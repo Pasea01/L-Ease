@@ -1,23 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>L-ease | Lease Anything</title>
 
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
 
 <body>
 
-    <h1>Welcome to L-ease</h1>
+    <!-- Navigation -->
+    <header>
+        <nav class="navbar">
 
-    <p>Lease almost anything from trusted people around you.</p>
+            <div class="logo">
+                L-ease
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="#">Browse</a></li>
+                <li><a href="#">Categories</a></li>
+                <li><a href="#">About</a></li>
+            </ul>
+
+            <div class="nav-buttons">
+                <button class="login-btn">Login</button>
+                <button class="signup-btn">Sign Up</button>
+            </div>
+
+        </nav>
+    </header>
+
+    <!-- Hero -->
+
+    <section class="hero">
+
+        <h1>Lease Anything, Anytime.</h1>
+
+        <p>
+            Find trusted rentals for property, vehicles,
+            electronics, furniture, tools, equipment and much more.
+        </p>
+
+        <div class="hero-buttons">
+            <button class="primary-btn">Browse Assets</button>
+            <button class="secondary-btn">List an Asset</button>
+        </div>
+
+    </section>
+    <section class="search-section">
+
+    <h2>Find Anything to Lease</h2>
+
+    <div class="search-box">
+
+        <input
+            type="text"
+            placeholder="Search property, vehicles, electronics..."
+        >
+
+        <button>Search</button>
+
+    </div>
+
+</section>
+<section class="categories">
+
+    <h2>Browse Categories</h2>
+
+    <div class="category-grid">
+
+        <div class="category-card">
+            <span>🏠</span>
+            <h3>Property</h3>
+        </div>
+
+        <div class="category-card">
+            <span>🚗</span>
+            <h3>Vehicles</h3>
+        </div>
+
+        <div class="category-card">
+            <span>💻</span>
+            <h3>Electronics</h3>
+        </div>
+
+        <div class="category-card">
+            <span>🔨</span>
+            <h3>Tools</h3>
+        </div>
+
+        <div class="category-card">
+            <span>🪑</span>
+            <h3>Furniture</h3>
+        </div>
+
+        <div class="category-card">
+            <span>⚙️</span>
+            <h3>Equipment</h3>
+        </div>
+
+    </div>
+
+</section>
+<section class="featured">
+
+    <h2>Featured Listings</h2>
+    
+    <div class="listing-grid" id="listingGrid">
+
+    </div>
+
+</section>
+<section class="how-it-works">
+
+    <h2>How L-ease Works</h2>
+
+    <div class="steps">
+
+        <div class="step">
+
+            <h3>1</h3>
+
+            <p>List an asset.</p>
+
+        </div>
+
+        <div class="step">
+
+            <h3>2</h3>
+
+            <p>Receive lease requests.</p>
+
+        </div>
+
+        <div class="step">
+
+            <h3>3</h3>
+
+            <p>Earn money securely.</p>
+
+        </div>
+
+    </div>
+
+</section>
 
     <script src="js/app.js"></script>
 
 </body>
-
 </html>
