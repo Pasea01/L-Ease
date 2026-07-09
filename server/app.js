@@ -1,47 +1,61 @@
+require("dotenv").config();
+
 const express = require("express");
+const authRoutes = require("./routes/authRoutes");
 const path = require("path");
+const session = require("express-session");
+
+require("./database/db");
+require("./database/initDatabase");
+
+const pageRoutes = require("./routes/pageRoutes");
+const listingRoutes = require("./routes/listingRoutes");
 
 const app = express();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Serve static files (CSS, JS, images)
-app.use(express.static(path.join(__dirname, "../client")));
+// --------------------------
+// View Engine
+// --------------------------
 
-// Sample listing data
-const listings = [
-    {
-        id: 1,
-        title: "Luxury Apartment",
-        location: "Nairobi",
-        price: 3500,
-        image: "🏠"
-    },
-    {
-        id: 2,
-        title: "Toyota Prado",
-        location: "Mombasa",
-        price: 8000,
-        image: "🚗"
-    },
-    {
-        id: 3,
-        title: "Canon EOS R6",
-        location: "Kisumu",
-        price: 2000,
-        image: "📷"
-    }
-];
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "../src/views"));
 
-// API endpoint
-app.get("/api/listings", (req, res) => {
-    res.json(listings);
-});
-// Serve the homepage
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/index.html"));
-});
+// --------------------------
+// Middleware
+// --------------------------
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "../src/public")));
+
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24
+        }
+    })
+);
+
+// --------------------------
+// Routes
+// --------------------------
+
+app.use("/", pageRoutes);
+
+app.use("/api/listings", listingRoutes);
+
+app.use("/auth", authRoutes);
+
+// --------------------------
+// Start Server
+// --------------------------
 
 app.listen(PORT, () => {
-    console.log(`🚀 L-ease server running at http://localhost:${PORT}`);
+    console.log(`🚀 L-ease running on http://localhost:${PORT}`);
 });

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+    <header>
+        <%- include("partials/navbar") %>
+    </header>
+
+    <main>
+
+        <!-- Hero Section -->
+        <section class="hero">
+
+            <h1>Lease Anything, Anytime.</h1>
+
+            <p>
+                Find trusted rentals for property, vehicles,
+                electronics, furniture, tools, equipment and much more.
+            </p>
+
+            <div class="hero-buttons">
+                <button class="primary-btn">Browse Assets</button>
+                <button class="secondary-btn">List an Asset</button>
+            </div>
+
+        </section>
+
+        <!-- Search -->
+        <section class="search-section">
+
+            <h2>Find Anything to Lease</h2>
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    placeholder="Search property, vehicles, electronics..."
+                >
+
+                <button>Search</button>
+
+            </div>
+
+        </section>
+
+        <!-- Categories -->
+        <section class="categories">
+
+            <h2>Browse Categories</h2>
+
+            <div class="category-grid">
+
+                <div class="category-card">
+                    <span>🏠</span>
+                    <h3>Property</h3>
+                </div>
+
+                <div class="category-card">
+                    <span>🚗</span>
+                    <h3>Vehicles</h3>
+                </div>
+
+                <div class="category-card">
+                    <span>💻</span>
+                    <h3>Electronics</h3>
+                </div>
+
+                <div class="category-card">
+                    <span>🔨</span>
+                    <h3>Tools</h3>
+                </div>
+
+                <div class="category-card">
+                    <span>🪑</span>
+                    <h3>Furniture</h3>
+                </div>
+
+                <div class="category-card">
+                    <span>⚙️</span>
+                    <h3>Equipment</h3>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Featured Listings -->
+        <section class="featured">
+
+            <h2>Featured Listings</h2>
+
+            <div class="listing-grid" id="listingGrid">
+
+            </div>
+
+        </section>
+
+        <!-- How It Works -->
+        <section class="how-it-works">
+
+            <h2>How L-ease Works</h2>
+
+            <div class="steps">
+
+                <div class="step">
+                    <h3>1</h3>
+                    <p>List an asset.</p>
+                </div>
+
+                <div class="step">
+                    <h3>2</h3>
+                    <p>Receive lease requests.</p>
+                </div>
+
+                <div class="step">
+                    <h3>3</h3>
+                    <p>Earn money securely.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <%- include("partials/footer") %>
+
+    <%- include("partials/scripts") %>
+
+</body>
+
+</html>
