@@ -73,3 +73,59 @@ exports.register = async (req, res) => {
     }
 
 };
+exports.showLogin = (req, res) => {
+    res.render("login");
+};
+
+exports.login = async (req, res) => {
+
+    try {
+
+        const { email, password } = req.body;
+
+        User.findByEmail(email, async (err, user) => {
+
+            if (err) {
+                return res.send("Server error.");
+            }
+
+            if (!user) {
+                return res.send("Invalid email or password.");
+            }
+
+            const match = await bcrypt.compare(password, user.password);
+
+            if (!match) {
+                return res.send("Invalid email or password.");
+            }
+
+            req.session.user = {
+                id: user.id,
+                full_name: user.full_name,
+                email: user.email,
+                role: user.role
+            };
+
+            res.redirect("/dashboard");
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.send("Server error.");
+
+    }
+
+};
+
+exports.logout = (req, res) => {
+
+    req.session.destroy(() => {
+
+        res.redirect("/");
+
+    });
+
+};

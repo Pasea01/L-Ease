@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="auth-container">
+
+    <h1>List a New Asset</h1>
+
+    <form action="/api/listings/create" method="POST">
+
+        <input
+            type="text"
+            name="title"
+            placeholder="Asset Title"
+            required
+        >
+
+        <select name="category" required>
+
+            <option value="">Choose Category</option>
+
+            <option>Property</option>
+            <option>Vehicle</option>
+            <option>Electronics</option>
+            <option>Furniture</option>
+            <option>Tools</option>
+            <option>Equipment</option>
+            <option>Other</option>
+
+        </select>
+
+        <input
+            type="number"
+            name="price_per_day"
+            placeholder="Price Per Day (KES)"
+            required
+        >
+
+        <input
+            type="text"
+            name="location"
+            placeholder="Location"
+            required
+        >
+
+        <textarea
+            name="description"
+            placeholder="Describe your asset..."
+            rows="6"
+        ></textarea>
+
+        <button type="submit">
+            Create Listing
+        </button>
+
+    </form>
+
+</main>
+
+<%- include("partials/footer") %>
+<%- include("partials/scripts") %>
+
+</body>
+</html>

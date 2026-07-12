@@ -269,3 +269,149 @@ section h2{
     color:#2563eb;
     margin-bottom:15px;
 }
+/* ===========================
+   AUTH PAGES
+=========================== */
+
+.auth-container,
+.container {
+    max-width: 900px;
+    margin: 60px auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+}
+
+.auth-container h1,
+.container h1 {
+    margin-bottom: 20px;
+    color: #1f2937;
+}
+
+.auth-container p,
+.container p {
+    margin-bottom: 15px;
+    color: #4b5563;
+    font-size: 18px;
+}
+
+.auth-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.auth-container input {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.auth-container button {
+    padding: 15px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.auth-container button:hover {
+    background: #1d4ed8;
+}
+/* ===========================
+   DASHBOARD
+=========================== */
+
+.dashboard{
+    max-width:1200px;
+    margin:50px auto;
+    padding:0 25px;
+}
+
+.dashboard-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:40px;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.dashboard-header h1{
+    font-size:34px;
+    margin-bottom:10px;
+}
+
+.dashboard-header p{
+    color:#6b7280;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+    margin-bottom:50px;
+}
+
+.stat-card{
+    background:white;
+    border-radius:12px;
+    padding:30px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.stat-card h3{
+    color:#6b7280;
+    margin-bottom:15px;
+}
+
+.stat-card span{
+    font-size:42px;
+    color:#2563eb;
+    font-weight:bold;
+}
+
+.quick-actions{
+    margin-bottom:50px;
+}
+
+.action-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+}
+
+.action-card{
+    background:white;
+    text-decoration:none;
+    color:#1f2937;
+    padding:35px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+    transition:.3s;
+}
+
+.action-card:hover{
+    transform:translateY(-5px);
+}
+
+.action-card h3{
+    margin-top:15px;
+}
+
+.recent-activity{
+    margin-bottom:50px;
+}
+
+.activity-card{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}

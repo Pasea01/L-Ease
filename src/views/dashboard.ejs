@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="dashboard">
+
+    <section class="dashboard-header">
+
+        <div>
+            <h1>Welcome back, <%= user.full_name %> 👋</h1>
+            <p>Manage your listings, leases, messages and profile from one place.</p>
+        </div>
+
+        <a href="/listings/new" class="primary-btn">
+            + List New Asset
+        </a>
+
+    </section>
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <h3>My Listings</h3>
+            <span>0</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>Active Leases</h3>
+            <span>0</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>Messages</h3>
+            <span>0</span>
+        </div>
+
+        <div class="stat-card">
+            <h3>Reviews</h3>
+            <span>0</span>
+        </div>
+
+    </section>
+
+    <section class="quick-actions">
+
+        <h2>Quick Actions</h2>
+
+        <div class="action-grid">
+
+            <a href="/listings/new" class="action-card">
+                <div style="font-size:50px;">📦</div>
+                <h3>List Asset</h3>
+                <p>Create a new rental listing.</p>
+            </a>
+
+            <a href="#" class="action-card">
+                <div style="font-size:50px;">🔍</div>
+                <h3>Browse Assets</h3>
+                <p>View all available rentals.</p>
+            </a>
+
+            <a href="#" class="action-card">
+                <div style="font-size:50px;">👤</div>
+                <h3>My Profile</h3>
+                <p>Manage your account.</p>
+            </a>
+
+            <a href="#" class="action-card">
+                <div style="font-size:50px;">💬</div>
+                <h3>Messages</h3>
+                <p>Chat with other users.</p>
+            </a>
+
+        </div>
+
+    </section>
+
+    <section class="recent-activity">
+
+        <h2>Recent Activity</h2>
+
+        <div class="activity-card">
+
+            <h3>No activity yet.</h3>
+
+            <p>
+                Once you create listings or lease assets,
+                your recent activity will appear here.
+            </p>
+
+        </div>
+
+    </section>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+</html>
