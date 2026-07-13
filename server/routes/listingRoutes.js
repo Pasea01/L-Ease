@@ -5,14 +5,27 @@ const router = express.Router();
 const listingController = require("../controllers/listingController");
 const authMiddleware = require("../middleware/authMiddleware");
 
-// Get all listings (API)
+// API - Get all listings
 router.get("/", listingController.getListings);
 
-// Create a new listing
+// Page - My Listings
+router.get(
+    "/my-listings",
+    authMiddleware,
+    listingController.showMyListings
+);
+
+// Create listing
 router.post(
     "/create",
     authMiddleware,
     listingController.createListing
+);
+// Delete listing
+router.get(
+    "/delete/:id",
+    authMiddleware,
+    listingController.deleteListing
 );
 
 module.exports = router;

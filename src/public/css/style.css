@@ -152,9 +152,29 @@ body{
 
 .secondary-btn{
 
-    background:white;
-    border:1px solid #2563eb;
-    color:#2563eb;
+    display:inline-block;
+
+    padding:12px 22px;
+
+    background:#ef4444;
+
+    color:white;
+
+    text-decoration:none;
+
+    border-radius:8px;
+
+    border:none;
+
+    cursor:pointer;
+
+    margin-left:10px;
+
+}
+
+.secondary-btn:hover{
+
+    background:#dc2626;
 
 }
 /* General Section Styling */

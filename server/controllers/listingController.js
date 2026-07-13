@@ -1,8 +1,8 @@
 const Listing = require("../models/Listing");
 
-// --------------------------
-// Get all listings
-// --------------------------
+// =====================================
+// Get all listings (Marketplace API)
+// =====================================
 
 exports.getListings = (req, res) => {
 
@@ -22,9 +22,38 @@ exports.getListings = (req, res) => {
 
 };
 
-// --------------------------
-// Create a new listing
-// --------------------------
+// =====================================
+// Show logged-in user's listings
+// =====================================
+
+exports.showMyListings = (req, res) => {
+
+    const ownerId = req.session.user.id;
+
+    Listing.getUserListings(ownerId, (err, listings) => {
+
+        if (err) {
+
+            console.error(err);
+
+            return res.send("Failed to load listings.");
+
+        }
+
+        res.render("my-listings", {
+
+            user: req.session.user,
+            listings
+
+        });
+
+    });
+
+};
+
+// =====================================
+// Create listing
+// =====================================
 
 exports.createListing = (req, res) => {
 
@@ -59,7 +88,31 @@ exports.createListing = (req, res) => {
 
         }
 
-        res.redirect("/dashboard");
+        res.redirect("/my-listings");
+
+    });
+
+};
+// =====================================
+// Delete Listing
+// =====================================
+
+exports.deleteListing = (req, res) => {
+
+    const listingId = req.params.id;
+    const ownerId = req.session.user.id;
+
+    Listing.deleteListing(listingId, ownerId, (err) => {
+
+        if (err) {
+
+            console.error(err);
+
+            return res.send("Failed to delete listing.");
+
+        }
+
+        res.redirect("/listings/my-listings");
 
     });
 

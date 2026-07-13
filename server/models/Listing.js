@@ -2,6 +2,7 @@ const db = require("../database/db");
 
 class Listing {
 
+    // Get all listings
     static getAllListings(callback) {
 
         const sql = `
@@ -16,6 +17,21 @@ class Listing {
 
     }
 
+    // Get listings for one user
+    static getUserListings(ownerId, callback) {
+
+        const sql = `
+            SELECT *
+            FROM assets
+            WHERE owner_id = ?
+            ORDER BY created_at DESC
+        `;
+
+        db.all(sql, [ownerId], callback);
+
+    }
+
+    // Create listing
     static create(listing, callback) {
 
         const sql = `
@@ -43,6 +59,19 @@ class Listing {
             ],
             callback
         );
+
+    }
+
+    // Delete listing
+    static deleteListing(id, ownerId, callback) {
+
+        const sql = `
+            DELETE FROM assets
+            WHERE id = ?
+            AND owner_id = ?
+        `;
+
+        db.run(sql, [id, ownerId], callback);
 
     }
 

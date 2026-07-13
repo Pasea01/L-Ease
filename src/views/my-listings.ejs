@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="dashboard">
+
+    <section class="dashboard-header">
+
+        <div>
+            <h1>My Listings</h1>
+            <p>Manage all the assets you've listed on L-ease.</p>
+        </div>
+
+        <a href="/listings/new" class="primary-btn">
+            + New Listing
+        </a>
+
+    </section>
+
+    <% if (listings.length === 0) { %>
+
+        <div class="activity-card">
+
+            <h2>No Listings Yet</h2>
+
+            <p>
+                You haven't listed any assets yet.
+            </p>
+
+            <br>
+
+            <a href="/listings/new" class="primary-btn">
+                Create Your First Listing
+            </a>
+
+        </div>
+
+    <% } else { %>
+
+        <div class="listing-grid">
+
+            <% listings.forEach(listing => { %>
+
+                <div class="listing-card">
+
+                    <div class="listing-image"></div>
+
+                    <div style="padding:20px;">
+
+                        <h3><%= listing.title %></h3>
+
+                        <p><strong>Category:</strong> <%= listing.category %></p>
+
+                        <p><strong>Location:</strong> <%= listing.location %></p>
+
+                        <p>
+                            <strong>KES <%= listing.price_per_day %> / day</strong>
+                        </p>
+
+                        <p><%= listing.description %></p>
+
+                        <br>
+
+                        <button class="primary-btn">
+                            Edit
+                        </button>
+
+                        <a
+                            href="/listings/delete/<%= listing.id %>"
+                            class="secondary-btn"
+                            onclick="return confirm('Are you sure you want to delete this listing?');"
+                            >
+                                Delete
+                        </a>
+
+                    </div>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } %>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+
+</html>

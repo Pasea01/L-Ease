@@ -49,6 +49,7 @@ app.use(
 app.use("/", pageRoutes);
 
 app.use("/api/listings", listingRoutes);
+app.use("/listings", listingRoutes);
 
 app.use("/auth", authRoutes);
 
