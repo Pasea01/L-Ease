@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="auth-container">
+
+    <h1>Edit Listing</h1>
+
+    <form action="/listings/edit/<%= listing.id %>" method="POST">
+
+        <input
+            type="text"
+            name="title"
+            value="<%= listing.title %>"
+            required
+        >
+
+        <textarea
+            name="description"
+            rows="5"
+            required
+        ><%= listing.description %></textarea>
+
+        <input
+            type="text"
+            name="category"
+            value="<%= listing.category %>"
+            required
+        >
+
+        <input
+            type="number"
+            name="price_per_day"
+            value="<%= listing.price_per_day %>"
+            required
+        >
+
+        <input
+            type="text"
+            name="location"
+            value="<%= listing.location %>"
+            required
+        >
+
+        <button type="submit" class="primary-btn">
+            Save Changes
+        </button>
+
+    </form>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+</html>

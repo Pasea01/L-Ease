@@ -75,6 +75,53 @@ class Listing {
 
     }
 
+    // Get one listing
+static getById(id, ownerId, callback) {
+
+    const sql = `
+        SELECT *
+        FROM assets
+        WHERE id = ?
+        AND owner_id = ?
+    `;
+
+    db.get(sql, [id, ownerId], callback);
+
+}
+
+// Update listing
+static update(id, ownerId, listing, callback) {
+
+    const sql = `
+        UPDATE assets
+        SET
+            title = ?,
+            description = ?,
+            category = ?,
+            price_per_day = ?,
+            location = ?
+        WHERE
+            id = ?
+        AND
+            owner_id = ?
+    `;
+
+    db.run(
+        sql,
+        [
+            listing.title,
+            listing.description,
+            listing.category,
+            listing.price_per_day,
+            listing.location,
+            id,
+            ownerId
+        ],
+        callback
+    );
+
+}
+
 }
 
 module.exports = Listing;

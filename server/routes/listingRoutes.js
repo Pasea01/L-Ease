@@ -27,5 +27,18 @@ router.get(
     authMiddleware,
     listingController.deleteListing
 );
+// Show edit page
+router.get(
+    "/edit/:id",
+    authMiddleware,
+    listingController.showEditListing
+);
+
+// Update listing
+router.post(
+    "/edit/:id",
+    authMiddleware,
+    listingController.updateListing
+);
 
 module.exports = router;

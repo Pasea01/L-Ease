@@ -88,7 +88,7 @@ exports.createListing = (req, res) => {
 
         }
 
-        res.redirect("/my-listings");
+        res.redirect("/listings/my-listings");
 
     });
 
@@ -115,5 +115,92 @@ exports.deleteListing = (req, res) => {
         res.redirect("/listings/my-listings");
 
     });
+
+};
+
+// =====================================
+// Show Edit Listing Page
+// =====================================
+
+exports.showEditListing = (req, res) => {
+
+    const listingId = req.params.id;
+    const ownerId = req.session.user.id;
+
+    Listing.getById(listingId, ownerId, (err, listing) => {
+
+        if (err) {
+
+            console.error(err);
+            return res.send("Failed to load listing.");
+
+        }
+
+        if (!listing) {
+
+            return res.send("Listing not found.");
+
+        }
+
+        res.render("edit-listing", {
+
+            user: req.session.user,
+            listing
+
+        });
+
+    });
+
+};
+
+// =====================================
+// Update Listing
+// =====================================
+
+exports.updateListing = (req, res) => {
+
+    const listingId = req.params.id;
+    const ownerId = req.session.user.id;
+
+    const {
+
+        title,
+        description,
+        category,
+        price_per_day,
+        location
+
+    } = req.body;
+
+    const listing = {
+
+        title,
+        description,
+        category,
+        price_per_day,
+        location
+
+    };
+
+    Listing.update(
+
+        listingId,
+        ownerId,
+        listing,
+
+        (err) => {
+
+            if (err) {
+
+                console.error(err);
+                return res.send("Failed to update listing.");
+
+            }
+
+            res.redirect("/listings/my-listings");
+
+        }
+
+    );
 
 };
