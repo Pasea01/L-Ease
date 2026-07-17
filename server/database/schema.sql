@@ -88,13 +88,15 @@ CREATE TABLE IF NOT EXISTS leases (
 
     asset_id INTEGER NOT NULL,
 
-    lessee_id INTEGER NOT NULL,
+    owner_id INTEGER NOT NULL,
+
+    tenant_id INTEGER NOT NULL,
 
     start_date DATE NOT NULL,
 
     end_date DATE NOT NULL,
 
-    total_price REAL NOT NULL,
+    message TEXT,
 
     status TEXT NOT NULL DEFAULT 'pending'
         CHECK(status IN (
@@ -113,7 +115,11 @@ CREATE TABLE IF NOT EXISTS leases (
         REFERENCES assets(id)
         ON DELETE CASCADE,
 
-    FOREIGN KEY(lessee_id)
+    FOREIGN KEY(owner_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY(tenant_id)
         REFERENCES users(id)
         ON DELETE CASCADE
 

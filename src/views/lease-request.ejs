@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="auth-container">
+
+    <h1>Request Lease</h1>
+
+    <div class="listing-summary">
+
+        <h2><%= listing.title %></h2>
+
+        <p><strong>Category:</strong> <%= listing.category %></p>
+
+        <p><strong>Location:</strong> <%= listing.location %></p>
+
+        <p><strong>Price:</strong> KES <%= listing.price_per_day %> / day</p>
+
+        <p><strong>Owner:</strong> <%= listing.full_name %></p>
+
+    </div>
+
+    <form action="/leases/request" method="POST">
+
+        <input
+            type="hidden"
+            name="asset_id"
+            value="<%= listing.id %>"
+        >
+
+        <label>Start Date</label>
+
+        <input
+            type="date"
+            name="start_date"
+            required
+        >
+
+        <label>End Date</label>
+
+        <input
+            type="date"
+            name="end_date"
+            required
+        >
+
+        <label>Message to Owner (Optional)</label>
+
+        <textarea
+            name="message"
+            rows="5"
+            placeholder="Introduce yourself or explain your intended use..."
+        ></textarea>
+
+        <button
+            type="submit"
+            class="primary-btn"
+        >
+            Submit Lease Request
+        </button>
+
+    </form>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+
+</html>

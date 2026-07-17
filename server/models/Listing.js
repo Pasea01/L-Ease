@@ -122,6 +122,22 @@ static update(id, ownerId, listing, callback) {
 
 }
 
+// Get one listing by ID
+static getListingById(id, callback) {
+
+    const sql = `
+        SELECT assets.*, users.full_name
+        FROM assets
+        JOIN users
+        ON assets.owner_id = users.id
+        WHERE assets.id = ?
+    `;
+
+    db.get(sql, [id], callback);
+
 }
+
+}
+
 
 module.exports = Listing;

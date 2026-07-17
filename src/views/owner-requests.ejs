@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="dashboard">
+
+    <h1>Incoming Lease Requests</h1>
+
+    <% if (requests.length === 0) { %>
+
+        <p>No lease requests yet.</p>
+
+    <% } else { %>
+
+        <% requests.forEach(request => { %>
+
+            <div class="listing-card">
+
+                <h2><%= request.title %></h2>
+
+                <p><strong>Requested By:</strong> <%= request.tenant_name %></p>
+
+                <p><strong>Start:</strong> <%= request.start_date %></p>
+
+                <p><strong>End:</strong> <%= request.end_date %></p>
+
+                <p><strong>Message:</strong></p>
+
+                <p><%= request.message || "No message." %></p>
+
+                <div class="lease-actions">
+
+                    <% if (request.status === "pending") { %>
+
+                        <form action="/leases/<%= request.id %>/approve" method="POST">
+
+                            <button class="primary-btn">
+                                Approve
+                            </button>
+
+                        </form>
+
+                        <form action="/leases/<%= request.id %>/reject" method="POST">
+
+                            <button class="danger-btn">
+                                Reject
+                            </button>
+
+                        </form>
+
+                    <% } else { %>
+
+                        <strong>Status: <%= request.status %></strong>
+
+                    <% } %>
+
+                </div>
+
+            </div>
+
+            <br>
+
+        <% }) %>
+
+    <% } %>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+
+</html>

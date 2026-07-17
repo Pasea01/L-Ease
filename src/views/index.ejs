@@ -88,15 +88,45 @@
         </section>
 
         <!-- Featured Listings -->
-        <section class="featured">
+<section class="featured">
 
-            <h2>Featured Listings</h2>
+    <h2>Featured Listings</h2>
 
-            <div class="listing-grid" id="listingGrid">
+    <div class="listing-grid">
 
-            </div>
+        <% if (listings.length === 0) { %>
 
-        </section>
+            <p>No listings available yet.</p>
+
+        <% } else { %>
+
+            <% listings.forEach(listing => { %>
+
+                <a
+                    href="/listings/<%= listing.id %>"
+                    class="listing-card"
+                    style="text-decoration:none; color:inherit;"
+                >
+
+                    <div class="listing-image"></div>
+
+                    <h3><%= listing.title %></h3>
+
+                    <p><%= listing.category %></p>
+
+                    <p><%= listing.location %></p>
+
+                    <strong>KES <%= listing.price_per_day %> / day</strong>
+
+                </a>
+
+            <% }) %>
+
+        <% } %>
+
+    </div>
+
+</section>
 
         <!-- How It Works -->
         <section class="how-it-works">

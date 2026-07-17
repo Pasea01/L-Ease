@@ -204,3 +204,38 @@ exports.updateListing = (req, res) => {
     );
 
 };
+
+// =====================================
+// Show Single Listing
+// =====================================
+
+exports.showListing = (req, res) => {
+
+    const id = req.params.id;
+
+    Listing.getListingById(id, (err, listing) => {
+
+        if (err) {
+
+            console.error(err);
+
+            return res.send("Failed to load listing.");
+
+        }
+
+        if (!listing) {
+
+            return res.send("Listing not found.");
+
+        }
+
+        res.render("listing-details", {
+
+            listing,
+            user: req.session.user || null
+
+        });
+
+    });
+
+};

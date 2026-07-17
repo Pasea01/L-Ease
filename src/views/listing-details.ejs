@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="listing-details-container">
+
+    <section class="listing-details">
+
+        <div class="listing-image-large">
+
+            <div style="font-size:90px;text-align:center;padding-top:60px;">
+                📦
+            </div>
+
+        </div>
+
+        <div class="listing-info">
+
+            <h1><%= listing.title %></h1>
+
+            <p><strong>Category:</strong> <%= listing.category %></p>
+
+            <p><strong>Location:</strong> <%= listing.location %></p>
+
+            <p><strong>Owner:</strong> <%= listing.full_name %></p>
+
+            <p><strong>Price:</strong> KES <%= listing.price_per_day %> / day</p>
+
+            <h3>Description</h3>
+
+            <p><%= listing.description %></p>
+
+            <br>
+
+            <% if (user) { %>
+
+               <a href="/leases/request/<%= listing.id %>"
+                    class="primary-btn"
+                >
+                    Request Lease
+                </a>
+
+            <% } else { %>
+
+                <a href="/login" class="primary-btn">
+                    Login to Request Lease
+                </a>
+
+            <% } %>
+
+        </div>
+
+    </section>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+
+</html>

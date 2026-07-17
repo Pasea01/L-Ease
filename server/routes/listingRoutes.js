@@ -41,4 +41,6 @@ router.post(
     listingController.updateListing
 );
 
+router.get("/:id", listingController.showListing);
+
 module.exports = router;

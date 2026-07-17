@@ -3,30 +3,35 @@ const router = express.Router();
 
 const authMiddleware = require("../middleware/authMiddleware");
 
-// Home page
-router.get("/", (req, res) => {
-    res.render("index");
-});
+const homeController = require("../controllers/homeController");
 
-// Login page
+// Home
+router.get("/", homeController.showHome);
+
+// Login
 router.get("/login", (req, res) => {
     res.render("login");
 });
 
-// Register page
+// Register
 router.get("/register", (req, res) => {
     res.render("register");
 });
 
 // Dashboard
 router.get("/dashboard", authMiddleware, (req, res) => {
+
     res.render("dashboard", {
         user: req.session.user
     });
+
+});
+
+// New Listing
+router.get("/listings/new", authMiddleware, (req, res) => {
+
+    res.render("new-listing");
+
 });
 
 module.exports = router;
-
-router.get("/listings/new", authMiddleware, (req, res) => {
-    res.render("new-listing");
-});
