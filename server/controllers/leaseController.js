@@ -1,4 +1,5 @@
 const Lease = require("../models/Lease");
+const Message = require("../models/Message");
 const Listing = require("../models/Listing");
 
 exports.showLeaseForm = (req, res) => {
@@ -111,22 +112,43 @@ exports.showOwnerRequests = (req, res) => {
 
 exports.approveLease = (req, res) => {
 
-    Lease.approve(
-        req.params.id,
-        req.session.user.id,
-        (err) => {
+    const leaseId = req.params.id;
+    const ownerId = req.session.user.id;
 
-            if (err) {
+    Lease.approve(leaseId, ownerId, (err) => {
 
+        if (err) {
+            console.error(err);
+            return res.send("Failed to approve lease.");
+        }
+
+        Lease.getById(leaseId, (err, lease) => {
+
+            if (err || !lease) {
                 console.error(err);
-                return res.send("Failed to approve lease.");
-
+                return res.redirect("/leases/owner");
             }
 
-            res.redirect("/leases/owner");
+            Message.send({
 
-        }
-    );
+                sender_id: ownerId,
+                receiver_id: lease.tenant_id,
+                asset_id: lease.asset_id,
+                message: "Your lease request has been approved. You can now chat with the owner."
+
+            }, (err) => {
+
+                if (err) {
+                    console.error(err);
+                }
+
+                res.redirect("/leases/owner");
+
+            });
+
+        });
+
+    });
 
 };
 

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="dashboard">
+
+    <h1>Inbox</h1>
+
+    <% if (conversations.length === 0) { %>
+
+        <div class="activity-card">
+            <h3>No conversations yet.</h3>
+            <p>Your messages will appear here.</p>
+        </div>
+
+    <% } else { %>
+
+        <% conversations.forEach(conversation => { %>
+
+            <div class="listing-card">
+
+                <h2><%= conversation.title %></h2>
+
+                <p>
+                    <strong>Conversation with:</strong>
+                    <%= conversation.other_user %>
+                </p>
+
+                <p>
+                    Last activity:
+                    <%= conversation.last_message %>
+                </p>
+
+            </div>
+
+            <br>
+
+        <% }) %>
+
+    <% } %>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+
+</html>

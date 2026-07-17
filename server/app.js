@@ -5,6 +5,7 @@ const authRoutes = require("./routes/authRoutes");
 const path = require("path");
 const session = require("express-session");
 const leaseRoutes = require("./routes/leaseRoutes");
+const messageRoutes = require("./routes/messageRoutes");
 
 require("./database/db");
 require("./database/initDatabase");
@@ -55,6 +56,8 @@ app.use("/listings", listingRoutes);
 app.use("/auth", authRoutes);
 
 app.use("/leases", leaseRoutes);
+
+app.use("/messages", messageRoutes);
 
 // --------------------------
 // Start Server

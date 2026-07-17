@@ -80,6 +80,19 @@ static reject(id, ownerId, callback) {
 
 }
 
+// Get one lease by ID
+static getById(id, callback) {
+
+    const sql = `
+        SELECT *
+        FROM leases
+        WHERE id = ?
+    `;
+
+    db.get(sql, [id], callback);
+
+}
+
 }
 
 
