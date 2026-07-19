@@ -6,7 +6,11 @@ const listingController = require("../controllers/listingController");
 const authMiddleware = require("../middleware/authMiddleware");
 
 // API - Get all listings
-router.get("/", listingController.getListings);
+// Marketplace page
+router.get("/", listingController.showMarketplace);
+
+// Marketplace API
+router.get("/api", listingController.getListingsAPI);
 
 // Page - My Listings
 router.get(

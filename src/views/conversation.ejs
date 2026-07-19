@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="dashboard">
+
+    <h1>Conversation</h1>
+
+    <div class="conversation-box">
+
+        <% if(messages.length === 0){ %>
+
+            <p>No messages yet.</p>
+
+        <% } else { %>
+
+            <% messages.forEach(message => { %>
+
+                <div class="listing-card">
+
+                    <strong><%= message.full_name %></strong>
+
+                    <p><%= message.message %></p>
+
+                    <small><%= message.created_at %></small>
+
+                </div>
+
+                <br>
+
+            <% }) %>
+
+        <% } %>
+
+    </div>
+
+    <hr>
+
+    <form
+        action="/messages/send"
+        method="POST"
+    >
+
+        <input
+            type="hidden"
+            name="asset_id"
+            value="<%= assetId %>"
+        >
+
+        <input
+            type="hidden"
+            name="receiver_id"
+            value="<%= otherUserId %>"
+        >
+
+        <textarea
+            name="message"
+            rows="4"
+            placeholder="Type your message..."
+            required
+        ></textarea>
+
+        <br><br>
+
+        <button class="primary-btn">
+
+            Send Message
+
+        </button>
+
+    </form>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+</html>

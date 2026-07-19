@@ -17,6 +17,8 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
+const getCategoryImage = require("./helpers/categoryImage");
+
 // --------------------------
 // View Engine
 // --------------------------
@@ -44,13 +46,29 @@ app.use(
     })
 );
 
+app.use((req, res, next) => {
+
+    res.locals.user = req.session.user || null;
+
+    res.locals.getCategoryImage = getCategoryImage;
+
+    next();
+
+});
+
 // --------------------------
 // Routes
 // --------------------------
 
 app.use("/", pageRoutes);
 
-app.use("/api/listings", listingRoutes);
+// JSON API
+app.get(
+    "/api/listings",
+    require("./controllers/listingController").getListingsAPI
+);
+
+// Website
 app.use("/listings", listingRoutes);
 
 app.use("/auth", authRoutes);

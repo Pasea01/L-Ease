@@ -42,9 +42,10 @@ class Listing {
                 description,
                 category,
                 price_per_day,
-                location
+                location,
+                image_url
             )
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
 
         db.run(
@@ -55,7 +56,8 @@ class Listing {
                 listing.description,
                 listing.category,
                 listing.price_per_day,
-                listing.location
+                listing.location,
+                listing.image_url
             ],
             callback
         );

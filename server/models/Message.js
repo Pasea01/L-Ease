@@ -81,6 +81,41 @@ class Message {
     );
     }
 
+    // Get conversation
+static getConversation(userId, otherUserId, assetId, callback) {
+
+    const sql = `
+        SELECT
+            messages.*,
+            users.full_name
+        FROM messages
+        JOIN users
+            ON messages.sender_id = users.id
+        WHERE
+            asset_id = ?
+        AND
+        (
+            (sender_id = ? AND receiver_id = ?)
+            OR
+            (sender_id = ? AND receiver_id = ?)
+        )
+        ORDER BY created_at ASC
+    `;
+
+    db.all(
+        sql,
+        [
+            assetId,
+            userId,
+            otherUserId,
+            otherUserId,
+            userId
+        ],
+        callback
+    );
+
+    }
+
 }
 
 module.exports = Message;

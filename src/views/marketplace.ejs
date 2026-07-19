@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="dashboard">
+
+    <div class="dashboard-header">
+
+        <div>
+
+        <h1>Explore</h1>
+
+            <p>
+                Discover assets available for lease from trusted owners.
+            </p>
+
+        </div>
+
+    </div>
+    <!-- Search Bar -->
+
+    <section class="search-section">
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                placeholder="Search assets..."
+            >
+
+            <button class="primary-btn">
+
+                Search
+
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- Listings -->
+
+    <% if (listings.length === 0) { %>
+
+        <div class="listing-card">
+
+            <h2>No listings available.</h2>
+
+            <p>Be the first to list an asset!</p>
+
+        </div>
+
+    <% } else { %>
+
+        <div class="listing-grid">
+
+            <% listings.forEach(listing => { %>
+
+                <div class="listing-card">
+
+                    <% if (listing.image_url) { %>
+
+                    <img
+                        src="/uploads/<%= listing.image_url %>"
+                        class="listing-image"
+                    >
+
+                <% } else { %>
+
+                    <img
+                        src="<%= getCategoryImage(listing.category) %>"
+                        class="listing-image"
+                        alt="<%= listing.category %>"
+                    >
+
+                <% } %>
+
+                    <h3><%= listing.title %></h3>
+
+                    <p>
+
+                        <strong>Category:</strong>
+
+                        <%= listing.category %>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Location:</strong>
+
+                        <%= listing.location %>
+
+                    </p>
+
+                    <p>
+
+                        <strong>Owner:</strong>
+
+                        <%= listing.full_name %>
+
+                    </p>
+
+                    <strong>
+
+                        KES <%= listing.price_per_day %> / day
+
+                    </strong>
+
+                    <br><br>
+
+                    <a
+                        href="/listings/<%= listing.id %>"
+                        class="primary-btn"
+                    >
+
+                        View Details
+
+                    </a>
+
+                </div>
+
+            <% }) %>
+
+        </div>
+
+    <% } %>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+
+</html>

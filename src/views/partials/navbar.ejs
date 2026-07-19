@@ -1,14 +1,14 @@
 <nav class="navbar">
 
     <div class="logo">
-        <a href="/">L-ease</a>
+        <a href="/">L-Ease</a>
     </div>
 
     <ul class="nav-links">
 
         <li><a href="/">Home</a></li>
 
-        <li><a href="#">Browse</a></li>
+        <li><a href="/listings">Browse</a></li>
 
         <li><a href="#">Categories</a></li>
 
@@ -16,16 +16,64 @@
 
     </ul>
 
-    <div class="nav-buttons">
+    <% if(user){ %>
 
-        <a href="/login" class="secondary-btn">Login</a>
+        <div class="user-menu">
 
-        <a href="/register" class="primary-btn">Sign Up</a>
+            <div class="user-menu">
+
+    <button class="user-btn" id="userMenuBtn">
+
+        👤 <%= user.full_name %> ▼
+
+    </button>
+
+    <div class="dropdown-menu" id="dropdownMenu">
+
+        <a href="/dashboard">🏠 Dashboard</a>
+
+        <a href="/listings/my-listings">📦 My Listings</a>
+
+        <a href="/leases/owner">📑 Lease Requests</a>
+
+        <a href="/messages">💬 Inbox</a>
+
+        <hr>
+
+        <a href="/auth/logout">🚪 Logout</a>
 
     </div>
 
-    <li>
-        <a href="/messages">Inbox</a>
-    </li>
+</div>
+
+            <div class="dropdown-menu">
+
+                <a href="/dashboard">🏠 Dashboard</a>
+
+                <a href="/listings/my-listings">📦 My Listings</a>
+
+                <a href="/leases/owner">📑 Lease Requests</a>
+
+                <a href="/messages">💬 Inbox</a>
+
+                <hr>
+
+                <a href="/auth/logout">🚪 Logout</a>
+
+            </div>
+
+        </div>
+
+    <% } else { %>
+
+        <div class="nav-buttons">
+
+            <a href="/login" class="secondary-btn">Login</a>
+
+            <a href="/register" class="primary-btn">Sign Up</a>
+
+        </div>
+
+    <% } %>
 
 </nav>

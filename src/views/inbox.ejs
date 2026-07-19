@@ -13,16 +13,23 @@
 
     <% if (conversations.length === 0) { %>
 
-        <div class="activity-card">
+        <div class="listing-card">
+
             <h3>No conversations yet.</h3>
+
             <p>Your messages will appear here.</p>
+
         </div>
 
     <% } else { %>
 
         <% conversations.forEach(conversation => { %>
 
-            <div class="listing-card">
+            <a
+                href="/messages/<%= conversation.asset_id %>/<%= conversation.other_user_id %>"
+                class="listing-card"
+                style="display:block; text-decoration:none; color:inherit; margin-bottom:20px;"
+            >
 
                 <h2><%= conversation.title %></h2>
 
@@ -32,13 +39,11 @@
                 </p>
 
                 <p>
-                    Last activity:
+                    <strong>Last activity:</strong>
                     <%= conversation.last_message %>
                 </p>
 
-            </div>
-
-            <br>
+            </a>
 
         <% }) %>
 

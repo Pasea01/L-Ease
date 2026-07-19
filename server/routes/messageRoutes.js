@@ -10,4 +10,10 @@ router.get(
     messageController.showInbox
 );
 
+router.get(
+    "/:assetId/:otherUserId",
+    authMiddleware,
+    messageController.showConversation
+);
+
 module.exports = router;

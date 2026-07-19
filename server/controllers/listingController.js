@@ -4,7 +4,7 @@ const Listing = require("../models/Listing");
 // Get all listings (Marketplace API)
 // =====================================
 
-exports.getListings = (req, res) => {
+exports.getListingsAPI = (req, res) => {
 
     Listing.getAllListings((err, listings) => {
 
@@ -17,6 +17,32 @@ exports.getListings = (req, res) => {
         }
 
         res.json(listings);
+
+    });
+
+};
+
+// =====================================
+// Marketplace Page
+// =====================================
+
+exports.showMarketplace = (req, res) => {
+
+    Listing.getAllListings((err, listings) => {
+
+        if (err) {
+
+            console.error(err);
+
+            return res.send("Failed to load marketplace.");
+
+        }
+
+        res.render("marketplace", {
+
+            listings
+
+        });
 
     });
 

@@ -11,13 +11,23 @@
 
     <section class="listing-details">
 
-        <div class="listing-image-large">
+        <% if (listing.image_url) { %>
 
-            <div style="font-size:90px;text-align:center;padding-top:60px;">
-                📦
-            </div>
+            <img
+                src="/uploads/<%= listing.image_url %>"
+                class="listing-image-large"
+                alt="<%= listing.title %>"
+            >
 
-        </div>
+        <% } else { %>
+
+            <img
+                src="<%= getCategoryImage(listing.category) %>"
+                class="listing-image-large"
+                alt="<%= listing.category %>"
+            >
+
+        <% } %>
 
         <div class="listing-info">
 

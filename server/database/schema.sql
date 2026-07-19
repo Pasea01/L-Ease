@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS assets (
 
     location TEXT NOT NULL,
 
+    image_url TEXT,
+
     status TEXT NOT NULL DEFAULT 'available'
         CHECK(status IN ('available', 'leased', 'unavailable')),
 
