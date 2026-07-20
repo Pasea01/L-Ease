@@ -49,11 +49,26 @@
 
             <% if (user) { %>
 
-               <a href="/leases/request/<%= listing.id %>"
-                    class="primary-btn"
-                >
-                    Request Lease
-                </a>
+              <% if (user && user.id !== listing.owner_id) { %>
+
+                    <a
+                        href="/leases/request/<%= listing.id %>"
+                        class="primary-btn"
+                    >
+                        Request Lease
+                    </a>
+
+                <% } else if (user) { %>
+
+                    <button
+                        class="secondary-btn"
+                        disabled
+                        style="cursor:not-allowed;opacity:.6;"
+                    >
+                        Your Listing
+                    </button>
+
+                <% } %>
 
             <% } else { %>
 

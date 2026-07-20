@@ -28,23 +28,39 @@ exports.getListingsAPI = (req, res) => {
 
 exports.showMarketplace = (req, res) => {
 
-    Listing.getAllListings((err, listings) => {
+    const search = req.query.search || "";
+    const category = req.query.category || "";
 
-        if (err) {
+    Listing.search(
 
-            console.error(err);
+        search,
+        category,
 
-            return res.send("Failed to load marketplace.");
+        (err, listings) => {
+
+            if (err) {
+
+                console.error(err);
+
+                return res.send("Error loading marketplace.");
+
+            }
+
+            res.render("marketplace", {
+
+                user: req.session.user,
+
+                listings,
+
+                search,
+
+                category
+
+            });
 
         }
 
-        res.render("marketplace", {
-
-            listings
-
-        });
-
-    });
+    );
 
 };
 
@@ -95,12 +111,13 @@ exports.createListing = (req, res) => {
 
     const listing = {
 
-        owner_id: req.session.user.id,
-        title,
-        description,
-        category,
-        price_per_day,
-        location
+    owner_id: req.session.user.id,
+    title: req.body.title,
+    description: req.body.description,
+    category: req.body.category,
+    price_per_day: req.body.price_per_day,
+    location: req.body.location,
+    image_url: req.file ? req.file.filename : null
 
     };
 
@@ -188,49 +205,53 @@ exports.updateListing = (req, res) => {
     const listingId = req.params.id;
     const ownerId = req.session.user.id;
 
-    const {
+    Listing.getById( listingId, ownerId, (err, existingListing) => {
 
-        title,
-        description,
-        category,
-        price_per_day,
-        location
+        if (err || !existingListing) {
 
-    } = req.body;
-
-    const listing = {
-
-        title,
-        description,
-        category,
-        price_per_day,
-        location
-
-    };
-
-    Listing.update(
-
-        listingId,
-        ownerId,
-        listing,
-
-        (err) => {
-
-            if (err) {
-
-                console.error(err);
-                return res.send("Failed to update listing.");
-
-            }
-
-            res.redirect("/listings/my-listings");
+            console.error(err);
+            return res.send("Listing not found.");
 
         }
 
-    );
+        const listing = {
+
+            title: req.body.title,
+            description: req.body.description,
+            category: req.body.category,
+            price_per_day: req.body.price_per_day,
+            location: req.body.location,
+
+            image_url: req.file
+                ? req.file.filename
+                : existingListing.image_url
+
+        };
+
+        Listing.update(
+
+            listingId,
+            ownerId,
+            listing,
+
+            (err) => {
+
+                if (err) {
+
+                    console.error(err);
+                    return res.send("Failed to update listing.");
+
+                }
+
+                res.redirect("/listings/my-listings");
+
+            }
+
+        );
+
+    });
 
 };
-
 // =====================================
 // Show Single Listing
 // =====================================

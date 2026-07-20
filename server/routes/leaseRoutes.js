@@ -34,4 +34,10 @@ router.post(
     leaseController.rejectLease
 );
 
+router.get(
+    "/my-requests",
+    authMiddleware,
+    leaseController.showMyRequests
+);
+
 module.exports = router;

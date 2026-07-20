@@ -17,6 +17,50 @@ class Listing {
 
     }
 
+    // Search listings
+    static search(search, category, callback) {
+
+        let sql = `
+            SELECT assets.*, users.full_name
+            FROM assets
+            JOIN users
+            ON assets.owner_id = users.id
+            WHERE 1 = 1
+        `;
+
+        const params = [];
+
+        if (search) {
+
+            sql += `
+                AND (
+                    assets.title LIKE ?
+                    OR assets.description LIKE ?
+                )
+            `;
+
+            params.push(`%${search}%`);
+            params.push(`%${search}%`);
+
+        }
+
+        if (category) {
+
+            sql += `
+                AND assets.category = ?
+            `;
+
+            params.push(category);
+
+        }
+
+        sql += `
+            ORDER BY assets.created_at DESC
+        `;
+
+        db.all(sql, params, callback);
+
+    }
     // Get listings for one user
     static getUserListings(ownerId, callback) {
 
@@ -101,7 +145,8 @@ static update(id, ownerId, listing, callback) {
             description = ?,
             category = ?,
             price_per_day = ?,
-            location = ?
+            location = ?,
+            image_url = ?
         WHERE
             id = ?
         AND
@@ -116,6 +161,7 @@ static update(id, ownerId, listing, callback) {
             listing.category,
             listing.price_per_day,
             listing.location,
+            listing.image_url,
             id,
             ownerId
         ],
@@ -123,7 +169,6 @@ static update(id, ownerId, listing, callback) {
     );
 
 }
-
 // Get one listing by ID
 static getListingById(id, callback) {
 

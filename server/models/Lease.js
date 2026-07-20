@@ -32,23 +32,29 @@ class Lease {
 
     }
 
-    static getOwnerRequests(ownerId, callback) {
+    static getTenantRequests(tenantId, callback) {
 
     const sql = `
         SELECT
             leases.*,
             assets.title,
-            users.full_name AS tenant_name
+            assets.category,
+            assets.image_url,
+            users.full_name AS owner_name
         FROM leases
+
         JOIN assets
             ON leases.asset_id = assets.id
+
         JOIN users
-            ON leases.tenant_id = users.id
-        WHERE leases.owner_id = ?
+            ON leases.owner_id = users.id
+
+        WHERE leases.tenant_id = ?
+
         ORDER BY leases.created_at DESC
     `;
 
-    db.all(sql, [ownerId], callback);
+    db.all(sql, [tenantId], callback);
 
 }
 

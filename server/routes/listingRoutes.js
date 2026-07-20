@@ -5,6 +5,8 @@ const router = express.Router();
 const listingController = require("../controllers/listingController");
 const authMiddleware = require("../middleware/authMiddleware");
 
+const upload = require("../config/multer");
+
 // API - Get all listings
 // Marketplace page
 router.get("/", listingController.showMarketplace);
@@ -23,6 +25,7 @@ router.get(
 router.post(
     "/create",
     authMiddleware,
+    upload.single("image"),
     listingController.createListing
 );
 // Delete listing
@@ -42,6 +45,7 @@ router.get(
 router.post(
     "/edit/:id",
     authMiddleware,
+    upload.single("image"),
     listingController.updateListing
 );
 

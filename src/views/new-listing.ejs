@@ -11,7 +11,10 @@
 
     <h1>List a New Asset</h1>
 
-    <form action="/listings/create" method="POST">
+    <form action="/listings/create"
+        method="POST"
+        enctype="multipart/form-data"
+    >
 
         <input
             type="text"
@@ -53,6 +56,14 @@
             placeholder="Describe your asset..."
             rows="6"
         ></textarea>
+
+        <label><strong>Asset Image</strong></label>
+
+            <input
+                type="file"
+                name="image"
+                accept="image/*"
+            >
 
         <button type="submit">
             Create Listing

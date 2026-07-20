@@ -36,6 +36,11 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "../src/public")));
 
 app.use(
+    "/uploads",
+    express.static(path.join(__dirname, "../src/uploads"))
+);
+
+app.use(
     session({
         secret: process.env.SESSION_SECRET,
         resave: false,
@@ -50,7 +55,11 @@ app.use((req, res, next) => {
 
     res.locals.user = req.session.user || null;
 
+    res.locals.flash = req.session.flash || null;
+
     res.locals.getCategoryImage = getCategoryImage;
+
+    delete req.session.flash;
 
     next();
 
@@ -67,6 +76,8 @@ app.get(
     "/api/listings",
     require("./controllers/listingController").getListingsAPI
 );
+
+
 
 // Website
 app.use("/listings", listingRoutes);

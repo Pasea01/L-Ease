@@ -1,3 +1,14 @@
+
+<% if (flash) { %>
+
+    <div class="flash flash-<%= flash.type %>">
+
+        <%= flash.message %>
+
+    </div>
+
+<% } %>
+
 <nav class="navbar">
 
     <div class="logo">
@@ -20,39 +31,21 @@
 
         <div class="user-menu">
 
-            <div class="user-menu">
+            <button class="user-btn" id="userMenuBtn">
 
-    <button class="user-btn" id="userMenuBtn">
+                👤 <%= user.full_name %> ▼
 
-        👤 <%= user.full_name %> ▼
+            </button>
 
-    </button>
-
-    <div class="dropdown-menu" id="dropdownMenu">
-
-        <a href="/dashboard">🏠 Dashboard</a>
-
-        <a href="/listings/my-listings">📦 My Listings</a>
-
-        <a href="/leases/owner">📑 Lease Requests</a>
-
-        <a href="/messages">💬 Inbox</a>
-
-        <hr>
-
-        <a href="/auth/logout">🚪 Logout</a>
-
-    </div>
-
-</div>
-
-            <div class="dropdown-menu">
+            <div class="dropdown-menu" id="dropdownMenu">
 
                 <a href="/dashboard">🏠 Dashboard</a>
 
                 <a href="/listings/my-listings">📦 My Listings</a>
 
-                <a href="/leases/owner">📑 Lease Requests</a>
+                <a href="/leases/my-requests">📝 My Lease Requests</a>
+
+                <a href="/leases/owner">📑 Incoming Lease Requests</a>
 
                 <a href="/messages">💬 Inbox</a>
 
@@ -64,7 +57,7 @@
 
         </div>
 
-    <% } else { %>
+        <% } else { %>
 
         <div class="nav-buttons">
 

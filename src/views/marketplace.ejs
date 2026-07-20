@@ -26,20 +26,75 @@
 
     <section class="search-section">
 
-        <div class="search-box">
+        <form
+            class="search-box"
+            action="/listings"
+            method="GET"
+        >
 
             <input
                 type="text"
+                name="search"
                 placeholder="Search assets..."
+                value="<%= search || '' %>"
             >
 
-            <button class="primary-btn">
+            <select name="category">
+
+                <option value="">All Categories</option>
+
+                <option value="Property"
+                    <%= category === "Property" ? "selected" : "" %>>
+                    Property
+                </option>
+
+                <option value="Vehicle"
+                    <%= category === "Vehicle" ? "selected" : "" %>>
+                    Vehicle
+                </option>
+
+                <option value="Electronics"
+                    <%= category === "Electronics" ? "selected" : "" %>>
+                    Electronics
+                </option>
+
+                <option value="Furniture"
+                    <%= category === "Furniture" ? "selected" : "" %>>
+                    Furniture
+                </option>
+
+                <option value="Tools"
+                    <%= category === "Tools" ? "selected" : "" %>>
+                    Tools
+                </option>
+
+                <option value="Equipment"
+                    <%= category === "Equipment" ? "selected" : "" %>>
+                    Equipment
+                </option>
+
+                <option value="Livestock"
+                    <%= category === "Livestock" ? "selected" : "" %>>
+                    Livestock
+                </option>
+
+                <option value="Other"
+                    <%= category === "Other" ? "selected" : "" %>>
+                    Other
+                </option>
+
+            </select>
+
+            <button
+                type="submit"
+                class="primary-btn"
+            >
 
                 Search
 
             </button>
 
-        </div>
+        </form>
 
     </section>
 

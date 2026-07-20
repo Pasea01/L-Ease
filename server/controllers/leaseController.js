@@ -21,6 +21,20 @@ exports.showLeaseForm = (req, res) => {
 
         }
 
+        if (listing.owner_id === req.session.user.id) {
+
+            req.session.flash = {
+
+                type: "error",
+
+                message: "You cannot lease your own listing."
+
+            };
+
+            return res.redirect("/listings/" + assetId);
+
+        }
+
         res.render("lease-request", {
 
             user: req.session.user,
@@ -48,6 +62,21 @@ exports.createLease = (req, res) => {
         if (err || !listing) {
 
             return res.send("Listing not found.");
+
+        }
+
+        // Prevent owners from leasing their own listings
+        if (listing.owner_id === req.session.user.id) {
+
+            req.session.flash = {
+
+                type: "error",
+
+                message: "You cannot lease your own listing."
+
+            };
+
+            return res.redirect("/listings/" + asset_id);
 
         }
 
@@ -107,6 +136,38 @@ exports.showOwnerRequests = (req, res) => {
         });
 
     });
+
+};
+
+exports.showMyRequests = (req, res) => {
+
+    Lease.getTenantRequests(
+
+        req.session.user.id,
+
+        (err, requests) => {
+
+            if (err) {
+
+                console.error(err);
+
+                return res.send("Failed to load requests.");
+
+            }
+
+            console.log(requests);
+
+            res.render("tenant-requests", {
+
+                user: req.session.user,
+
+                requests
+
+            });
+
+        }
+
+    );
 
 };
 
