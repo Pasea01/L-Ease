@@ -27,61 +27,70 @@
     <section class="search-section">
 
         <form
-            class="search-box"
             action="/listings"
             method="GET"
+            class="search-form"
         >
 
             <input
                 type="text"
                 name="search"
                 placeholder="Search assets..."
-                value="<%= search || '' %>"
+                value="<%= search %>"
             >
 
             <select name="category">
 
                 <option value="">All Categories</option>
 
-                <option value="Property"
-                    <%= category === "Property" ? "selected" : "" %>>
-                    Property
-                </option>
+                <option value="Property" <%= category==="Property"?"selected":"" %>>Property</option>
 
-                <option value="Vehicle"
-                    <%= category === "Vehicle" ? "selected" : "" %>>
-                    Vehicle
-                </option>
+                <option value="Vehicle" <%= category==="Vehicle"?"selected":"" %>>Vehicle</option>
 
-                <option value="Electronics"
-                    <%= category === "Electronics" ? "selected" : "" %>>
-                    Electronics
-                </option>
+                <option value="Electronics" <%= category==="Electronics"?"selected":"" %>>Electronics</option>
 
-                <option value="Furniture"
-                    <%= category === "Furniture" ? "selected" : "" %>>
-                    Furniture
-                </option>
+                <option value="Furniture" <%= category==="Furniture"?"selected":"" %>>Furniture</option>
 
-                <option value="Tools"
-                    <%= category === "Tools" ? "selected" : "" %>>
-                    Tools
-                </option>
+                <option value="Tools" <%= category==="Tools"?"selected":"" %>>Tools</option>
 
-                <option value="Equipment"
-                    <%= category === "Equipment" ? "selected" : "" %>>
-                    Equipment
-                </option>
+                <option value="Equipment" <%= category==="Equipment"?"selected":"" %>>Equipment</option>
 
-                <option value="Livestock"
-                    <%= category === "Livestock" ? "selected" : "" %>>
-                    Livestock
-                </option>
+                <option value="Livestock" <%= category==="Livestock"?"selected":"" %>>Livestock</option>
 
-                <option value="Other"
-                    <%= category === "Other" ? "selected" : "" %>>
-                    Other
-                </option>
+                <option value="Other" <%= category==="Other"?"selected":"" %>>Other</option>
+
+            </select>
+
+            <input
+                type="text"
+                name="location"
+                placeholder="Location"
+                value="<%= location %>"
+            >
+
+            <input
+                type="number"
+                name="minPrice"
+                placeholder="Min Price"
+                value="<%= minPrice %>"
+            >
+
+            <input
+                type="number"
+                name="maxPrice"
+                placeholder="Max Price"
+                value="<%= maxPrice %>"
+            >
+
+            <select name="sort">
+
+                <option value="newest" <%= sort==="newest"?"selected":"" %>>Newest</option>
+
+                <option value="oldest" <%= sort==="oldest"?"selected":"" %>>Oldest</option>
+
+                <option value="price-low" <%= sort==="price-low"?"selected":"" %>>Lowest Price</option>
+
+                <option value="price-high" <%= sort==="price-high"?"selected":"" %>>Highest Price</option>
 
             </select>
 
