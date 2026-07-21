@@ -18,7 +18,7 @@ class Listing {
     }
 
     // Search listings
-    static search(search, category, callback) {
+    static search(filters, callback) {
 
         let sql = `
             SELECT assets.*, users.full_name
@@ -30,7 +30,7 @@ class Listing {
 
         const params = [];
 
-        if (search) {
+        if (filters.search) {
 
             sql += `
                 AND (
@@ -39,28 +39,68 @@ class Listing {
                 )
             `;
 
-            params.push(`%${search}%`);
-            params.push(`%${search}%`);
-
+            params.push(`%${filters.search}%`);
+            params.push(`%${filters.search}%`);
         }
 
-        if (category) {
+        if (filters.category) {
 
             sql += `
                 AND assets.category = ?
             `;
 
-            params.push(category);
-
+            params.push(filters.category);
         }
 
-        sql += `
-            ORDER BY assets.created_at DESC
-        `;
+        if (filters.location) {
+
+            sql += `
+                AND assets.location LIKE ?
+            `;
+
+            params.push(`%${filters.location}%`);
+        }
+
+        if (filters.minPrice) {
+
+            sql += `
+                AND assets.price_per_day >= ?
+            `;
+
+            params.push(filters.minPrice);
+        }
+
+        if (filters.maxPrice) {
+
+            sql += `
+                AND assets.price_per_day <= ?
+            `;
+
+            params.push(filters.maxPrice);
+        }
+
+        switch (filters.sort) {
+
+            case "oldest":
+                sql += " ORDER BY assets.created_at ASC";
+                break;
+
+            case "price-low":
+                sql += " ORDER BY assets.price_per_day ASC";
+                break;
+
+            case "price-high":
+                sql += " ORDER BY assets.price_per_day DESC";
+                break;
+
+            default:
+                sql += " ORDER BY assets.created_at DESC";
+        }
 
         db.all(sql, params, callback);
 
     }
+    
     // Get listings for one user
     static getUserListings(ownerId, callback) {
 

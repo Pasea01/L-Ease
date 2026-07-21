@@ -10,10 +10,21 @@ router.get(
     messageController.showInbox
 );
 
+router.post(
+    "/send",
+    authMiddleware,
+    messageController.sendMessage
+);
+
 router.get(
     "/:assetId/:otherUserId",
     authMiddleware,
     messageController.showConversation
 );
 
+router.post(
+    "/send",
+    authMiddleware,
+    messageController.sendMessage
+);
 module.exports = router;

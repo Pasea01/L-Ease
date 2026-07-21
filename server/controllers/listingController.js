@@ -30,11 +30,20 @@ exports.showMarketplace = (req, res) => {
 
     const search = req.query.search || "";
     const category = req.query.category || "";
+    const location = req.query.location || "";
+    const minPrice = req.query.minPrice || "";
+    const maxPrice = req.query.maxPrice || "";
+    const sort = req.query.sort || "newest";
 
     Listing.search(
-
-        search,
-        category,
+        {
+            search,
+            category,
+            location,
+            minPrice,
+            maxPrice,
+            sort
+        },
 
         (err, listings) => {
 
@@ -47,15 +56,14 @@ exports.showMarketplace = (req, res) => {
             }
 
             res.render("marketplace", {
-
-                user: req.session.user,
-
-                listings,
-
-                search,
-
-                category
-
+            user: req.session.user,
+            listings,
+            search,
+            category,
+            location,
+            minPrice,
+            maxPrice,
+            sort
             });
 
         }

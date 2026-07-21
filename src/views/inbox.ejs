@@ -9,43 +9,89 @@
 
 <main class="dashboard">
 
-    <h1>Inbox</h1>
+    <div class="dashboard-header">
+
+        <div>
+
+            <h1>Inbox</h1>
+
+            <p>Continue conversations with owners and tenants.</p>
+
+        </div>
+
+    </div>
 
     <% if (conversations.length === 0) { %>
 
-        <div class="listing-card">
+        <div class="activity-card">
 
-            <h3>No conversations yet.</h3>
+            <h2>No conversations yet</h2>
 
-            <p>Your messages will appear here.</p>
+            <p>Your conversations will appear here after a lease is approved.</p>
 
         </div>
 
     <% } else { %>
 
-        <% conversations.forEach(conversation => { %>
+        <div class="conversation-list">
 
-            <a
-                href="/messages/<%= conversation.asset_id %>/<%= conversation.other_user_id %>"
-                class="listing-card"
-                style="display:block; text-decoration:none; color:inherit; margin-bottom:20px;"
-            >
+            <% conversations.forEach(conversation => { %>
 
-                <h2><%= conversation.title %></h2>
+                <a
+                    href="/messages/<%= conversation.asset_id %>/<%= conversation.other_user_id %>"
+                    class="conversation-card"
+                >
 
-                <p>
-                    <strong>Conversation with:</strong>
-                    <%= conversation.other_user %>
-                </p>
+                    <% if(conversation.image_url){ %>
 
-                <p>
-                    <strong>Last activity:</strong>
-                    <%= conversation.last_message %>
-                </p>
+                        <img
+                            src="/uploads/<%= conversation.image_url %>"
+                            class="conversation-image"
+                            onerror="this.onerror=null;this.src='/images/categories/<%= (conversation.category || 'other').toLowerCase() %>.png';"
+                        >
 
-            </a>
+                    <% } else { %>
 
-        <% }) %>
+                        <img
+                            src="/images/categories/<%= (conversation.category || 'other').toLowerCase() %>.png"
+                            class="conversation-image"
+                        >
+
+                    <% } %>
+
+                    <div class="conversation-details">
+
+                        <h3><%= conversation.title %></h3>
+
+                        <p class="conversation-user">
+
+                            <strong><%= conversation.other_user %></strong>
+
+                        </p>
+
+                        <p class="conversation-preview">
+
+                            <%= conversation.last_message %>
+
+                        </p>
+
+                    </div>
+
+                    <div class="conversation-time">
+
+                        <small>
+
+                            <%= conversation.last_time %>
+
+                        </small>
+
+                    </div>
+
+                </a>
+
+            <% }) %>
+
+        </div>
 
     <% } %>
 

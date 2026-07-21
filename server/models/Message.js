@@ -6,9 +6,12 @@ class Message {
     static getInbox(userId, callback) {
 
         const sql = `
-            SELECT DISTINCT
+            SELECT
                 m.asset_id,
                 a.title,
+                a.image_url,
+                a.category,
+
                 CASE
                     WHEN m.sender_id = ?
                     THEN u2.full_name
@@ -21,7 +24,9 @@ class Message {
                     ELSE m.sender_id
                 END AS other_user_id,
 
-                MAX(m.created_at) AS last_message
+                m.message AS last_message,
+
+                MAX(m.created_at) AS last_time
 
             FROM messages m
 
@@ -36,15 +41,14 @@ class Message {
 
             WHERE
                 m.sender_id = ?
-                OR
-                m.receiver_id = ?
+                OR m.receiver_id = ?
 
             GROUP BY
                 m.asset_id,
                 other_user_id
 
             ORDER BY
-                last_message DESC
+                last_time DESC
         `;
 
         db.all(
