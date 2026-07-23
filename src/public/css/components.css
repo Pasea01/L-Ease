@@ -1,0 +1,585 @@
+/* =====================================================
+   NAVBAR
+===================================================== */
+
+.navbar{
+
+    width:95%;
+    max-width:1400px;
+
+    margin:20px auto;
+    
+    padding:10px 30px;
+
+    background:#fff;
+
+    border-radius:22px;
+
+    display:grid;
+
+    grid-template-columns:1fr auto 1fr;
+
+    align-items:center;
+
+    box-shadow:
+        0 8px 30px rgba(15,23,42,.08);
+
+}
+
+/* ---------- LEFT ---------- */
+
+.navbar-left{
+
+    justify-self:start;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    text-decoration:none;
+
+}
+
+.logo-image{
+
+    width:160px;
+
+    height:auto;
+
+    display:block;
+
+}
+
+/* ---------- CENTER ---------- */
+
+.navbar-center{
+
+    justify-self:center;
+
+}
+
+.nav-links{
+
+    display:flex;
+
+    list-style:none;
+
+    gap:55px;
+
+    align-items:center;
+
+}
+
+.nav-links li{
+
+    position:relative;
+
+}
+
+.nav-links a{
+
+    text-decoration:none;
+
+    color:#374151;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.nav-links a:hover{
+
+    color:#2563eb;
+
+}
+
+.nav-links a::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    bottom:-8px;
+
+    width:0;
+
+    height:2px;
+
+    background:#2563eb;
+
+    transition:.25s;
+
+}
+
+.nav-links a:hover::after{
+
+    width:100%;
+
+}
+
+/* ---------- RIGHT ---------- */
+
+.navbar-right{
+
+    justify-self:end;
+
+    display:flex;
+
+    align-items:center;
+
+}
+
+/* ---------- GUEST ---------- */
+
+.guest-buttons{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+/* ---------- USER ---------- */
+
+.user-menu{
+
+    position:relative;
+
+}
+
+.user-btn{
+
+    background:#2F6BFF;
+
+    color:#fff;
+
+    border:none;
+
+    border-radius:999px;
+
+    padding:6px 10px 6px 6px;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.user-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 20px rgba(47,107,255,.25);
+
+}
+
+.avatar{
+
+    width:42px;
+    
+    height:42px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    color:#2F6BFF;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-weight:700;
+
+}
+
+.username{
+
+    font-size:14px;
+
+}
+
+.caret{
+
+    font-size:11px;
+
+}
+
+/* ---------- DROPDOWN ---------- */
+
+.dropdown-menu{
+
+    position:absolute;
+
+    right:0;
+
+    top:68px;
+
+    width:270px;
+
+    background:#fff;
+
+    border-radius:16px;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.15);
+
+    overflow:hidden;
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transform:translateY(12px);
+
+    transition:.25s;
+
+    z-index:999;
+
+}
+
+.dropdown-menu.show{
+
+    opacity:1;
+
+    visibility:visible;
+
+    transform:translateY(0);
+
+}
+
+.dropdown-header{
+
+    padding:20px;
+
+}
+
+.dropdown-header strong{
+
+    display:block;
+
+    margin-bottom:5px;
+
+}
+
+.dropdown-header small{
+
+    color:#6b7280;
+
+}
+
+.dropdown-menu hr{
+
+    border:none;
+
+    border-top:1px solid #ececec;
+
+}
+
+.dropdown-menu a{
+
+    display:block;
+
+    padding:15px 20px;
+
+    color:#374151;
+
+    text-decoration:none;
+
+    transition:.2s;
+
+}
+
+.dropdown-menu a:hover{
+
+    background:#f4f7fb;
+
+    color:#2563eb;
+
+}
+
+/* ---------- BUTTONS ---------- */
+
+.primary-btn{
+
+    background:#2563eb;
+
+    color:#fff;
+
+    padding:12px 22px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}
+
+.primary-btn:hover{
+
+    background:#1d4ed8;
+
+}
+
+.secondary-btn{
+
+    background:#fff;
+
+    color:#2563eb;
+
+    border:1px solid #2563eb;
+
+    padding:12px 22px;
+
+    border-radius:10px;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}
+
+.secondary-btn:hover{
+
+    background:#2563eb;
+
+    color:#fff;
+
+}
+/* ==========================================
+   SEARCH
+========================================== */
+
+.search-form{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+    display:grid;
+
+    grid-template-columns:
+        2fr
+        1.2fr
+        1.2fr
+        1fr
+        1fr
+        1.3fr
+        auto;
+
+    gap:15px;
+
+    margin-bottom:40px;
+
+}
+
+/* ==========================================
+   CATEGORY CARDS
+========================================== */
+
+.category-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(180px,1fr));
+
+    gap:25px;
+
+}
+
+.category-card{
+
+    background:white;
+
+    border-radius:16px;
+
+    text-align:center;
+
+    padding:35px 20px;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.category-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.category-card span{
+
+    font-size:42px;
+
+    display:block;
+
+    margin-bottom:18px;
+
+}
+
+/* ==========================================
+   CHAT
+========================================== */
+
+.chat-container{
+
+    background:white;
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+    padding:25px;
+
+    height:520px;
+
+    overflow-y:auto;
+
+}
+
+.chat-message{
+
+    display:flex;
+
+    margin-bottom:18px;
+
+}
+
+.chat-message.sent{
+
+    justify-content:flex-end;
+
+}
+
+.chat-message.received{
+
+    justify-content:flex-start;
+
+}
+
+.chat-bubble{
+
+    max-width:70%;
+
+    padding:15px 18px;
+
+    border-radius:18px;
+
+}
+
+.chat-message.sent .chat-bubble{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+.chat-message.received .chat-bubble{
+
+    background:#edf2f7;
+
+}
+
+.chat-form{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+/* ==========================================
+   INBOX
+========================================== */
+
+.conversation-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.conversation-card{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    padding:18px;
+
+    background:white;
+
+    border-radius:16px;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.conversation-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.conversation-image{
+
+    width:90px;
+    height:90px;
+
+    border-radius:12px;
+
+    object-fit:cover;
+
+}
+
+.conversation-details{
+
+    flex:1;
+
+}
+
+.conversation-time{
+
+    color:var(--text-muted);
+
+    font-size:13px;
+
+}

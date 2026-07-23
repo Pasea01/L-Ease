@@ -55,6 +55,64 @@ class User {
 
     }
 
+    static emailExists(email, userId, callback) {
+
+        const sql = `
+            SELECT *
+            FROM users
+            WHERE email = ?
+            AND id != ?
+        `;
+
+        db.get(
+            sql,
+            [email, userId],
+            callback
+        );
+
+    }
+
+    static getProfileStats(userId, callback) {
+
+        const sql = `
+            SELECT
+                (SELECT COUNT(*) FROM assets WHERE owner_id = ?) AS listings,
+                (SELECT COUNT(*) FROM leases WHERE tenant_id = ?) AS lease_requests,
+                (SELECT COUNT(*) FROM leases WHERE owner_id = ? AND status = 'approved') AS successful_leases
+        `;
+
+        db.get(
+            sql,
+            [userId, userId, userId],
+            callback
+        );
+
+    }
+
+    static updateProfile(userId, user, callback) {
+
+        const sql = `
+            UPDATE users
+            SET
+                full_name = ?,
+                email = ?,
+                phone = ?
+            WHERE id = ?
+        `;
+
+        db.run(
+            sql,
+            [
+                user.full_name,
+                user.email,
+                user.phone,
+                userId
+            ],
+            callback
+        );
+
+    }
+
 }
 
 module.exports = User;

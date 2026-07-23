@@ -14,16 +14,63 @@
         <!-- Hero Section -->
         <section class="hero">
 
-            <h1>Lease Anything, Anytime.</h1>
+            <div class="hero-content">
 
-            <p>
-                Find trusted rentals for property, vehicles,
-                electronics, furniture, tools, equipment and much more.
-            </p>
+                <h1>Lease Anything, Anytime.</h1>
 
-            <div class="hero-buttons">
-                <button class="primary-btn">Browse Assets</button>
-                <button class="secondary-btn">List an Asset</button>
+                <p>
+                    Find trusted rentals for property, vehicles,
+                    electronics, furniture, tools, equipment and much more.
+                </p>
+
+                <div class="hero-search-card">
+
+                    <input
+                        type="text"
+                        placeholder="Search assets..."
+                    >
+
+                    <select>
+
+                        <option>All Categories</option>
+                        <option>Vehicles</option>
+                        <option>Property</option>
+                        <option>Electronics</option>
+                        <option>Furniture</option>
+                        <option>Tools</option>
+
+                    </select>
+
+                    <button class="primary-btn">
+
+                        Search
+
+                    </button>
+
+                </div>
+
+                <div class="hero-buttons">
+
+                    <a href="/listings" class="primary-btn">
+                        Browse Assets
+                    </a>
+
+                    <% if(user){ %>
+
+                        <a href="/listings/new" class="secondary-btn">
+                            List an Asset
+                        </a>
+
+                    <% } else { %>
+
+                        <a href="/register" class="secondary-btn">
+                            List an Asset
+                        </a>
+
+                    <% } %>
+
+                </div>
+
             </div>
 
         </section>

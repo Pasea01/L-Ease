@@ -1,0 +1,487 @@
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+
+    padding:70px 8% 90px;
+
+}
+
+.hero-content{
+
+    max-width:900px;
+
+    margin:auto;
+
+    text-align:center;
+
+}
+
+.hero h1{
+
+    font-size:60px;
+
+    font-weight:800;
+
+    line-height:1.1;
+
+    color:#1f2937;
+
+    margin-bottom:20px;
+
+}
+
+.hero p{
+
+    max-width:760px;
+
+    margin:0 auto 45px;
+
+    font-size:20px;
+
+    line-height:1.7;
+
+    color:#6b7280;
+
+}
+
+/* Search Card */
+
+.hero-search-card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:12px;
+
+    display:grid;
+
+    grid-template-columns:2fr 1fr auto;
+
+    gap:12px;
+
+    align-items:center;
+
+    box-shadow:0 12px 35px rgba(15,23,42,.08);
+
+    margin-bottom:35px;
+
+}
+
+.hero-search-card input,
+
+.hero-search-card select{
+
+    border:none;
+
+    background:#f8fafc;
+
+    padding:16px 20px;
+
+    border-radius:12px;
+
+    font-size:15px;
+
+    outline:none;
+
+}
+
+.hero-search-card input:focus,
+
+.hero-search-card select:focus{
+
+    background:#eef4ff;
+
+}
+
+.hero-search-card button{
+
+    height:54px;
+
+    padding:0 28px;
+
+}
+
+/* Buttons */
+
+.hero-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:16px;
+
+    flex-wrap:wrap;
+
+}
+
+/* ==========================================
+   AUTH
+========================================== */
+
+.auth-container{
+
+    width:min(500px,92%);
+
+    margin:80px auto;
+
+    background:white;
+
+    padding:45px;
+
+    border-radius:20px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.auth-container h1{
+
+    text-align:center;
+
+    margin-bottom:30px;
+
+}
+
+.auth-container form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.auth-container p{
+
+    text-align:center;
+
+}
+
+/* ==========================================
+   DASHBOARD
+========================================== */
+
+.stats-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(230px,1fr));
+
+    gap:25px;
+
+    margin-bottom:40px;
+
+}
+
+.quick-actions{
+
+    margin:50px 0;
+
+}
+
+.action-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(230px,1fr));
+
+    gap:25px;
+
+}
+
+.action-card{
+
+    background:white;
+
+    padding:35px;
+
+    border-radius:18px;
+
+    text-align:center;
+
+    box-shadow:var(--shadow);
+
+    transition:.25s;
+
+}
+
+.action-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.action-card h3{
+
+    margin-top:15px;
+
+}
+
+.recent-activity{
+
+    margin-top:60px;
+
+}
+
+/* ==========================================
+   PROFILE
+========================================== */
+
+.dashboard-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap:35px;
+
+}
+
+.profile-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px 0;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.profile-row:last-child{
+
+    border-bottom:none;
+
+}
+
+.profile-row strong{
+
+    color:var(--text);
+
+}
+
+.profile-row span{
+
+    color:var(--text-light);
+
+}
+
+.stat-box{
+
+    background:#f8fafc;
+
+    border-radius:14px;
+
+    text-align:center;
+
+    padding:28px;
+
+}
+
+.stat-box h1{
+
+    color:var(--primary);
+
+    font-size:40px;
+
+    margin-bottom:10px;
+
+}
+
+/* ==========================================
+   LISTING DETAILS
+========================================== */
+
+.listing-details-container{
+
+    width:min(1300px,94%);
+
+    margin:50px auto;
+
+}
+
+.listing-details{
+
+    display:grid;
+
+    grid-template-columns:
+        1.1fr
+        1fr;
+
+    gap:60px;
+
+    align-items:start;
+
+}
+
+.listing-image-large{
+
+    width:100%;
+
+    height:520px;
+
+    object-fit:cover;
+
+    border-radius:18px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.listing-info h1{
+
+    margin-bottom:20px;
+
+}
+
+.listing-info p{
+
+    margin-bottom:18px;
+
+}
+
+.listing-info .listing-price{
+
+    margin:25px 0;
+
+}
+
+.lease-actions{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:30px;
+
+}
+
+/* ==========================================
+   MY LISTINGS
+========================================== */
+
+.my-listings{
+
+    margin-top:30px;
+
+}
+
+.my-listings .listing-card{
+
+    position:relative;
+
+}
+
+.my-listings .listing-buttons{
+
+    padding:20px;
+
+}
+
+/* ==========================================
+   LEASE REQUESTS
+========================================== */
+
+.request-list{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:25px;
+
+}
+
+.request-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.request-card h3{
+
+    margin-bottom:12px;
+
+}
+
+.request-actions{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:25px;
+
+}
+
+/* ==========================================
+   EMPTY STATES
+========================================== */
+
+.empty-state{
+
+    background:white;
+
+    text-align:center;
+
+    padding:60px 30px;
+
+    border-radius:20px;
+
+    box-shadow:var(--shadow);
+
+}
+
+.empty-state h2{
+
+    margin-bottom:15px;
+
+}
+
+.empty-state p{
+
+    margin-bottom:25px;
+
+}
+
+/* ==========================================
+   PAGE HEADINGS
+========================================== */
+
+.page-header{
+
+    margin-bottom:35px;
+
+}
+
+.page-header h1{
+
+    font-size:38px;
+
+}
+
+.page-header p{
+
+    margin-top:8px;
+
+    color:var(--text-light);
+
+}
