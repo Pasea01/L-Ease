@@ -55,7 +55,7 @@ exports.showConversation = (req, res) => {
 
             }
 
-            Message.getConversation(
+           Message.getConversation(
 
                 userId,
                 otherUserId,
@@ -71,12 +71,25 @@ exports.showConversation = (req, res) => {
 
                     }
 
+                    const otherUserName =
+                        messages.length > 0
+                            ? messages.find(m => m.sender_id !== userId)?.full_name ||
+                            messages[0].full_name
+                            : "User";
+
+                    const listingTitle =
+                        messages.length > 0
+                            ? messages[0].title || "Conversation"
+                            : "Conversation";
+
                     res.render("conversation", {
 
                         user: req.session.user,
                         messages,
                         assetId,
-                        otherUserId
+                        otherUserId,
+                        otherUserName,
+                        listingTitle
 
                     });
 
@@ -90,66 +103,6 @@ exports.showConversation = (req, res) => {
 
 };
 
-exports.sendMessage = (req, res) => {
-
-    const senderId = req.session.user.id;
-
-    const {
-
-        receiver_id,
-        asset_id,
-        message
-
-    } = req.body;
-
-    Lease.canAccessConversation(
-
-        senderId,
-        Number(receiver_id),
-        Number(asset_id),
-
-        (err, lease) => {
-
-            if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to verify permission.");
-
-            }
-
-            if (!lease) {
-
-                return res.status(403).send("Access denied.");
-
-            }
-
-            Message.send({
-
-                sender_id: senderId,
-                receiver_id,
-                asset_id,
-                message
-
-            }, (err) => {
-
-                if (err) {
-
-                    console.error(err);
-
-                    return res.send("Failed to send message.");
-
-                }
-
-                res.redirect(`/messages/${asset_id}/${receiver_id}`);
-
-            });
-
-        }
-
-    );
-
-};
 
 exports.sendMessage = (req, res) => {
 

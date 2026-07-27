@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <%- include("partials/head") %>
@@ -8,9 +7,9 @@
 
 <%- include("partials/navbar") %>
 
-<main class="dashboard">
+<main class="lease-owner-page">
 
-    <div class="dashboard-header">
+    <section class="create-header">
 
         <div>
 
@@ -18,105 +17,163 @@
 
             <p>
 
-                Track every lease request you've submitted.
+                Track the status of every lease request you've submitted.
 
             </p>
 
         </div>
 
-    </div>
+    </section>
 
-    <% if(requests.length === 0){ %>
+    <% if(requests.length===0){ %>
 
-        <div class="activity-card">
+    <section class="empty-state-card">
 
-            <h2>No Requests Yet</h2>
+        <div class="empty-icon">📨</div>
 
-            <p>
+        <h2>No Requests Yet</h2>
 
-                You haven't requested any leases yet.
+        <p>
 
-            </p>
+            Browse listings and request your first lease.
 
-        </div>
+        </p>
+
+        <a
+            href="/listings"
+            class="primary-btn"
+        >
+
+            Browse Listings
+
+        </a>
+
+    </section>
 
     <% } else { %>
 
-        <div class="listing-grid">
+    <section class="request-grid">
 
-            <% requests.forEach(request => { %>
+        <% requests.forEach(request=>{ %>
 
-                <div class="listing-card">
+        <article class="request-card">
 
-                   <% if (request.image_url) { %>
+            <div class="request-layout">
 
-                        <img
-                            src="/uploads/<%= request.image_url %>"
-                            class="listing-image"
-                            alt="<%= request.title %>"
-                            onerror="this.onerror=null; this.src='/images/categories/<%= (request.category || 'other').toLowerCase() %>.png';"
-                        >
+                <div class="request-image">
+
+                    <% if(request.image_url){ %>
+
+                    <img
+                        src="/uploads/<%= request.image_url %>"
+                        alt="<%= request.title %>"
+                        onerror="this.onerror=null;this.src='/images/categories/<%= (request.category || 'other').toLowerCase() %>.png';"
+                    >
 
                     <% } else { %>
 
-                        <img
-                            src="/images/categories/<%= (request.category || 'other').toLowerCase() %>.png"
-                            class="listing-image"
-                            alt="<%= request.category %>"
-                        >
+                    <img
+                        src="/images/categories/<%= (request.category || 'other').toLowerCase() %>.png"
+                        alt="<%= request.category %>"
+                    >
 
                     <% } %>
 
-                <div class="listing-content">
+                </div>
 
-                    <h3><%= request.title %></h3>
+                <div class="request-content">
 
-                    <p>
+                    <div class="request-top">
 
-                        <strong>Owner:</strong>
+                        <div>
 
-                        <%= request.owner_name %>
+                            <h2><%= request.title %></h2>
 
-                    </p>
+                            <p>
 
-                    <p>
+                                Host: <strong><%= request.owner_name %></strong>
 
-                        <strong>From:</strong>
+                            </p>
 
-                        <%= request.start_date %>
+                        </div>
 
-                    </p>
+                        <span class="status-badge status-<%= request.status %>">
 
-                    <p>
+                            <%= request.status %>
 
-                        <strong>To:</strong>
+                        </span>
 
-                        <%= request.end_date %>
+                    </div>
 
-                    </p>
+                    <div class="request-details">
 
-                    <p>
+                        <div>
 
-                        <strong>Status:</strong>
+                            <span>📅 Start</span>
 
-                        <%= request.status %>
+                            <strong><%= request.start_date %></strong>
 
-                    </p>
+                        </div>
 
-                    <br>
+                        <div>
 
-                    <% if(request.status === "approved"){ %>
+                            <span>📅 End</span>
 
-                        <a
-                            href="/messages/<%= request.asset_id %>/<%= request.owner_id %>"
-                            class="primary-btn"
-                        >
+                            <strong><%= request.end_date %></strong>
 
-                            Open Chat
+                        </div>
 
-                        </a>
+                    </div>
 
-                    <% } else if(request.status === "pending"){ %>
+                    <div class="request-actions">
+
+                        <% if(request.completed){ %>
+
+                            <a
+                                href="/reviews/new/<%= request.id %>"
+                                class="primary-btn"
+                            >
+
+                                ⭐ Leave Review
+
+                            </a>
+
+                        <% } else if(request.status === "approved"){ %>
+
+                            <a
+                                href="/messages/<%= request.asset_id %>/<%= request.owner_id %>"
+                                class="primary-btn"
+                            >
+
+                                Open Chat
+
+                            </a>
+
+                        <% } else if(request.status === "pending"){ %>
+
+                            <button
+                                class="secondary-btn"
+                                disabled
+                            >
+
+                                Awaiting Approval
+
+                            </button>
+
+                        <% } else { %>
+
+                            <button
+                                class="danger-btn"
+                                disabled
+                            >
+
+                                Rejected
+
+                            </button>
+
+                        <% } %>
+
+                        <% if(request.status==="pending"){ %>
 
                         <button
                             class="secondary-btn"
@@ -127,32 +184,39 @@
 
                         </button>
 
-                    <% } else { %>
+                        <% } %>
+
+                        <% if(request.status==="rejected"){ %>
 
                         <button
-                            class="danger-btn"
+                            class="reject-btn"
                             disabled
                         >
 
-                            Rejected
+                            Request Rejected
 
                         </button>
 
-                    <% } %>
+                        <% } %>
+
+                    </div>
 
                 </div>
 
-                </div>
+            </div>
 
-            <% }) %>
+        </article>
 
-        </div>
+        <% }) %>
+
+    </section>
 
     <% } %>
 
 </main>
 
 <%- include("partials/footer") %>
+
 
 <%- include("partials/scripts") %>
 

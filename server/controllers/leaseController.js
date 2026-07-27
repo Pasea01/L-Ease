@@ -233,3 +233,35 @@ exports.rejectLease = (req, res) => {
     );
 
 };
+
+exports.completeLease = (req,res)=>{
+
+    Lease.completeLease(
+
+        req.params.id,
+
+        (err)=>{
+
+            if(err){
+
+                console.error(err);
+
+                return res.send("Failed to complete lease.");
+
+            }
+
+            req.session.flash={
+
+                type:"success",
+
+                message:"Lease marked as completed."
+
+            };
+
+            res.redirect("/leases/owner");
+
+        }
+
+    );
+
+};

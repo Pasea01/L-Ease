@@ -7,103 +7,133 @@
 
 <%- include("partials/navbar") %>
 
-<main class="dashboard">
+<main class="dashboard-page">
 
-    <section class="dashboard-header">
+    <div class="dashboard-layout">
 
-        <div>
-            <h1>Welcome back, <%= user.full_name %> 👋</h1>
-            <p>Manage your listings, leases, messages and profile from one place.</p>
-        </div>
+        <!-- Sidebar -->
 
-        <a href="/listings/new" class="primary-btn">
-            + List New Asset
-        </a>
+        <aside class="dashboard-sidebar">
 
-    </section>
+            <div class="sidebar-profile">
 
-    <section class="stats-grid">
+                <div class="sidebar-avatar">
 
-        <div class="stat-card">
-            <h3>My Listings</h3>
-            <span>0</span>
-        </div>
+                    <%= user.full_name.charAt(0).toUpperCase() %>
 
-        <div class="stat-card">
-            <h3>Active Leases</h3>
-            <span>0</span>
-        </div>
+                </div>
 
-        <div class="stat-card">
-            <h3>Messages</h3>
-            <span>0</span>
-        </div>
+                <h3><%= user.full_name %></h3>
 
-        <div class="stat-card">
-            <h3>Reviews</h3>
-            <span>0</span>
-        </div>
+                <p>Marketplace Member</p>
 
-    </section>
+            </div>
 
-    <section class="quick-actions">
+            <nav class="dashboard-menu">
 
-        <h2>Quick Actions</h2>
+                <a href="/dashboard" class="active">🏠 Dashboard</a>
 
-        <div class="action-grid">
+                <a href="/profile">👤 Profile</a>
 
-            <a href="/listings/new" class="action-card">
-                <div style="font-size:50px;">📦</div>
-                <h3>List Asset</h3>
-                <p>Create a new rental listing.</p>
-            </a>
+                <a href="/listings/my-listings">📦 My Listings</a>
 
-            <a href="/listings/my-listings" class="action-card">
-                <div style="font-size:50px;">🔍</div>
-                <h3>My Listings</h3>
-                <p>View and manage your listed assets.</p>
-            </a>
+                <a href="/leases/owner">📋 Lease Requests</a>
 
-            <a href="#" class="action-card">
-                <div style="font-size:50px;">👤</div>
-                <h3>My Profile</h3>
-                <p>Manage your account.</p>
-            </a>
+                <a href="/inbox">💬 Messages</a>
 
-            <a href="#" class="action-card">
-                <div style="font-size:50px;">💬</div>
-                <h3>Messages</h3>
-                <p>Chat with other users.</p>
-            </a>
+                <a href="#">⭐ Reviews</a>
 
-            <a href="/leases/owner" class="action-card">
+                <a href="#">⚙ Settings</a>
 
-                <div style="font-size:50px;">📋</div>
-                <h3>Lease Requests</h3>
-                <p>View incoming requests.</p>
+            </nav>
 
-            </a>
+        </aside>
 
-        </div>
+        <!-- Main -->
 
-    </section>
+        <section class="dashboard-main">
 
-    <section class="recent-activity">
+            <div class="dashboard-hero">
 
-        <h2>Recent Activity</h2>
+                <div>
 
-        <div class="activity-card">
+                    <h1>Welcome back, <%= user.full_name %> 👋</h1>
 
-            <h3>No activity yet.</h3>
+                    <p>Manage everything from one place.</p>
 
-            <p>
-                Once you create listings or lease assets,
-                your recent activity will appear here.
-            </p>
+                </div>
 
-        </div>
+                <a href="/listings/new" class="primary-btn">
 
-    </section>
+                    + New Listing
+
+                </a>
+
+            </div>
+
+            <div class="dashboard-stats">
+
+                <div class="dashboard-stat">
+
+                    <div class="stat-icon">📦</div>
+
+                    <h2>0</h2>
+
+                    <p>Listings</p>
+
+                </div>
+
+                <div class="dashboard-stat">
+
+                    <div class="stat-icon">📑</div>
+
+                    <h2>0</h2>
+
+                    <p>Requests</p>
+
+                </div>
+
+                <div class="dashboard-stat">
+
+                    <div class="stat-icon">💬</div>
+
+                    <h2>0</h2>
+
+                    <p>Messages</p>
+
+                </div>
+
+                <div class="dashboard-stat">
+
+                    <div class="stat-icon">⭐</div>
+
+                    <h2>0</h2>
+
+                    <p>Reviews</p>
+
+                </div>
+
+            </div>
+
+            <div class="dashboard-card">
+
+                <h2>Recent Activity</h2>
+
+                <div class="empty-state">
+
+                    <h3>No recent activity</h3>
+
+                    <p>Your latest listings and lease activity will appear here.</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+    
 
 </main>
 
@@ -112,4 +142,5 @@
 <%- include("partials/scripts") %>
 
 </body>
+
 </html>

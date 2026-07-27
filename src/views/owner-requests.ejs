@@ -7,65 +7,172 @@
 
 <%- include("partials/navbar") %>
 
-<main class="dashboard">
+<main class="lease-owner-page">
 
-    <h1>Incoming Lease Requests</h1>
+    <section class="create-header">
 
-    <% if (requests.length === 0) { %>
+        <div>
 
-        <p>No lease requests yet.</p>
+            <h1>Lease Requests</h1>
+
+            <p>
+
+                Review incoming lease requests for your listings.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <% if(requests.length===0){ %>
+
+    <section class="empty-state-card">
+
+        <div class="empty-icon">📋</div>
+
+        <h2>No Requests Yet</h2>
+
+        <p>
+
+            Lease requests will appear here when someone requests one of your listings.
+
+        </p>
+
+    </section>
 
     <% } else { %>
 
-        <% requests.forEach(request => { %>
+    <section class="request-grid">
 
-            <div class="listing-card">
+        <% requests.forEach(request=>{ %>
 
-                <h2><%= request.title %></h2>
+        <article class="request-card">
 
-                <p><strong>Requested By:</strong> <%= request.tenant_name %></p>
+            <div class="request-top">
 
-                <p><strong>Start:</strong> <%= request.start_date %></p>
+                <div>
 
-                <p><strong>End:</strong> <%= request.end_date %></p>
+                    <h2><%= request.title %></h2>
 
-                <p><strong>Message:</strong></p>
+                    <p>
 
-                <p><%= request.message || "No message." %></p>
+                        Requested by <strong><%= request.tenant_name %></strong>
 
-                <div class="lease-actions">
+                    </p>
 
-                    <% if (request.status === "pending") { %>
+                </div>
 
-                        <form action="/leases/<%= request.id %>/approve" method="POST">
+                <span class="status-badge status-<%= request.status %>">
 
-                            <button class="primary-btn">
-                                Approve
-                            </button>
+                    <%= request.status %>
 
-                        </form>
+                </span>
 
-                        <form action="/leases/<%= request.id %>/reject" method="POST">
+            </div>
 
-                            <button class="danger-btn">
-                                Reject
-                            </button>
+            <div class="request-details">
 
-                        </form>
+                <div>
 
-                    <% } else { %>
+                    <span>📅 Start</span>
 
-                        <strong>Status: <%= request.status %></strong>
+                    <strong><%= request.start_date %></strong>
 
-                    <% } %>
+                </div>
+
+                <div>
+
+                    <span>📅 End</span>
+
+                    <strong><%= request.end_date %></strong>
 
                 </div>
 
             </div>
 
-            <br>
+            <div class="request-message">
+
+                <h4>Message</h4>
+
+                <p>
+
+                    <%= request.message || "No message provided." %>
+
+                </p>
+
+            </div>
+
+            <% if(request.status==="pending"){ %>
+
+                <div class="request-actions">
+
+                    <form
+                        action="/leases/<%= request.id %>/approve"
+                        method="POST"
+                    >
+
+                        <button class="approve-btn">
+
+                            ✓ Approve
+
+                        </button>
+
+                    </form>
+
+                    <form
+                        action="/leases/<%= request.id %>/reject"
+                        method="POST"
+                    >
+
+                        <button class="reject-btn">
+
+                            ✕ Reject
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <% } else if(request.status==="approved" && !request.completed){ %>
+
+                <div class="request-actions">
+
+                    <form
+                        action="/leases/<%= request.id %>/complete"
+                        method="POST"
+                    >
+
+                        <button class="primary-btn">
+
+                            ✔ Mark Lease Complete
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+                <% } else if(request.completed){ %>
+
+                <div class="request-actions">
+
+                    <span class="success-badge">
+
+                        ✔ Lease Completed
+
+                    </span>
+
+                </div>
+
+                <% } %>
+
+        </article>
 
         <% }) %>
+
+    </section>
 
     <% } %>
 

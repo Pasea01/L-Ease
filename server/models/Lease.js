@@ -171,6 +171,22 @@ class Lease {
 
     }
 
+    // =====================================
+        // Complete Lease
+        // =====================================
+        static completeLease(leaseId, callback) {
+
+            const sql = `
+                UPDATE leases
+                SET completed = 1
+                WHERE id = ?
+            `;
+
+            db.run(sql, [leaseId], callback);
+
+        }
+
 }
+
 
 module.exports = Lease;

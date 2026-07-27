@@ -45,3 +45,60 @@ async function loadListings() {
 }
 
 loadListings();
+
+const overlay = document.getElementById("authOverlay");
+
+const loginView = document.getElementById("loginView");
+const registerView = document.getElementById("registerView");
+
+document.getElementById("openLogin")?.addEventListener("click",(e)=>{
+
+    e.preventDefault();
+
+    overlay.classList.add("show");
+
+    loginView.style.display="block";
+    registerView.style.display="none";
+
+});
+
+document.getElementById("openRegister")?.addEventListener("click",(e)=>{
+
+    e.preventDefault();
+
+    overlay.classList.add("show");
+
+    loginView.style.display="none";
+    registerView.style.display="block";
+
+});
+
+document.getElementById("closeAuth")?.addEventListener("click",()=>{
+
+    overlay.classList.remove("show");
+
+});
+
+overlay?.addEventListener("click",(e)=>{
+
+    if(e.target===overlay){
+
+        overlay.classList.remove("show");
+
+    }
+
+});
+
+document.getElementById("showRegister")?.addEventListener("click",()=>{
+
+    loginView.style.display="none";
+    registerView.style.display="block";
+
+});
+
+document.getElementById("showLogin")?.addEventListener("click",()=>{
+
+    registerView.style.display="none";
+    loginView.style.display="block";
+
+});

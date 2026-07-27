@@ -7,6 +7,7 @@ const session = require("express-session");
 const leaseRoutes = require("./routes/leaseRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const userRoutes = require("./routes/userRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 
 require("./database/db");
 require("./database/initDatabase");
@@ -90,6 +91,8 @@ app.use("/leases", leaseRoutes);
 app.use("/messages", messageRoutes);
 
 app.use("/", userRoutes);
+
+app.use("/reviews", reviewRoutes);
 
 // --------------------------
 // Start Server

@@ -7,134 +7,167 @@
 
 <%- include("partials/navbar") %>
 
-<main class="dashboard">
+<main class="my-listings-page">
 
-    <section class="dashboard-header">
+    <section class="page-header">
 
         <div>
+
             <h1>My Listings</h1>
-            <p>Manage all the assets you've listed on L-ease.</p>
+
+            <p>Manage the assets you've listed on L-Ease.</p>
+
         </div>
 
         <a href="/listings/new" class="primary-btn">
+
             + New Listing
+
         </a>
 
     </section>
 
-    <% if (listings.length === 0) { %>
+    <% if(listings.length === 0){ %>
 
-        <div class="activity-card">
+    <section class="empty-state-card">
 
-            <h2>No Listings Yet</h2>
+        <div class="empty-icon">📦</div>
 
-            <p>
-                You haven't listed any assets yet.
-            </p>
+        <h2>No Listings Yet</h2>
 
-            <br>
+        <p>
 
-            <a href="/listings/new" class="primary-btn">
-                Create Your First Listing
-            </a>
+            Start earning by listing your first asset.
 
-        </div>
+        </p>
+
+        <a href="/listings/new" class="primary-btn">
+
+            Create Listing
+
+        </a>
+
+    </section>
 
     <% } else { %>
 
-        <div class="listing-grid">
+    <section class="host-grid">
 
-            <% listings.forEach(listing => { %>
+        <% listings.forEach(listing=>{ %>
 
-            <div class="listing-card">
+        <article class="host-card">
 
-                <% if (listing.image_url) { %>
+            <div class="image-wrapper">
+
+                <a href="/listings/<%= listing.id %>">
+
+                    <% if(listing.image_url){ %>
 
                     <img
                         src="/uploads/<%= listing.image_url %>"
-                        class="listing-image"
                         alt="<%= listing.title %>"
+                        class="host-image"
                     >
 
-                <% } else { %>
+                    <% } else { %>
 
                     <img
                         src="<%= getCategoryImage(listing.category) %>"
-                        class="listing-image"
                         alt="<%= listing.category %>"
+                        class="host-image"
                     >
 
-                <% } %>
+                    <% } %>
 
-                <div class="listing-content">
+                </a>
 
-                    <h3><%= listing.title %></h3>
+                <details class="card-menu">
 
-                    <div class="listing-meta">
+                    <summary>⋮</summary>
 
-                        <span class="category-badge">
+                    <div class="menu-dropdown">
 
-                            <% if(listing.category==="Property"){ %>🏠<% } %>
-                            <% if(listing.category==="Vehicle"){ %>🚗<% } %>
-                            <% if(listing.category==="Electronics"){ %>💻<% } %>
-                            <% if(listing.category==="Furniture"){ %>🪑<% } %>
-                            <% if(listing.category==="Tools"){ %>🔧<% } %>
-                            <% if(listing.category==="Equipment"){ %>⚙️<% } %>
-                            <% if(listing.category==="Livestock"){ %>🐄<% } %>
-                            <% if(listing.category==="Other"){ %>📦<% } %>
+                        <a href="/listings/<%= listing.id %>">
 
-                            <%= listing.category %>
+                            👁 View
 
-                        </span>
+                        </a>
 
-                        <span class="listing-location">
+                        <a href="/listings/edit/<%= listing.id %>">
 
-                            📍 <%= listing.location %>
+                            ✏ Edit
 
-                        </span>
-
-                    </div>
-
-                    <div class="listing-price">
-
-                        KES <%= listing.price_per_day %> / day
-
-                    </div>
-
-                    <p class="listing-description">
-
-                        <%= listing.description %>
-
-                    </p>
-
-                    <div class="listing-buttons">
-
-                        <a
-                            href="/listings/edit/<%= listing.id %>"
-                            class="primary-btn"
-                        >
-                            Edit
                         </a>
 
                         <a
                             href="/listings/delete/<%= listing.id %>"
-                            class="secondary-btn"
                             onclick="return confirm('Delete this listing?')"
                         >
-                            Delete
+
+                            🗑 Delete
+
                         </a>
 
                     </div>
 
-                </div>
+                </details>
 
             </div>
 
-            <% }) %>
+            <a
+                href="/listings/<%= listing.id %>"
+                class="card-link"
+            >
+
+                <div class="host-content">
+
+                    <div class="host-title-row">
+
+                        <h3>
+
+                            <%= listing.title %>
+
+                        </h3>
+
+                        <span class="host-price">
+
+                            KES <%= listing.price_per_day %>/day
+
+                        </span>
 
                     </div>
 
-                <% } %>
+                    <p class="host-location">
+
+                        📍 <%= listing.location %>
+
+                    </p>
+
+                    <span class="host-category">
+
+                        <%= listing.category %>
+
+                    </span>
+
+                    <p class="host-description">
+
+                        <%= listing.description.length > 80
+                        ? listing.description.substring(0,80) + "..."
+                        : listing.description %>
+
+                    </p>
+
+                </div>
+
+            </a>
+
+        </article>
+
+        <% }) %>
+
+    </section>
+
+    <% } %>
 
 </main>
 

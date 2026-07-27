@@ -7,117 +7,151 @@
 
 <%- include("partials/navbar") %>
 
-<main class="dashboard">
+<main class="profile-page">
 
-    <div class="dashboard-header">
+    <div class="profile-layout">
 
-        <div>
+        <!-- Sidebar -->
 
-            <h1>My Profile</h1>
+        <aside class="profile-sidebar">
 
-            <p>Manage your personal information and account activity.</p>
+            <h1>Profile</h1>
 
-        </div>
+            <nav class="profile-menu">
 
-    </div>
+                <a href="/profile" class="active">
+                    👤 About Me
+                </a>
 
-    <div class="dashboard-grid">
+                <a href="/dashboard">
+                    📊 Dashboard
+                </a>
 
-        <!-- Profile Information -->
+                <a href="/listings/my-listings">
+                    📦 My Listings
+                </a>
 
-        <div class="activity-card">
+                <a href="/leases/owner">
+                    📋 Lease Requests
+                </a>
 
-            <h2>👤 Account Information</h2>
+                <a href="/inbox">
+                    💬 Messages
+                </a>
 
-            <hr><br>
+            </nav>
 
-            <div class="profile-row">
+        </aside>
 
-                <span>Full Name</span>
+        <!-- Main -->
 
-                <strong><%= user.full_name %></strong>
+        <section class="profile-content">
 
-            </div>
+            <div class="profile-header">
 
-            <div class="profile-row">
+                <h1>About Me</h1>
 
-                <span>Email</span>
-
-                <strong><%= user.email %></strong>
-
-            </div>
-
-            <div class="profile-row">
-
-                <span>Phone</span>
-
-                <strong><%= user.phone || "Not provided" %></strong>
-
-            </div>
-
-            <div class="profile-row">
-
-                <span>Role</span>
-
-                <strong><%= user.role %></strong>
+                <a href="/profile/edit" class="secondary-btn">
+                    Edit
+                </a>
 
             </div>
 
-            <div class="profile-row">
+            <div class="profile-card">
 
-                <span>Member Since</span>
+                <div class="profile-avatar">
 
-                <strong><%= new Date(user.created_at).toLocaleDateString() %></strong>
-
-            </div>
-
-            <br>
-
-            <a href="/profile/edit" class="primary-btn">
-
-                Edit Profile
-
-            </a>
-
-        </div>
-
-        <!-- Activity -->
-
-        <div class="activity-card">
-
-            <h2>📊 Activity</h2>
-
-            <hr><br>
-
-            <div class="stats-grid">
-
-                <div class="stat-box">
-
-                    <h1><%= stats.listings %></h1>
-
-                    <p>Listings</p>
+                    <%= user.full_name.charAt(0).toUpperCase() %>
 
                 </div>
 
-                <div class="stat-box">
+                <h2><%= user.full_name %></h2>
 
-                    <h1><%= stats.lease_requests %></h1>
+                <p class="profile-role">
 
-                    <p>Lease Requests</p>
+                    <%= user.role %>
 
-                </div>
+                </p>
 
-                <div class="stat-box">
+            </div>
 
-                    <h1><%= stats.successful_leases %></h1>
+            <div class="profile-section">
 
-                    <p>Approved Leases</p>
+                <h2>Personal Information</h2>
+
+                <div class="profile-info">
+
+                    <div class="profile-item">
+
+                        <span>Email</span>
+
+                        <strong><%= user.email %></strong>
+
+                    </div>
+
+                    <div class="profile-item">
+
+                        <span>Phone</span>
+
+                        <strong>
+
+                            <%= user.phone || "Not provided" %>
+
+                        </strong>
+
+                    </div>
+
+                    <div class="profile-item">
+
+                        <span>Member Since</span>
+
+                        <strong>
+
+                            <%= new Date(user.created_at).toLocaleDateString() %>
+
+                        </strong>
+
+                    </div>
 
                 </div>
 
             </div>
 
-        </div>
+            <div class="profile-section">
+
+                <h2>Account Activity</h2>
+
+                <div class="activity-grid">
+
+                    <div class="activity-box">
+
+                        <h1><%= stats.listings %></h1>
+
+                        <p>Listings</p>
+
+                    </div>
+
+                    <div class="activity-box">
+
+                        <h1><%= stats.lease_requests %></h1>
+
+                        <p>Lease Requests</p>
+
+                    </div>
+
+                    <div class="activity-box">
+
+                        <h1><%= stats.successful_leases %></h1>
+
+                        <p>Approved Leases</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
 
     </div>
 

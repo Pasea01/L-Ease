@@ -11,7 +11,7 @@
 
     <main>
 
-        <!-- Hero Section -->
+        <!-- HERO -->
         <section class="hero">
 
             <div class="hero-content">
@@ -23,51 +23,144 @@
                     electronics, furniture, tools, equipment and much more.
                 </p>
 
-                <div class="hero-search-card">
+                <form action="/listings" method="GET" class="hero-search">
 
                     <input
                         type="text"
-                        placeholder="Search assets..."
+                        name="search"
+                        placeholder="What are you looking for?"
                     >
 
-                    <select>
+                    <select name="category">
 
-                        <option>All Categories</option>
-                        <option>Vehicles</option>
+                        <option value="">All Categories</option>
                         <option>Property</option>
+                        <option>Vehicles</option>
                         <option>Electronics</option>
                         <option>Furniture</option>
                         <option>Tools</option>
+                        <option>Equipment</option>
+                        <option>Livestock</option>
 
                     </select>
 
-                    <button class="primary-btn">
-
+                    <button type="submit">
                         Search
-
                     </button>
 
-                </div>
+                </form>
 
-                <div class="hero-buttons">
+            </div>
 
-                    <a href="/listings" class="primary-btn">
-                        Browse Assets
+        </section>
+
+
+        <!-- MARKET SECTION -->
+
+        <section class="market-home">
+
+            <aside class="category-sidebar">
+
+                <h3>Browse Categories</h3>
+
+                <a href="/listings?category=Property">
+                    <img src="/images/categories/property.png">
+                    <span>Property</span>
+                </a>
+
+                <a href="/listings?category=Vehicle">
+                    <img src="/images/categories/vehicle.png">
+                    <span>Vehicles</span>
+                </a>
+
+                <a href="/listings?category=Electronics">
+                    <img src="/images/categories/electronics.png">
+                    <span>Electronics</span>
+                </a>
+
+                <a href="/listings?category=Furniture">
+                    <img src="/images/categories/furniture.png">
+                    <span>Furniture</span>
+                </a>
+
+                <a href="/listings?category=Tools">
+                    <img src="/images/categories/tools.png">
+                    <span>Tools</span>
+                </a>
+
+                <a href="/listings?category=Equipment">
+                    <img src="/images/categories/equipment.png">
+                    <span>Equipment</span>
+                </a>
+
+                <a href="/listings?category=Livestock">
+                    <img src="/images/categories/livestock.png">
+                    <span>Livestock</span>
+                </a>
+
+                <a href="/listings?category=Other">
+                    <img src="/images/categories/others.png">
+                    <span>Other</span>
+                </a>
+
+            </aside>
+
+
+            <div class="market-content">
+
+                <div class="section-header">
+
+                    <h2>Featured Assets</h2>
+
+                    <a href="/listings">
+                        View All →
                     </a>
 
-                    <% if(user){ %>
+                </div>
 
-                        <a href="/listings/new" class="secondary-btn">
-                            List an Asset
+                <div class="listing-grid">
+
+                    <% listings.forEach(listing => { %>
+
+                        <a href="/listings/<%= listing.id %>" class="listing-card">
+
+                            <% if(listing.image_url){ %>
+
+                                <img
+                                    src="/uploads/<%= listing.image_url %>"
+                                    class="listing-image"
+                                >
+
+                            <% } else { %>
+
+                                <img
+                                    src="<%= getCategoryImage(listing.category) %>"
+                                    class="listing-image"
+                                >
+
+                            <% } %>
+
+                            <div class="listing-content">
+
+                                <h3><%= listing.title %></h3>
+
+                                <p>📍 <%= listing.location %></p>
+
+                                <p>👤 <%= listing.full_name %></p>
+
+                                <div class="listing-price">
+
+                                    KES <%= Number(listing.price_per_day).toLocaleString() %>
+
+                                    <span>/ day</span>
+
+                                </div>
+
+                            </div>
+
                         </a>
 
-                    <% } else { %>
-
-                        <a href="/register" class="secondary-btn">
-                            List an Asset
-                        </a>
-
-                    <% } %>
+                    <% }) %>
 
                 </div>
 
@@ -75,136 +168,43 @@
 
         </section>
 
-        <!-- Search -->
-        <section class="search-section">
 
-            <h2>Find Anything to Lease</h2>
+        <!-- HOW IT WORKS -->
 
-            <div class="search-box">
-
-                <input
-                    type="text"
-                    placeholder="Search property, vehicles, electronics..."
-                >
-
-                <button>Search</button>
-
-            </div>
-
-        </section>
-
-        <!-- Categories -->
-        <section>
-
-            <h2>Browse Categories</h2>
-
-            <div class="category-grid">
-
-                <a href="/listings?category=Property" class="category-card">
-                    <span>🏠</span>
-                    <h3>Property</h3>
-                </a>
-
-                <a href="/listings?category=Vehicle" class="category-card">
-                    <span>🚗</span>
-                    <h3>Vehicles</h3>
-                </a>
-
-                <a href="/listings?category=Electronics" class="category-card">
-                    <span>💻</span>
-                    <h3>Electronics</h3>
-                </a>
-
-                <a href="/listings?category=Furniture" class="category-card">
-                    <span>🛋️</span>
-                    <h3>Furniture</h3>
-                </a>
-
-                <a href="/listings?category=Tools" class="category-card">
-                    <span>🛠️</span>
-                    <h3>Tools</h3>
-                </a>
-
-                <a href="/listings?category=Equipment" class="category-card">
-                    <span>🚜</span>
-                    <h3>Equipment</h3>
-                </a>
-
-                <a href="/listings?category=Livestock" class="category-card">
-                    <span>🐄</span>
-                    <h3>Livestock</h3>
-                </a>
-
-                <a href="/listings?category=Other" class="category-card">
-                    <span>📦</span>
-                    <h3>Other</h3>
-                </a>
-
-            </div>
-
-        </section>
-
-        <!-- Featured Listings -->
-<section class="featured">
-
-    <h2>Featured Listings</h2>
-
-    <div class="listing-grid">
-
-        <% if (listings.length === 0) { %>
-
-            <p>No listings available yet.</p>
-
-        <% } else { %>
-
-            <% listings.forEach(listing => { %>
-
-                <a
-                    href="/listings/<%= listing.id %>"
-                    class="listing-card"
-                    style="text-decoration:none; color:inherit;"
-                >
-
-                    <div class="listing-image"></div>
-
-                    <h3><%= listing.title %></h3>
-
-                    <p><%= listing.category %></p>
-
-                    <p><%= listing.location %></p>
-
-                    <strong>KES <%= listing.price_per_day %> / day</strong>
-
-                </a>
-
-            <% }) %>
-
-        <% } %>
-
-    </div>
-
-</section>
-
-        <!-- How It Works -->
         <section class="how-it-works">
 
-            <h2>How L-ease Works</h2>
+            <h2>How L-Ease Works</h2>
 
             <div class="steps">
 
                 <div class="step">
-                    <h3>1</h3>
-                    <p>List an asset.</p>
+
+                    <span>1</span>
+
+                    <h3>List an Asset</h3>
+
+                    <p>Create a listing in minutes.</p>
+
                 </div>
 
                 <div class="step">
-                    <h3>2</h3>
-                    <p>Receive lease requests.</p>
+
+                    <span>2</span>
+
+                    <h3>Receive Requests</h3>
+
+                    <p>Interested users contact you directly.</p>
+
                 </div>
 
                 <div class="step">
-                    <h3>3</h3>
-                    <p>Earn money securely.</p>
+
+                    <span>3</span>
+
+                    <h3>Earn Money</h3>
+
+                    <p>Lease your assets securely.</p>
+
                 </div>
 
             </div>

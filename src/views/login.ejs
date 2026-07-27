@@ -3,37 +3,100 @@
 
 <%- include("partials/head") %>
 
-<body>
+<body class="auth-page">
 
 <%- include("partials/navbar") %>
 
-<main class="auth-container">
+<main class="auth-wrapper">
 
-    <h1>Login to L-ease</h1>
+    <div class="auth-card">
 
-    <form action="/auth/login" method="POST">
+        <div class="auth-header">
 
-        <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            required
+            <h1>Welcome Back</h1>
+
+            <p>Sign in to continue to L-Ease.</p>
+
+        </div>
+
+        <% if(flash){ %>
+
+            <div class="auth-alert <%= flash.type %>">
+
+                <%= flash.message %>
+
+            </div>
+
+        <% } %>
+
+        <form
+            action="/auth/login"
+            method="POST"
+            class="auth-form"
         >
 
-        <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            required
-        >
+            <div class="form-group">
 
-        <button type="submit">
+                <label>Email Address</label>
 
-            Login
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                >
 
-        </button>
+            </div>
 
-    </form>
+            <div class="form-group">
+
+                <label>Password</label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+            <button
+                type="submit"
+                class="primary-btn auth-btn"
+            >
+
+                Sign In
+
+            </button>
+
+        </form>
+                <div class="auth-footer">
+
+            <p>
+
+                Don't have an account?
+
+                <a href="/register">
+
+                    Create one
+
+                </a>
+
+            </p>
+
+            <a
+                href="/"
+                class="back-home"
+            >
+
+                ← Back to Home
+
+            </a>
+
+        </div>
+
+    </div>
 
 </main>
 
@@ -42,4 +105,5 @@
 <%- include("partials/scripts") %>
 
 </body>
+
 </html>

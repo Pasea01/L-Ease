@@ -7,86 +7,193 @@
 
 <%- include("partials/navbar") %>
 
-<main class="auth-container">
+<main class="create-listing-page">
 
-    <h1>Edit Listing</h1>
+    <section class="create-header">
 
-    <form action="/listings/edit/<%= listing.id %>"
+        <div>
+
+            <h1>Edit Listing</h1>
+
+            <p>
+                Update your listing details and keep your information up to date.
+            </p>
+
+        </div>
+
+    </section>
+
+    <form
+        action="/listings/edit/<%= listing.id %>"
         method="POST"
         enctype="multipart/form-data"
-        >
+        class="listing-form"
+    >
 
-        <h3>Current Image</h3>
+        <div class="listing-layout">
 
-            <% if (listing.image_url) { %>
+            <!-- Left -->
 
-                <img
-                    src="/uploads/<%= listing.image_url %>"
-                    class="listing-image-large"
-                    alt="<%= listing.title %>"
-                >
+            <div class="listing-main">
 
-            <% } else { %>
+                <div class="form-card">
 
-                <img
-                    src="<%= getCategoryImage(listing.category) %>"
-                    class="listing-image-large"
-                    alt="<%= listing.category %>"
-                >
+                    <h2>Listing Information</h2>
 
-            <% } %>
+                    <div class="form-group">
 
-        <br><br>
+                        <label>Asset Title</label>
 
-        <input
-            type="text"
-            name="title"
-            value="<%= listing.title %>"
-            required
-        >
+                        <input
+                            type="text"
+                            name="title"
+                            value="<%= listing.title %>"
+                            required
+                        >
 
-        <textarea
-            name="description"
-            rows="5"
-            required
-        ><%= listing.description %></textarea>
+                    </div>
 
-        <input
-            type="text"
-            name="category"
-            value="<%= listing.category %>"
-            required
-        >
+                    <div class="form-row">
 
-        <input
-            type="number"
-            name="price_per_day"
-            value="<%= listing.price_per_day %>"
-            required
-        >
+                        <div class="form-group">
 
-        <input
-            type="text"
-            name="location"
-            value="<%= listing.location %>"
-            required
-        >
+                            <label>Category</label>
 
-        <label><strong>Replace Image (optional)</strong></label>
+                            <select
+                                name="category"
+                                required
+                            >
 
-        <input
-            type="file"
-            name="image"
-            accept="image/*"
-        >
+                                <option value="Property" <%= listing.category==="Property"?"selected":"" %>>Property</option>
 
-        <p style="color:#6b7280;font-size:14px;">
-            Leave empty to keep the current image.
-        </p>
+                                <option value="Vehicle" <%= listing.category==="Vehicle"?"selected":"" %>>Vehicle</option>
 
-        <button type="submit" class="primary-btn">
-            Save Changes
-        </button>
+                                <option value="Electronics" <%= listing.category==="Electronics"?"selected":"" %>>Electronics</option>
+
+                                <option value="Furniture" <%= listing.category==="Furniture"?"selected":"" %>>Furniture</option>
+
+                                <option value="Tools" <%= listing.category==="Tools"?"selected":"" %>>Tools</option>
+
+                                <option value="Equipment" <%= listing.category==="Equipment"?"selected":"" %>>Equipment</option>
+
+                                <option value="Other" <%= listing.category==="Other"?"selected":"" %>>Other</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Price Per Day (KES)</label>
+
+                            <input
+                                type="number"
+                                name="price_per_day"
+                                value="<%= listing.price_per_day %>"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Location</label>
+
+                        <input
+                            type="text"
+                            name="location"
+                            value="<%= listing.location %>"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Description</label>
+
+                        <textarea
+                            name="description"
+                            rows="8"
+                            required
+                        ><%= listing.description %></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right -->
+
+            <aside class="listing-sidebar">
+
+                <div class="form-card">
+
+                    <h2>Current Image</h2>
+
+                    <% if (listing.image_url) { %>
+
+                        <img
+                            src="/uploads/<%= listing.image_url %>"
+                            class="current-image"
+                            alt="<%= listing.title %>"
+                        >
+
+                    <% } else { %>
+
+                        <img
+                            src="<%= getCategoryImage(listing.category) %>"
+                            class="current-image"
+                            alt="<%= listing.category %>"
+                        >
+
+                    <% } %>
+
+                    <label class="upload-box">
+
+                        <input
+                            type="file"
+                            name="image"
+                            accept="image/*"
+                        >
+
+                        <div class="upload-content">
+
+                            <span>📷</span>
+
+                            <h3>Replace Image</h3>
+
+                            <p>
+
+                                Leave empty to keep the current image.
+
+                            </p>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+                <div class="form-card">
+
+                    <button
+                        type="submit"
+                        class="publish-btn"
+                    >
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+            </aside>
+
+        </div>
 
     </form>
 

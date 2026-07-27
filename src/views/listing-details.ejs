@@ -7,80 +7,168 @@
 
 <%- include("partials/navbar") %>
 
-<main class="listing-details-container">
+<main class="details-page">
 
-    <section class="listing-details">
+    <div class="details-grid">
 
-        <% if (listing.image_url) { %>
+        <!-- LEFT -->
 
-            <img
-                src="/uploads/<%= listing.image_url %>"
-                class="listing-image-large"
-                alt="<%= listing.title %>"
-            >
+        <section class="details-main">
 
-        <% } else { %>
+            <% if (listing.image_url) { %>
 
-            <img
-                src="<%= getCategoryImage(listing.category) %>"
-                class="listing-image-large"
-                alt="<%= listing.category %>"
-            >
+                <img
+                    src="/uploads/<%= listing.image_url %>"
+                    class="details-image"
+                    alt="<%= listing.title %>"
+                >
 
-        <% } %>
+            <% } else { %>
 
-        <div class="listing-info">
+                <img
+                    src="<%= getCategoryImage(listing.category) %>"
+                    class="details-image"
+                    alt="<%= listing.category %>"
+                >
 
-            <h1><%= listing.title %></h1>
+            <% } %>
 
-            <p><strong>Category:</strong> <%= listing.category %></p>
+            <div class="details-card">
 
-            <p><strong>Location:</strong> <%= listing.location %></p>
+                <span class="asset-category">
 
-            <p><strong>Owner:</strong> <%= listing.full_name %></p>
+                    <%= listing.category %>
 
-            <p><strong>Price:</strong> KES <%= listing.price_per_day %> / day</p>
+                </span>
 
-            <h3>Description</h3>
+                <h1>
 
-            <p><%= listing.description %></p>
+                    <%= listing.title %>
 
-            <br>
+                </h1>
+
+                <p class="asset-location">
+
+                    📍 <%= listing.location %>
+
+                </p>
+
+                <div class="asset-meta">
+
+                    <div>
+
+                        <small>Owner</small>
+
+                        <strong><%= listing.full_name %></strong>
+
+                    </div>
+
+                    <div>
+
+                        <small>Daily Rate</small>
+
+                        <strong>KES <%= Number(listing.price_per_day).toLocaleString() %></strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="details-card">
+
+                <h2>Description</h2>
+
+                <p>
+
+                    <%= listing.description %>
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- RIGHT -->
+
+        <aside class="booking-card">
+
+            <h2>
+
+                KES <%= Number(listing.price_per_day).toLocaleString() %>
+
+                <span>/day</span>
+
+            </h2>
+
+            <p>
+
+                Secure your lease request directly from the owner.
+
+            </p>
 
             <% if (user) { %>
 
-              <% if (user && user.id !== listing.owner_id) { %>
+                <% if(user.id !== listing.owner_id){ %>
 
                     <a
                         href="/leases/request/<%= listing.id %>"
-                        class="primary-btn"
+                        class="primary-btn full-btn"
                     >
+
                         Request Lease
+
                     </a>
 
-                <% } else if (user) { %>
+                <% } else { %>
 
                     <button
-                        class="secondary-btn"
+                        class="secondary-btn full-btn"
                         disabled
-                        style="cursor:not-allowed;opacity:.6;"
                     >
+
                         Your Listing
+
                     </button>
 
                 <% } %>
 
             <% } else { %>
 
-                <a href="/login" class="primary-btn">
-                    Login to Request Lease
+                <a
+                    href="/login"
+                    class="primary-btn full-btn"
+                >
+
+                    Login to Request
+
                 </a>
 
             <% } %>
 
-        </div>
+            <hr>
 
-    </section>
+                <div class="owner-card">
+
+                    <h3>Owner</h3>
+
+                    <strong><%= listing.full_name %></strong>
+
+                    <p>Verified L-Ease member</p>
+
+                </div>
+
+                <div class="booking-footnote">
+
+                    Your request is sent directly to the owner. No payment is required until the lease is approved.
+
+                </div>
+
+        </aside>
+
+
+    </div>
+
 
 </main>
 

@@ -7,87 +7,173 @@
 
 <%- include("partials/navbar") %>
 
-<main class="dashboard">
+<main class="chat-page">
 
-    <div class="dashboard-header">
+    <div class="chat-wrapper">
 
-        <div>
-            <h1>Conversation</h1>
-            <p>Discuss the lease details.</p>
-        </div>
+        <!-- LEFT SIDEBAR -->
 
-    </div>
+        <aside class="chat-sidebar">
 
-    <div class="chat-container">
+            <div class="chat-sidebar-header">
 
-        <% if(messages.length === 0){ %>
+                <a href="/messages" class="back-link">
 
-            <div class="activity-card">
+                    ← Back to Inbox
 
-                <h3>No messages yet</h3>
+                </a>
 
-                <p>Start the conversation below.</p>
+                <h2>Conversation</h2>
 
             </div>
 
-        <% } else { %>
+            <div class="chat-user-card">
 
-            <% messages.forEach(message => { %>
+                <div class="chat-avatar">
 
-                <div class="chat-message <%= message.sender_id === user.id ? 'sent' : 'received' %>">
-
-                    <div class="chat-bubble">
-
-                        <p><%= message.message %></p>
-
-                        <small>
-
-                            <%= message.full_name %> • <%= message.created_at %>
-
-                        </small>
-
-                    </div>
+                    <%= otherUserName ? otherUserName.charAt(0).toUpperCase() : "U" %>
 
                 </div>
 
-            <% }) %>
+                <div>
 
-        <% } %>
+                    <h3>
+
+                        <%= otherUserName || "User" %>
+
+                    </h3>
+
+                    <p>
+
+                        Regarding this lease
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+        <!-- RIGHT SIDE -->
+
+        <section class="chat-panel">
+
+            <div class="chat-header">
+
+                <div>
+
+                    <h2>
+
+                        <%= listingTitle || "Conversation" %>
+
+                    </h2>
+
+                    <small>
+
+                        Chat securely through L-Ease
+
+                    </small>
+
+                </div>
+
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+
+                <% if(messages.length===0){ %>
+
+                    <div class="chat-empty">
+
+                        <div class="empty-icon">
+
+                            💬
+
+                        </div>
+
+                        <h3>
+
+                            No messages yet
+
+                        </h3>
+
+                        <p>
+
+                            Say hello and start discussing the lease.
+
+                        </p>
+
+                    </div>
+
+                <% }else{ %>
+
+                    <% messages.forEach(message=>{ %>
+
+                    <div class="message-row <%= message.sender_id===user.id ? 'sent' : 'received' %>">
+
+                        <div class="message-bubble">
+
+                            <p>
+
+                                <%= message.message %>
+
+                            </p>
+
+                            <span class="message-time">
+
+                                <%= message.created_at %>
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <% }) %>
+
+                <% } %>
+
+            </div>
+
+            <form
+                action="/messages/send"
+                method="POST"
+                class="chat-compose"
+            >
+
+                <input
+                    type="hidden"
+                    name="asset_id"
+                    value="<%= assetId %>"
+                >
+
+                <input
+                    type="hidden"
+                    name="receiver_id"
+                    value="<%= otherUserId %>"
+                >
+
+                <textarea
+                    name="message"
+                    rows="1"
+                    placeholder="Write a message..."
+                    required
+                ></textarea>
+
+                <button
+                    type="submit"
+                    class="send-btn"
+                >
+
+                    Send
+
+                </button>
+
+            </form>
+
+        </section>
 
     </div>
-
-    <form
-        action="/messages/send"
-        method="POST"
-        class="chat-form"
-    >
-
-        <input
-            type="hidden"
-            name="asset_id"
-            value="<%= assetId %>"
-        >
-
-        <input
-            type="hidden"
-            name="receiver_id"
-            value="<%= otherUserId %>"
-        >
-
-        <textarea
-            name="message"
-            placeholder="Type your message..."
-            required
-        ></textarea>
-
-        <button
-            type="submit"
-            class="primary-btn"
-        >
-            Send
-        </button>
-
-    </form>
 
 </main>
 
@@ -97,11 +183,29 @@
 
 <script>
 
-const container = document.querySelector(".chat-container");
+const chat=document.getElementById("chatMessages");
 
-container.scrollTop = container.scrollHeight;
+if(chat){
+
+    chat.scrollTop=chat.scrollHeight;
+
+}
+
+const textarea=document.querySelector(".chat-compose textarea");
+
+if(textarea){
+
+    textarea.addEventListener("input",function(){
+
+        this.style.height="auto";
+        this.style.height=this.scrollHeight+"px";
+
+    });
+
+}
 
 </script>
 
 </body>
+
 </html>

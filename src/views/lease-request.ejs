@@ -7,25 +7,29 @@
 
 <%- include("partials/navbar") %>
 
-<main class="auth-container">
+<main class="lease-page">
 
-    <h1>Request Lease</h1>
+    <section class="create-header">
 
-    <div class="listing-summary">
+        <div>
 
-        <h2><%= listing.title %></h2>
+            <h1>Request Lease</h1>
 
-        <p><strong>Category:</strong> <%= listing.category %></p>
+            <p>
 
-        <p><strong>Location:</strong> <%= listing.location %></p>
+                Review the listing and send your lease request.
 
-        <p><strong>Price:</strong> KES <%= listing.price_per_day %> / day</p>
+            </p>
 
-        <p><strong>Owner:</strong> <%= listing.full_name %></p>
+        </div>
 
-    </div>
+    </section>
 
-    <form action="/leases/request" method="POST">
+    <form
+        action="/leases/request"
+        method="POST"
+        class="lease-layout"
+    >
 
         <input
             type="hidden"
@@ -33,36 +37,138 @@
             value="<%= listing.id %>"
         >
 
-        <label>Start Date</label>
+        <!-- LEFT -->
 
-        <input
-            type="date"
-            name="start_date"
-            required
-        >
+        <section class="lease-details">
 
-        <label>End Date</label>
+            <div class="form-card">
 
-        <input
-            type="date"
-            name="end_date"
-            required
-        >
+                <% if(listing.image_url){ %>
 
-        <label>Message to Owner (Optional)</label>
+                    <img
+                        src="/uploads/<%= listing.image_url %>"
+                        class="lease-image"
+                        alt="<%= listing.title %>"
+                    >
 
-        <textarea
-            name="message"
-            rows="5"
-            placeholder="Introduce yourself or explain your intended use..."
-        ></textarea>
+                <% } else { %>
 
-        <button
-            type="submit"
-            class="primary-btn"
-        >
-            Submit Lease Request
-        </button>
+                    <img
+                        src="<%= getCategoryImage(listing.category) %>"
+                        class="lease-image"
+                        alt="<%= listing.category %>"
+                    >
+
+                <% } %>
+
+                <div class="lease-info">
+
+                    <h2><%= listing.title %></h2>
+
+                    <p>📍 <%= listing.location %></p>
+
+                    <p><strong>Category:</strong> <%= listing.category %></p>
+
+                    <p><strong>Owner:</strong> <%= listing.full_name %></p>
+
+                    <p class="lease-price">
+
+                        KES <%= listing.price_per_day %> / day
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- RIGHT -->
+
+        <aside class="lease-sidebar">
+
+            <div class="form-card">
+
+                <h2>Booking Details</h2>
+
+                <div class="form-group">
+
+                    <label>Start Date</label>
+
+                    <input
+                        type="date"
+                        name="start_date"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>End Date</label>
+
+                    <input
+                        type="date"
+                        name="end_date"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Message to Owner</label>
+
+                    <textarea
+                        name="message"
+                        rows="6"
+                        placeholder="Introduce yourself or explain your intended use..."
+                    ></textarea>
+
+                </div>
+
+                <hr>
+
+                <div class="price-summary">
+
+                    <div>
+
+                        <span>Daily Rate</span>
+
+                        <strong>KES <%= listing.price_per_day %></strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Lease Duration</span>
+
+                        <strong>Calculated later</strong>
+
+                    </div>
+
+                    <div>
+
+                        <span>Total</span>
+
+                        <strong>Calculated after approval</strong>
+
+                    </div>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="publish-btn"
+                >
+
+                    Request Lease
+
+                </button>
+
+            </div>
+
+        </aside>
 
     </form>
 

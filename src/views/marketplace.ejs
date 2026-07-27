@@ -7,193 +7,211 @@
 
 <%- include("partials/navbar") %>
 
-<main class="dashboard">
+<main class="marketplace-page">
 
-    <div class="dashboard-header">
+    <section class="page-header">
 
         <div>
 
-        <h1>Explore</h1>
+            <h1>Browse Assets</h1>
 
-            <p>
-                Discover assets available for lease from trusted owners.
-            </p>
+            <p>Discover quality assets available for lease from trusted owners.</p>
 
         </div>
-
-    </div>
-    <!-- Search Bar -->
-
-    <section class="search-section">
-
-        <form
-            action="/listings"
-            method="GET"
-            class="search-form"
-        >
-
-            <input
-                type="text"
-                name="search"
-                placeholder="Search assets..."
-                value="<%= search %>"
-            >
-
-            <select name="category">
-
-                <option value="">All Categories</option>
-
-                <option value="Property" <%= category==="Property"?"selected":"" %>>Property</option>
-
-                <option value="Vehicle" <%= category==="Vehicle"?"selected":"" %>>Vehicle</option>
-
-                <option value="Electronics" <%= category==="Electronics"?"selected":"" %>>Electronics</option>
-
-                <option value="Furniture" <%= category==="Furniture"?"selected":"" %>>Furniture</option>
-
-                <option value="Tools" <%= category==="Tools"?"selected":"" %>>Tools</option>
-
-                <option value="Equipment" <%= category==="Equipment"?"selected":"" %>>Equipment</option>
-
-                <option value="Livestock" <%= category==="Livestock"?"selected":"" %>>Livestock</option>
-
-                <option value="Other" <%= category==="Other"?"selected":"" %>>Other</option>
-
-            </select>
-
-            <input
-                type="text"
-                name="location"
-                placeholder="Location"
-                value="<%= location %>"
-            >
-
-            <input
-                type="number"
-                name="minPrice"
-                placeholder="Min Price"
-                value="<%= minPrice %>"
-            >
-
-            <input
-                type="number"
-                name="maxPrice"
-                placeholder="Max Price"
-                value="<%= maxPrice %>"
-            >
-
-            <select name="sort">
-
-                <option value="newest" <%= sort==="newest"?"selected":"" %>>Newest</option>
-
-                <option value="oldest" <%= sort==="oldest"?"selected":"" %>>Oldest</option>
-
-                <option value="price-low" <%= sort==="price-low"?"selected":"" %>>Lowest Price</option>
-
-                <option value="price-high" <%= sort==="price-high"?"selected":"" %>>Highest Price</option>
-
-            </select>
-
-            <button
-                type="submit"
-                class="primary-btn"
-            >
-
-                Search
-
-            </button>
-
-        </form>
 
     </section>
 
-    <!-- Listings -->
+    <section class="marketplace-layout">
 
-    <% if (listings.length === 0) { %>
+        <!-- FILTERS -->
 
-        <div class="listing-card">
+        <aside class="filters-card">
 
-            <h2>No listings available.</h2>
+            <h3>Filters</h3>
 
-            <p>Be the first to list an asset!</p>
+            <form action="/listings" method="GET">
 
-        </div>
+                <div class="filter-group">
 
-    <% } else { %>
+                    <label>Search</label>
 
-        <div class="listing-grid">
-
-            <% listings.forEach(listing => { %>
-
-                <div class="listing-card">
-
-                    <% if (listing.image_url) { %>
-
-                    <img
-                        src="/uploads/<%= listing.image_url %>"
-                        class="listing-image"
+                    <input
+                        type="text"
+                        name="search"
+                        placeholder="Search assets..."
+                        value="<%= search %>"
                     >
-
-                <% } else { %>
-
-                    <img
-                        src="<%= getCategoryImage(listing.category) %>"
-                        class="listing-image"
-                        alt="<%= listing.category %>"
-                    >
-
-                <% } %>
-
-                    <h3><%= listing.title %></h3>
-
-                    <p>
-
-                        <strong>Category:</strong>
-
-                        <%= listing.category %>
-
-                    </p>
-
-                    <p>
-
-                        <strong>Location:</strong>
-
-                        <%= listing.location %>
-
-                    </p>
-
-                    <p>
-
-                        <strong>Owner:</strong>
-
-                        <%= listing.full_name %>
-
-                    </p>
-
-                    <strong>
-
-                        KES <%= listing.price_per_day %> / day
-
-                    </strong>
-
-                    <br><br>
-
-                    <a
-                        href="/listings/<%= listing.id %>"
-                        class="primary-btn"
-                    >
-
-                        View Details
-
-                    </a>
 
                 </div>
 
-            <% }) %>
+                <div class="filter-group">
 
-        </div>
+                    <label>Category</label>
 
-    <% } %>
+                    <select name="category">
+
+                        <option value="">All Categories</option>
+
+                        <option value="Property" <%= category==="Property"?"selected":"" %>>Property</option>
+
+                        <option value="Vehicle" <%= category==="Vehicle"?"selected":"" %>>Vehicle</option>
+
+                        <option value="Electronics" <%= category==="Electronics"?"selected":"" %>>Electronics</option>
+
+                        <option value="Furniture" <%= category==="Furniture"?"selected":"" %>>Furniture</option>
+
+                        <option value="Tools" <%= category==="Tools"?"selected":"" %>>Tools</option>
+
+                        <option value="Equipment" <%= category==="Equipment"?"selected":"" %>>Equipment</option>
+
+                        <option value="Livestock" <%= category==="Livestock"?"selected":"" %>>Livestock</option>
+
+                        <option value="Other" <%= category==="Other"?"selected":"" %>>Other</option>
+
+                    </select>
+
+                </div>
+
+                <div class="filter-group">
+
+                    <label>Location</label>
+
+                    <input
+                        type="text"
+                        name="location"
+                        placeholder="Location"
+                        value="<%= location %>"
+                    >
+
+                </div>
+
+                <div class="filter-group">
+
+                    <label>Minimum Price</label>
+
+                    <input
+                        type="number"
+                        name="minPrice"
+                        value="<%= minPrice %>"
+                    >
+
+                </div>
+
+                <div class="filter-group">
+
+                    <label>Maximum Price</label>
+
+                    <input
+                        type="number"
+                        name="maxPrice"
+                        value="<%= maxPrice %>"
+                    >
+
+                </div>
+
+                <div class="filter-group">
+
+                    <label>Sort By</label>
+
+                    <select name="sort">
+
+                        <option value="newest" <%= sort==="newest"?"selected":"" %>>Newest</option>
+
+                        <option value="oldest" <%= sort==="oldest"?"selected":"" %>>Oldest</option>
+
+                        <option value="price-low" <%= sort==="price-low"?"selected":"" %>>Lowest Price</option>
+
+                        <option value="price-high" <%= sort==="price-high"?"selected":"" %>>Highest Price</option>
+
+                    </select>
+
+                </div>
+
+                <button class="primary-btn" type="submit">
+
+                    Apply Filters
+
+                </button>
+
+            </form>
+
+        </aside>
+
+        <!-- LISTINGS -->
+
+        <section class="marketplace-results">
+
+            <div class="results-header">
+
+                <h2>Available Assets</h2>
+
+                <span><%= listings.length %> results</span>
+
+            </div>
+
+            <% if(listings.length===0){ %>
+
+                <div class="empty-state">
+
+                    <h3>No assets found.</h3>
+
+                    <p>Try changing your filters or search terms.</p>
+
+                </div>
+
+            <% }else{ %>
+
+                <div class="listing-grid">
+
+                    <% listings.forEach(listing => { %>
+
+                        <a href="/listings/<%= listing.id %>" class="listing-card">
+
+                            <% if(listing.image_url){ %>
+
+                                <img
+                                    src="/uploads/<%= listing.image_url %>"
+                                    class="listing-image"
+                                >
+
+                            <% } else { %>
+
+                                <img
+                                    src="<%= getCategoryImage(listing.category) %>"
+                                    class="listing-image"
+                                >
+
+                            <% } %>
+
+                            <div class="listing-content">
+
+                                <h3><%= listing.title %></h3>
+
+                                <p>📍 <%= listing.location %></p>
+
+                                <p>👤 <%= listing.full_name %></p>
+
+                                <div class="listing-price">
+
+                                    KES <%= Number(listing.price_per_day).toLocaleString() %>
+
+                                    <span>/ day</span>
+
+                                </div>
+
+                            </div>
+
+                        </a>
+
+                    <% }) %>
+
+                </div>
+
+            <% } %>
+
+        </section>
+
+    </section>
 
 </main>
 

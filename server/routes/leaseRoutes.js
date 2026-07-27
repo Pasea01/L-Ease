@@ -40,4 +40,14 @@ router.get(
     leaseController.showMyRequests
 );
 
+router.post(
+
+    "/:id/complete",
+
+    authMiddleware,
+
+    leaseController.completeLease
+
+);
+
 module.exports = router;

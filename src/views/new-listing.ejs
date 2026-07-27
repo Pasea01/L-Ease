@@ -7,74 +7,180 @@
 
 <%- include("partials/navbar") %>
 
-<main class="auth-container">
+<main class="create-listing-page">
 
-    <h1>List a New Asset</h1>
+    <section class="create-header">
 
-    <form action="/listings/create"
+        <div>
+
+            <h1>Create a New Listing</h1>
+
+            <p>
+                Add your asset and start earning from trusted renters.
+            </p>
+
+        </div>
+
+    </section>
+
+    <form
+        action="/listings/create"
         method="POST"
         enctype="multipart/form-data"
+        class="listing-form"
     >
 
-        <input
-            type="text"
-            name="title"
-            placeholder="Asset Title"
-            required
-        >
+        <div class="listing-layout">
 
-        <select name="category" required>
+            <!-- Left -->
 
-            <option value="">Choose Category</option>
+            <div class="listing-main">
 
-            <option>Property</option>
-            <option>Vehicle</option>
-            <option>Electronics</option>
-            <option>Furniture</option>
-            <option>Tools</option>
-            <option>Equipment</option>
-            <option>Other</option>
+                <div class="form-card">
 
-        </select>
+                    <h2>Basic Information</h2>
 
-        <input
-            type="number"
-            name="price_per_day"
-            placeholder="Price Per Day (KES)"
-            required
-        >
+                    <div class="form-group">
 
-        <input
-            type="text"
-            name="location"
-            placeholder="Location"
-            required
-        >
+                        <label>Asset Title</label>
 
-        <textarea
-            name="description"
-            placeholder="Describe your asset..."
-            rows="6"
-        ></textarea>
+                        <input
+                            type="text"
+                            name="title"
+                            placeholder="e.g. Toyota Prado TX"
+                            required
+                        >
 
-        <label><strong>Asset Image</strong></label>
+                    </div>
 
-            <input
-                type="file"
-                name="image"
-                accept="image/*"
-            >
+                    <div class="form-row">
 
-        <button type="submit">
-            Create Listing
-        </button>
+                        <div class="form-group">
+
+                            <label>Category</label>
+
+                            <select
+                                name="category"
+                                required
+                            >
+
+                                <option value="">Select Category</option>
+
+                                <option>Property</option>
+                                <option>Vehicle</option>
+                                <option>Electronics</option>
+                                <option>Furniture</option>
+                                <option>Tools</option>
+                                <option>Equipment</option>
+                                <option>Other</option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <label>Price Per Day (KES)</label>
+
+                            <input
+                                type="number"
+                                name="price_per_day"
+                                placeholder="2500"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Location</label>
+
+                        <input
+                            type="text"
+                            name="location"
+                            placeholder="Nairobi"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>Description</label>
+
+                        <textarea
+                            name="description"
+                            rows="8"
+                            placeholder="Describe your asset..."
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right -->
+
+            <aside class="listing-sidebar">
+
+                <div class="form-card">
+
+                    <h2>Photos</h2>
+
+                    <label class="upload-box">
+
+                        <input
+                            type="file"
+                            name="image"
+                            accept="image/*"
+                        >
+
+                        <div class="upload-content">
+
+                            <span>📷</span>
+
+                            <h3>Upload Photo</h3>
+
+                            <p>
+
+                                PNG, JPG or JPEG
+
+                            </p>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+                <div class="form-card">
+
+                    <button
+                        type="submit"
+                        class="publish-btn"
+                    >
+
+                        Publish Listing
+
+                    </button>
+
+                </div>
+
+            </aside>
+
+        </div>
 
     </form>
 
 </main>
 
 <%- include("partials/footer") %>
+
 <%- include("partials/scripts") %>
 
 </body>
+
 </html>

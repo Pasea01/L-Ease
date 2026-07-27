@@ -7,93 +7,122 @@
 
 <%- include("partials/navbar") %>
 
-<main class="dashboard">
+<main class="inbox-page">
 
-    <div class="dashboard-header">
+    <section class="inbox-wrapper">
 
-        <div>
+        <!-- LEFT SIDEBAR -->
 
-            <h1>Inbox</h1>
+        <aside class="inbox-sidebar">
 
-            <p>Continue conversations with owners and tenants.</p>
+            <div class="inbox-sidebar-header">
 
-        </div>
+                <h1>Messages</h1>
 
-    </div>
-
-    <% if (conversations.length === 0) { %>
-
-        <div class="activity-card">
-
-            <h2>No conversations yet</h2>
-
-            <p>Your conversations will appear here after a lease is approved.</p>
-
-        </div>
-
-    <% } else { %>
-
-        <div class="conversation-list">
-
-            <% conversations.forEach(conversation => { %>
-
-                <a
-                    href="/messages/<%= conversation.asset_id %>/<%= conversation.other_user_id %>"
-                    class="conversation-card"
+                <input
+                    type="text"
+                    placeholder="Search conversations..."
+                    class="conversation-search"
                 >
 
-                    <% if(conversation.image_url){ %>
+            </div>
 
-                        <img
-                            src="/uploads/<%= conversation.image_url %>"
-                            class="conversation-image"
-                            onerror="this.onerror=null;this.src='/images/categories/<%= (conversation.category || 'other').toLowerCase() %>.png';"
-                        >
+            <% if(conversations.length===0){ %>
 
-                    <% } else { %>
+                <div class="empty-sidebar">
 
-                        <img
-                            src="/images/categories/<%= (conversation.category || 'other').toLowerCase() %>.png"
-                            class="conversation-image"
-                        >
+                    <p>No conversations yet.</p>
 
-                    <% } %>
+                </div>
 
-                    <div class="conversation-details">
+            <% }else{ %>
 
-                        <h3><%= conversation.title %></h3>
+                <div class="conversation-list">
 
-                        <p class="conversation-user">
+                    <% conversations.forEach(conversation=>{ %>
 
-                            <strong><%= conversation.other_user %></strong>
+                    <a
+                        href="/messages/<%= conversation.asset_id %>/<%= conversation.other_user_id %>"
+                        class="conversation-item"
+                    >
 
-                        </p>
+                        <div class="conversation-avatar">
 
-                        <p class="conversation-preview">
+                            <%= conversation.other_user.charAt(0).toUpperCase() %>
 
-                            <%= conversation.last_message %>
+                        </div>
 
-                        </p>
+                        <div class="conversation-info">
 
-                    </div>
+                            <div class="conversation-top">
 
-                    <div class="conversation-time">
+                                <h3>
 
-                        <small>
+                                    <%= conversation.other_user %>
 
-                            <%= conversation.last_time %>
+                                </h3>
 
-                        </small>
+                                <small>
 
-                    </div>
+                                    <%= conversation.last_time %>
 
-                </a>
+                                </small>
 
-            <% }) %>
+                            </div>
 
-        </div>
+                            <p class="conversation-asset">
 
-    <% } %>
+                                <%= conversation.title %>
+
+                            </p>
+
+                            <p class="conversation-preview">
+
+                                <%= conversation.last_message %>
+
+                            </p>
+
+                        </div>
+
+                    </a>
+
+                    <% }) %>
+
+                </div>
+
+            <% } %>
+
+        </aside>
+
+        <!-- RIGHT PANEL -->
+
+        <section class="inbox-placeholder">
+
+            <div class="placeholder-content">
+
+                <div class="placeholder-icon">
+
+                    💬
+
+                </div>
+
+                <h2>
+
+                    Select a conversation
+
+                </h2>
+
+                <p>
+
+                    Choose a conversation from the left to start messaging.
+
+                </p>
+
+            </div>
+
+        </section>
+
+    </section>
 
 </main>
 

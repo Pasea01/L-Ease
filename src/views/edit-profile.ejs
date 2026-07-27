@@ -7,75 +7,130 @@
 
 <%- include("partials/navbar") %>
 
-<main class="dashboard">
+<main class="create-listing-page">
 
-    <div class="dashboard-header">
+    <section class="create-header">
 
         <div>
 
             <h1>Edit Profile</h1>
 
-            <p>Update your account information.</p>
+            <p>
+
+                Keep your personal information up to date.
+
+            </p>
 
         </div>
 
-    </div>
+    </section>
 
     <form
         action="/profile/edit"
         method="POST"
-        class="activity-card"
+        class="listing-form"
     >
 
-        <label>Full Name</label>
+        <div class="listing-layout">
 
-        <input
-            type="text"
-            name="full_name"
-            value="<%= user.full_name %>"
-            required
-        >
+            <!-- Left -->
 
-        <br><br>
+            <div class="listing-main">
 
-        <label>Email</label>
+                <div class="form-card">
 
-        <input
-            type="email"
-            name="email"
-            value="<%= user.email %>"
-            required
-        >
+                    <h2>Personal Information</h2>
 
-        <br><br>
+                    <div class="form-group">
 
-        <label>Phone Number</label>
+                        <label>Full Name</label>
 
-        <input
-            type="text"
-            name="phone"
-            value="<%= user.phone || '' %>"
-        >
+                        <input
+                            type="text"
+                            name="full_name"
+                            value="<%= user.full_name %>"
+                            required
+                        >
 
-        <br><br>
+                    </div>
 
-        <button
-            type="submit"
-            class="primary-btn"
-        >
+                    <div class="form-group">
 
-            Save Changes
+                        <label>Email Address</label>
 
-        </button>
+                        <input
+                            type="email"
+                            name="email"
+                            value="<%= user.email %>"
+                            required
+                        >
 
-        <a
-            href="/profile"
-            class="secondary-btn"
-        >
+                    </div>
 
-            Cancel
+                    <div class="form-group">
 
-        </a>
+                        <label>Phone Number</label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            value="<%= user.phone || '' %>"
+                            placeholder="+254..."
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Right -->
+
+            <aside class="listing-sidebar">
+
+                <div class="form-card profile-summary">
+
+                    <div class="profile-avatar-large">
+
+                        <%= user.full_name.charAt(0).toUpperCase() %>
+
+                    </div>
+
+                    <h2><%= user.full_name %></h2>
+
+                    <p>
+
+                        <%= user.role %>
+
+                    </p>
+
+                </div>
+
+                <div class="form-card">
+
+                    <button
+                        type="submit"
+                        class="publish-btn"
+                    >
+
+                        Save Changes
+
+                    </button>
+
+                    <a
+                        href="/profile"
+                        class="cancel-btn"
+                    >
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </aside>
+
+        </div>
 
     </form>
 
@@ -86,4 +141,5 @@
 <%- include("partials/scripts") %>
 
 </body>
+
 </html>
