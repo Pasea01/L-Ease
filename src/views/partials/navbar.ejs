@@ -7,6 +7,7 @@
 <nav class="navbar">
 
     <!-- Left -->
+
     <div class="navbar-left">
 
         <a href="/" class="logo">
@@ -22,26 +23,39 @@
     </div>
 
     <!-- Center -->
+
     <div class="navbar-center">
 
         <ul class="nav-links">
 
             <li>
+
                 <a href="/listings">
+
                     Browse Assets
+
                 </a>
+
             </li>
 
             <li>
+
                 <a href="#">
+
                     Categories
+
                 </a>
+
             </li>
 
             <li>
+
                 <a href="#">
+
                     About
+
                 </a>
+
             </li>
 
         </ul>
@@ -49,73 +63,221 @@
     </div>
 
     <!-- Right -->
+
     <div class="navbar-right">
 
         <% if(user){ %>
 
-        <div class="user-menu">
+        <div class="navbar-actions">
 
-            <button class="user-btn" id="userMenuBtn">
+            <!-- Notifications -->
 
-                <div class="avatar">
+            <div class="notification-menu">
 
-                    <%= user.full_name.charAt(0).toUpperCase() %>
+                <button
+
+                    class="notification-btn"
+
+                    id="notificationBtn"
+
+                >
+
+                    🔔
+
+                    <% if(unreadNotifications > 0){ %>
+
+                        <span class="notification-count">
+
+                            <%= unreadNotifications %>
+
+                        </span>
+
+                    <% } %>
+
+                </button>
+
+                <div
+                    class="notification-dropdown"
+                    id="notificationDropdown"
+                >
+
+                    <div class="notification-header">
+
+                        <strong>
+
+                            Notifications
+
+                        </strong>
+
+                        <% if(unreadNotifications > 0){ %>
+
+                            <form
+                                action="/notifications/mark-all-read"
+                                method="POST"
+                            >
+
+                                <button
+                                    type="submit"
+                                    class="mark-read-btn"
+                                >
+
+                                    ✓ Mark all as read
+
+                                </button>
+
+                            </form>
+
+                        <% } %>
+
+                    </div>
+
+                    <hr>
+
+                    <% if(notifications.length === 0){ %>
+
+                        <div class="notification-empty">
+
+                            No notifications yet.
+
+                        </div>
+
+                    <% } else { %>
+
+                        <% notifications.forEach(notification => { %>
+
+                            <a
+
+                                href="/notifications/<%= notification.id %>"
+
+                                class="notification-item <%= notification.is_read ? '' : 'unread' %>"
+
+                            >
+
+                                <strong>
+
+                                    <%= notification.title %>
+
+                                </strong>
+
+                                <small>
+
+                                    <%= notification.message %>
+
+                                </small>
+
+                            </a>
+
+                        <% }) %>
+
+                    <% } %>
 
                 </div>
 
-                <span class="username">
+            </div>
 
-                    <%= user.full_name.split(" ")[0] %>
+            <!-- User Menu -->
 
-                </span>
+            <div class="user-menu">
 
-                <span class="caret">
+                <button
 
-                    ▼
+                    class="user-btn"
 
-                </span>
+                    id="userMenuBtn"
 
-            </button>
+                >
 
-            <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="avatar">
 
-                <div class="dropdown-header">
+                        <%= user.full_name.charAt(0).toUpperCase() %>
 
-                    <strong>
+                    </div>
 
-                        <%= user.full_name %>
+                    <span class="username">
 
-                    </strong>
+                        <%= user.full_name.split(" ")[0] %>
 
-                    <small>
+                    </span>
 
-                        <%= user.email %>
+                    <span class="caret">
 
-                    </small>
+                        ▼
+
+                    </span>
+
+                </button>
+
+                <div
+
+                    class="dropdown-menu"
+
+                    id="dropdownMenu"
+
+                >
+
+                    <div class="dropdown-header">
+
+                        <strong>
+
+                            <%= user.full_name %>
+
+                        </strong>
+
+                        <small>
+
+                            <%= user.email %>
+
+                        </small>
+
+                    </div>
+
+                    <hr>
+
+                    <a href="/dashboard">
+
+                        🏠 Dashboard
+
+                    </a>
+
+                    <a href="/profile">
+
+                        👤 Profile
+
+                    </a>
+
+                    <a href="/listings/my-listings">
+
+                        📦 My Listings
+
+                    </a>
+
+                    <a href="/leases/my-requests">
+
+                        📝 My Requests
+
+                    </a>
+
+                    <a href="/leases/owner">
+
+                        📑 Incoming Requests
+
+                    </a>
+
+                    <a href="/messages">
+
+                        💬 Messages
+
+                    </a>
+
+                    <hr>
+
+                    <a href="/auth/logout">
+
+                        🚪 Logout
+
+                    </a>
 
                 </div>
-
-                <hr>
-
-                <a href="/dashboard">🏠 Dashboard</a>
-
-                <a href="/profile">👤 Profile</a>
-
-                <a href="/listings/my-listings">📦 My Listings</a>
-
-                <a href="/leases/my-requests">📝 My Requests</a>
-
-                <a href="/leases/owner">📑 Incoming Requests</a>
-
-                <a href="/messages">💬 Messages</a>
-
-                <hr>
-
-                <a href="/auth/logout">
-
-                    🚪 Logout
-
-                </a>
 
             </div>
 

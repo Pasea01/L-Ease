@@ -52,10 +52,14 @@
                 <h1>About Me</h1>
 
                 <a href="/profile/edit" class="secondary-btn">
+
                     Edit
+
                 </a>
 
             </div>
+
+            <!-- Profile Card -->
 
             <div class="profile-card">
 
@@ -69,11 +73,67 @@
 
                 <p class="profile-role">
 
-                    <%= user.role %>
+                    Member
 
                 </p>
 
+                <div class="profile-rating">
+
+                    <% if (rating && rating.total > 0) { %>
+
+                        <div class="rating-stars">
+
+                            <% const fullStars = Math.round(rating.average); %>
+
+                            <% for(let i=1;i<=5;i++){ %>
+
+                                <% if(i<=fullStars){ %>
+
+                                    ⭐
+
+                                <% }else{ %>
+
+                                    ☆
+
+                                <% } %>
+
+                            <% } %>
+
+                        </div>
+
+                        <div class="rating-info">
+
+                            <strong>
+
+                                <%= rating.average %>
+
+                            </strong>
+
+                            <span>
+
+                                Based on
+                                <%= rating.total %>
+                                review<%= rating.total>1?"s":"" %>
+
+                            </span>
+
+                        </div>
+
+                    <% } else { %>
+
+                        <span class="rating-none">
+
+                            No reviews yet
+
+                        </span>
+
+                    <% } %>
+
+                </div>
+
             </div>
+
+            <!-- Personal Information -->
 
             <div class="profile-section">
 
@@ -85,7 +145,11 @@
 
                         <span>Email</span>
 
-                        <strong><%= user.email %></strong>
+                        <strong>
+
+                            <%= user.email %>
+
+                        </strong>
 
                     </div>
 
@@ -117,15 +181,35 @@
 
             </div>
 
+            <!-- About -->
+
             <div class="profile-section">
 
-                <h2>Account Activity</h2>
+                <h2>About</h2>
+
+                <p class="profile-bio">
+
+                    <%= user.bio || "Tell other members a little about yourself. This helps build trust with owners and renters." %>
+
+                </p>
+
+            </div>
+
+            <!-- Statistics -->
+
+            <div class="profile-section">
+
+                <h2>Statistics</h2>
 
                 <div class="activity-grid">
 
                     <div class="activity-box">
 
-                        <h1><%= stats.listings %></h1>
+                        <h1>
+
+                            <%= stats.listings %>
+
+                        </h1>
 
                         <p>Listings</p>
 
@@ -133,21 +217,165 @@
 
                     <div class="activity-box">
 
-                        <h1><%= stats.lease_requests %></h1>
+                        <h1>
 
-                        <p>Lease Requests</p>
+                            <%= stats.lease_requests %>
+
+                        </h1>
+
+                        <p>Pending Requests</p>
 
                     </div>
 
                     <div class="activity-box">
 
-                        <h1><%= stats.successful_leases %></h1>
+                        <h1>
 
-                        <p>Approved Leases</p>
+                            <%= stats.successful_leases %>
+
+                        </h1>
+
+                        <p>Completed Leases</p>
+
+                    </div>
+
+                    <div class="activity-box">
+
+                        <h1>
+
+                            <%= rating ? rating.total : 0 %>
+
+                        </h1>
+
+                        <p>Reviews</p>
 
                     </div>
 
                 </div>
+
+            </div>
+
+            <!-- Recent Reviews -->
+
+            <div class="profile-section">
+
+                <div class="section-header">
+
+                    <h2>
+
+                        Recent Reviews
+
+                    </h2>
+
+                    <a href="/profile/reviews" class="view-all-link">
+
+                        View All →
+
+                    </a>
+
+                </div>
+
+                <% if(reviews.length === 0){ %>
+
+                    <div class="empty-state">
+
+                        <h3>
+
+                            No reviews yet
+
+                        </h3>
+
+                        <p>
+
+                            Complete your first lease to receive your first review.
+
+                        </p>
+
+                    </div>
+
+                <% } else { %>
+
+                    <div class="review-list">
+
+                        <% reviews.slice(0,2).forEach(review => { %>
+
+                            <div class="review-card">
+
+                                <div class="review-header">
+
+                                    <div class="review-user">
+
+                                        <div class="review-avatar">
+
+                                            <%= review.full_name.charAt(0).toUpperCase() %>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+
+                                                <%= review.full_name %>
+
+                                            </strong>
+
+                                            <small>
+
+                                                <%= new Date(review.created_at).toLocaleDateString() %>
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="review-stars">
+
+                                        <% for(let i=1;i<=5;i++){ %>
+
+                                            <% if(i<=review.rating){ %>
+
+                                                ⭐
+
+                                            <% }else{ %>
+
+                                                ☆
+
+                                            <% } %>
+
+                                        <% } %>
+
+                                    </div>
+
+                                </div>
+
+                                <p class="review-comment">
+
+                                    <%= review.comment %>
+
+                                </p>
+
+                            </div>
+
+                        <% }) %>
+
+                    </div>
+
+                    <% if(reviews.length > 2){ %>
+
+                        <div class="profile-review-footer">
+
+                            <a href="/profile/reviews" class="secondary-btn">
+
+                                View All <%= reviews.length %> Reviews
+
+                            </a>
+
+                        </div>
+
+                    <% } %>
+
+                <% } %>
 
             </div>
 

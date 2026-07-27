@@ -41,7 +41,7 @@ L-Ease is a peer-to-peer asset leasing platform that allows users to list and le
 - Listing CRUD Operations
 
 ### Upcoming
-- Public Marketplace
+- Public
 - Image Uploads
 - Search & Filters
 - Lease Requests

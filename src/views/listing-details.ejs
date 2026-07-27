@@ -87,6 +87,96 @@
 
             </div>
 
+            <div class="details-card">
+
+                <div class="review-summary">
+
+                    <h2>
+
+                        ⭐
+
+                        <%= rating.average || "0.0" %>
+
+                        <span>
+
+                            (<%= rating.total || 0 %> Reviews)
+
+                        </span>
+
+                    </h2>
+
+                </div>
+
+                <% if(reviews.length === 0){ %>
+
+                    <div class="empty-review">
+
+                        <p>
+
+                            No reviews yet.
+
+                        </p>
+
+                    </div>
+
+                <% } else { %>
+
+                    <% reviews.forEach(review => { %>
+
+                        <div class="review-card">
+
+                            <div class="review-top">
+
+                                <div class="review-avatar">
+
+                                    <%= review.full_name.charAt(0).toUpperCase() %>
+
+                                </div>
+
+                                <div>
+
+                                    <strong>
+
+                                        <%= review.full_name %>
+
+                                    </strong>
+
+                                    <div class="review-stars">
+
+                                        <% for(let i = 1; i <= 5; i++){ %>
+
+                                            <% if(i <= review.rating){ %>
+
+                                                ⭐
+
+                                            <% } else { %>
+
+                                                ☆
+
+                                            <% } %>
+
+                                        <% } %>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <p class="review-comment">
+
+                                <%= review.comment %>
+
+                            </p>
+
+                        </div>
+
+                    <% }) %>
+
+                <% } %>
+
+            </div>
+
         </section>
 
         <!-- RIGHT -->

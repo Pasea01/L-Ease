@@ -14,3 +14,5 @@ db.exec(schema, (err) => {
         console.log("✅ Database schema created successfully.");
     }
 });
+
+

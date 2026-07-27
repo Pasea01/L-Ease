@@ -1,7 +1,7 @@
 const Listing = require("../models/Listing");
 
 // =====================================
-// Get all listings (Marketplace API)
+// Get all listings (API)
 // =====================================
 
 exports.getListingsAPI = (req, res) => {
@@ -36,13 +36,16 @@ exports.showMarketplace = (req, res) => {
     const sort = req.query.sort || "newest";
 
     Listing.search(
+
         {
+
             search,
             category,
             location,
             minPrice,
             maxPrice,
             sort
+
         },
 
         (err, listings) => {
@@ -56,14 +59,16 @@ exports.showMarketplace = (req, res) => {
             }
 
             res.render("marketplace", {
-            user: req.session.user,
-            listings,
-            search,
-            category,
-            location,
-            minPrice,
-            maxPrice,
-            sort
+
+                user: req.session.user,
+                listings,
+                search,
+                category,
+                location,
+                minPrice,
+                maxPrice,
+                sort
+
             });
 
         }
@@ -73,134 +78,140 @@ exports.showMarketplace = (req, res) => {
 };
 
 // =====================================
-// Show logged-in user's listings
+// User Listings
 // =====================================
 
 exports.showMyListings = (req, res) => {
 
-    const ownerId = req.session.user.id;
+    Listing.getUserListings(
 
-    Listing.getUserListings(ownerId, (err, listings) => {
+        req.session.user.id,
 
-        if (err) {
+        (err, listings) => {
 
-            console.error(err);
+            if (err) {
 
-            return res.send("Failed to load listings.");
+                console.error(err);
+
+                return res.send("Failed to load listings.");
+
+            }
+
+            res.render("my-listings", {
+
+                user: req.session.user,
+                listings
+
+            });
 
         }
 
-        res.render("my-listings", {
-
-            user: req.session.user,
-            listings
-
-        });
-
-    });
+    );
 
 };
 
 // =====================================
-// Create listing
+// Create Listing
 // =====================================
 
 exports.createListing = (req, res) => {
 
-    const {
-
-        title,
-        description,
-        category,
-        price_per_day,
-        location
-
-    } = req.body;
-
     const listing = {
 
-    owner_id: req.session.user.id,
-    title: req.body.title,
-    description: req.body.description,
-    category: req.body.category,
-    price_per_day: req.body.price_per_day,
-    location: req.body.location,
-    image_url: req.file ? req.file.filename : null
+        owner_id: req.session.user.id,
+        title: req.body.title,
+        description: req.body.description,
+        category: req.body.category,
+        price_per_day: req.body.price_per_day,
+        location: req.body.location,
+        image_url: req.file ? req.file.filename : null
 
     };
 
-    Listing.create(listing, (err) => {
+    Listing.create(
 
-        if (err) {
+        listing,
 
-            console.error(err);
+        (err) => {
 
-            return res.send("Failed to create listing.");
+            if (err) {
+
+                console.error(err);
+
+                return res.send("Failed to create listing.");
+
+            }
+
+            res.redirect("/listings/my-listings");
 
         }
 
-        res.redirect("/listings/my-listings");
-
-    });
+    );
 
 };
+
 // =====================================
 // Delete Listing
 // =====================================
 
 exports.deleteListing = (req, res) => {
 
-    const listingId = req.params.id;
-    const ownerId = req.session.user.id;
+    Listing.deleteListing(
 
-    Listing.deleteListing(listingId, ownerId, (err) => {
+        req.params.id,
 
-        if (err) {
+        req.session.user.id,
 
-            console.error(err);
+        (err) => {
 
-            return res.send("Failed to delete listing.");
+            if (err) {
+
+                console.error(err);
+
+                return res.send("Failed to delete listing.");
+
+            }
+
+            res.redirect("/listings/my-listings");
 
         }
 
-        res.redirect("/listings/my-listings");
-
-    });
+    );
 
 };
 
 // =====================================
-// Show Edit Listing Page
+// Edit Listing Page
 // =====================================
 
 exports.showEditListing = (req, res) => {
 
-    const listingId = req.params.id;
-    const ownerId = req.session.user.id;
+    Listing.getById(
 
-    Listing.getById(listingId, ownerId, (err, listing) => {
+        req.params.id,
 
-        if (err) {
+        req.session.user.id,
 
-            console.error(err);
-            return res.send("Failed to load listing.");
+        (err, listing) => {
+
+            if (err || !listing) {
+
+                console.error(err);
+
+                return res.send("Listing not found.");
+
+            }
+
+            res.render("edit-listing", {
+
+                user: req.session.user,
+                listing
+
+            });
 
         }
 
-        if (!listing) {
-
-            return res.send("Listing not found.");
-
-        }
-
-        res.render("edit-listing", {
-
-            user: req.session.user,
-            listing
-
-        });
-
-    });
+    );
 
 };
 
@@ -211,86 +222,146 @@ exports.showEditListing = (req, res) => {
 exports.updateListing = (req, res) => {
 
     const listingId = req.params.id;
+
     const ownerId = req.session.user.id;
 
-    Listing.getById( listingId, ownerId, (err, existingListing) => {
+    Listing.getById(
 
-        if (err || !existingListing) {
+        listingId,
 
-            console.error(err);
-            return res.send("Listing not found.");
+        ownerId,
 
-        }
+        (err, existingListing) => {
 
-        const listing = {
+            if (err || !existingListing) {
 
-            title: req.body.title,
-            description: req.body.description,
-            category: req.body.category,
-            price_per_day: req.body.price_per_day,
-            location: req.body.location,
+                console.error(err);
 
-            image_url: req.file
-                ? req.file.filename
-                : existingListing.image_url
-
-        };
-
-        Listing.update(
-
-            listingId,
-            ownerId,
-            listing,
-
-            (err) => {
-
-                if (err) {
-
-                    console.error(err);
-                    return res.send("Failed to update listing.");
-
-                }
-
-                res.redirect("/listings/my-listings");
+                return res.send("Listing not found.");
 
             }
 
-        );
+            const listing = {
 
-    });
+                title: req.body.title,
+                description: req.body.description,
+                category: req.body.category,
+                price_per_day: req.body.price_per_day,
+                location: req.body.location,
+
+                image_url: req.file
+                    ? req.file.filename
+                    : existingListing.image_url
+
+            };
+
+            Listing.update(
+
+                listingId,
+
+                ownerId,
+
+                listing,
+
+                (err) => {
+
+                    if (err) {
+
+                        console.error(err);
+
+                        return res.send("Failed to update listing.");
+
+                    }
+
+                    res.redirect("/listings/my-listings");
+
+                }
+
+            );
+
+        }
+
+    );
 
 };
+
 // =====================================
-// Show Single Listing
+// Listing Details
 // =====================================
 
 exports.showListing = (req, res) => {
 
-    const id = req.params.id;
+    const listingId = req.params.id;
 
-    Listing.getListingById(id, (err, listing) => {
+    Listing.getListingById(
 
-        if (err) {
+        listingId,
 
-            console.error(err);
+        (err, listing) => {
 
-            return res.send("Failed to load listing.");
+            if (err || !listing) {
+
+                console.error(err);
+
+                return res.send("Listing not found.");
+
+            }
+
+            Listing.getListingRating(
+
+                listingId,
+
+                (err, rating) => {
+
+                    if (err) {
+
+                        console.error(err);
+
+                        rating = {
+
+                            average: 0,
+                            total: 0
+
+                        };
+
+                    }
+
+                    Listing.getListingReviews(
+
+                        listingId,
+
+                        (err, reviews) => {
+
+                            if (err) {
+
+                                console.error(err);
+
+                                reviews = [];
+
+                            }
+
+                            res.render("listing-details", {
+
+                                user: req.session.user || null,
+
+                                listing,
+
+                                rating,
+
+                                reviews
+
+                            });
+
+                        }
+
+                    );
+
+                }
+
+            );
 
         }
 
-        if (!listing) {
-
-            return res.send("Listing not found.");
-
-        }
-
-        res.render("listing-details", {
-
-            listing,
-            user: req.session.user || null
-
-        });
-
-    });
+    );
 
 };

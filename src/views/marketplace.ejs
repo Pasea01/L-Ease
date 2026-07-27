@@ -191,6 +191,36 @@
 
                                 <p>👤 <%= listing.full_name %></p>
 
+                                <div class="listing-rating">
+
+                                    <% if (listing.review_count > 0) { %>
+
+                                        <span class="rating-star">⭐</span>
+
+                                        <span class="rating-score">
+
+                                            <%= listing.average_rating %>
+
+                                        </span>
+
+                                        <span class="rating-count">
+
+                                            (<%= listing.review_count %>)
+
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="rating-none">
+
+                                            New Listing
+
+                                        </span>
+
+                                    <% } %>
+
+                                </div>
+
                                 <div class="listing-price">
 
                                     KES <%= Number(listing.price_per_day).toLocaleString() %>

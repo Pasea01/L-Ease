@@ -25,7 +25,7 @@
 
                 <h3><%= user.full_name %></h3>
 
-                <p>Marketplace Member</p>
+                <p>Member</p>
 
             </div>
 
@@ -39,11 +39,7 @@
 
                 <a href="/leases/owner">📋 Lease Requests</a>
 
-                <a href="/inbox">💬 Messages</a>
-
-                <a href="#">⭐ Reviews</a>
-
-                <a href="#">⚙ Settings</a>
+                <a href="/messages">💬 Messages</a>
 
             </nav>
 
@@ -71,69 +67,210 @@
 
             </div>
 
+            <!-- Statistics -->
+
             <div class="dashboard-stats">
 
-                <div class="dashboard-stat">
+                <a href="/listings/my-listings" class="dashboard-stat-link">
 
-                    <div class="stat-icon">📦</div>
+                    <div class="dashboard-stat">
 
-                    <h2>0</h2>
+                        <div class="stat-icon">📦</div>
 
-                    <p>Listings</p>
+                        <h2><%= stats.listings %></h2>
 
-                </div>
+                        <p>Listings</p>
 
-                <div class="dashboard-stat">
+                    </div>
 
-                    <div class="stat-icon">📑</div>
+                </a>
 
-                    <h2>0</h2>
+                <a href="/leases/owner" class="dashboard-stat-link">
 
-                    <p>Requests</p>
+                    <div class="dashboard-stat">
 
-                </div>
+                        <div class="stat-icon">📑</div>
 
-                <div class="dashboard-stat">
+                        <h2><%= stats.requests %></h2>
 
-                    <div class="stat-icon">💬</div>
+                        <p>Pending Requests</p>
 
-                    <h2>0</h2>
+                    </div>
 
-                    <p>Messages</p>
+                </a>
 
-                </div>
+                <a href="/messages" class="dashboard-stat-link">
 
-                <div class="dashboard-stat">
+                    <div class="dashboard-stat">
 
-                    <div class="stat-icon">⭐</div>
+                        <div class="stat-icon">💬</div>
 
-                    <h2>0</h2>
+                        <h2><%= stats.messages %></h2>
 
-                    <p>Reviews</p>
+                        <p>Messages</p>
 
-                </div>
+                    </div>
+
+                </a>
+
+                <a href="/profile/reviews" class="dashboard-stat-link">
+
+                    <div class="dashboard-stat">
+
+                        <div class="stat-icon">⭐</div>
+
+                        <h2>
+
+                            <%= rating.average || "0.0" %>
+
+                        </h2>
+
+                        <p>
+
+                            ⭐ <%= rating.total %> Reviews
+
+                        </p>
+
+                    </div>
+
+                </a>
 
             </div>
 
-            <div class="dashboard-card">
+            <!-- Recent Activity -->
 
-                <h2>Recent Activity</h2>
+                <div class="dashboard-card">
 
-                <div class="empty-state">
+                    <h2>Recent Activity</h2>
 
-                    <h3>No recent activity</h3>
+                    <% if (activities.length === 0) { %>
 
-                    <p>Your latest listings and lease activity will appear here.</p>
+                        <div class="empty-state">
+
+                            <h3>No recent activity</h3>
+
+                            <p>
+
+                                Your latest activity will appear here.
+
+                            </p>
+
+                        </div>
+
+                    <% } else { %>
+
+                        <div class="activity-list">
+
+                            <% activities.forEach(activity => { %>
+
+                                <%
+                                    let icon = "•";
+                                    let link = "#";
+
+                                    if(activity.type === "listing"){
+                                        icon = "📦";
+                                        link = "/listings/my-listings";
+                                    }
+
+                                    if(activity.type === "lease"){
+                                        icon = "📋";
+                                        link = "/leases/owner";
+                                    }
+
+                                    if(activity.type === "message"){
+                                        icon = "💬";
+                                        link = "/messages";
+                                    }
+
+                                    if(activity.type === "review"){
+                                        icon = "⭐";
+                                        link = "/profile";
+                                    }
+
+                                    if(activity.type === "completed"){
+                                        icon = "✅";
+                                        link = "/leases/owner";
+
+                                    }
+
+                                    const created = new Date(activity.created_at);
+                                    const now = new Date();
+
+                                    const seconds = Math.floor((now-created)/1000);
+                                    const minutes = Math.floor(seconds/60);
+                                    const hours = Math.floor(minutes/60);
+                                    const days = Math.floor(hours/24);
+
+                                    let timeAgo = "";
+
+                                    if(seconds < 60){
+
+                                        timeAgo = "Just now";
+
+                                    }else if(minutes < 60){
+
+                                        timeAgo = minutes + " minute" + (minutes>1?"s":"") + " ago";
+
+                                    }else if(hours < 24){
+
+                                        timeAgo = hours + " hour" + (hours>1?"s":"") + " ago";
+
+                                    }else if(days === 1){
+
+                                        timeAgo = "Yesterday";
+
+                                    }else if(days < 7){
+
+                                        timeAgo = days + " days ago";
+
+                                    }else{
+
+                                        timeAgo = created.toLocaleDateString();
+
+                                    }
+                                %>
+
+                                <a href="<%= link %>" class="activity-link">
+
+                                    <div class="activity-item">
+
+                                        <div class="activity-icon">
+
+                                            <%= icon %>
+
+                                        </div>
+
+                                        <div class="activity-content">
+
+                                            <strong>
+
+                                                <%= activity.description %>
+
+                                            </strong>
+
+                                            <small>
+
+                                                <%= timeAgo %>
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </a>
+
+                            <% }) %>
+
+                        </div>
+
+                    <% } %>
 
                 </div>
-
-            </div>
 
         </section>
 
     </div>
-
-    
 
 </main>
 

@@ -1,4 +1,9 @@
 const User = require("../models/User");
+const Review = require("../models/Review");
+
+// ======================================
+// Profile
+// ======================================
 
 exports.showProfile = (req, res) => {
 
@@ -24,10 +29,36 @@ exports.showProfile = (req, res) => {
 
             }
 
-            res.render("profile", {
+            Review.getUserReviews(userId, (err, reviews) => {
 
-                user,
-                stats
+                if (err) {
+
+                    console.error(err);
+
+                    return res.send("Failed to load profile.");
+
+                }
+
+                Review.getAverageRating(userId, (err, rating) => {
+
+                    if (err) {
+
+                        console.error(err);
+
+                        return res.send("Failed to load profile.");
+
+                    }
+
+                    res.render("profile", {
+
+                        user,
+                        stats,
+                        reviews,
+                        rating
+
+                    });
+
+                });
 
             });
 
@@ -36,6 +67,64 @@ exports.showProfile = (req, res) => {
     });
 
 };
+
+// ======================================
+// Reviews Page
+// ======================================
+
+exports.showReviews = (req, res) => {
+
+    const userId = req.session.user.id;
+
+    User.findById(userId, (err, user) => {
+
+        if (err || !user) {
+
+            console.error(err);
+
+            return res.send("Failed to load reviews.");
+
+        }
+
+        Review.getUserReviews(userId, (err, reviews) => {
+
+            if (err) {
+
+                console.error(err);
+
+                return res.send("Failed to load reviews.");
+
+            }
+
+            Review.getAverageRating(userId, (err, rating) => {
+
+                if (err) {
+
+                    console.error(err);
+
+                    return res.send("Failed to load reviews.");
+
+                }
+
+                res.render("reviews", {
+
+                    user,
+                    reviews,
+                    rating
+
+                });
+
+            });
+
+        });
+
+    });
+
+};
+
+// ======================================
+// Edit Profile
+// ======================================
 
 exports.showEditProfile = (req, res) => {
 
@@ -57,6 +146,10 @@ exports.showEditProfile = (req, res) => {
 
 };
 
+// ======================================
+// Update Profile
+// ======================================
+
 exports.updateProfile = (req, res) => {
 
     const userId = req.session.user.id;
@@ -71,27 +164,29 @@ exports.updateProfile = (req, res) => {
 
     User.emailExists(user.email, userId, (err, existingUser) => {
 
-    if (err) {
+        if (err) {
 
-        console.error(err);
-        return res.send("Database error.");
+            console.error(err);
 
-    }
+            return res.send("Database error.");
 
-    if (existingUser) {
+        }
 
-        req.session.flash = {
+        if (existingUser) {
 
-            type: "error",
-            message: "That email address is already in use."
+            req.session.flash = {
 
-        };
+                type: "error",
 
-        return res.redirect("/profile/edit");
+                message: "That email address is already in use."
 
-    }
+            };
 
-    User.updateProfile(userId, user, (err) => {
+            return res.redirect("/profile/edit");
+
+        }
+
+        User.updateProfile(userId, user, (err) => {
 
             if (err) {
 
@@ -107,6 +202,7 @@ exports.updateProfile = (req, res) => {
             req.session.flash = {
 
                 type: "success",
+
                 message: "Profile updated successfully."
 
             };

@@ -1,8 +1,10 @@
 const Review = require("../models/Review");
+const Lease = require("../models/Lease");
+const Notification = require("../models/Notification");
 const db = require("../database/db");
 
 // ======================================
-// Show Review Form
+// Review Form
 // ======================================
 
 exports.showReviewForm = (req, res) => {
@@ -18,8 +20,6 @@ exports.showReviewForm = (req, res) => {
             leases.*,
 
             assets.title,
-
-            assets.id AS listing_id,
 
             users.id AS owner_id,
 
@@ -57,7 +57,7 @@ exports.showReviewForm = (req, res) => {
 
             }
 
-            res.render("review", {
+            res.render("reviews", {
 
                 user: req.session.user,
 
@@ -65,7 +65,7 @@ exports.showReviewForm = (req, res) => {
 
                 listing: {
 
-                    id: lease.listing_id,
+                    id: lease.asset_id,
 
                     title: lease.title
 
@@ -98,8 +98,11 @@ exports.createReview = (req, res) => {
     const {
 
         lease_id,
+
         reviewee_id,
+
         rating,
+
         review
 
     } = req.body;
@@ -174,11 +177,63 @@ exports.createReview = (req, res) => {
 
                     }
 
+                    Lease.getById(
+
+                        lease_id,
+
+                        (err, lease) => {
+
+                            if (!err && lease) {
+
+                                db.get(
+
+                                    `
+
+                                    SELECT title
+
+                                    FROM assets
+
+                                    WHERE id = ?
+
+                                    `,
+
+                                    [lease.asset_id],
+
+                                    (err, asset) => {
+
+                                        Notification.create(
+
+                                            {
+
+                                                user_id: reviewee_id,
+
+                                                title: "New Review",
+
+                                                message: `${req.session.user.full_name} left you a ${rating}-star review for "${asset.title}".`,
+
+                                                link: "/profile"
+
+                                            },
+
+                                            () => {}
+
+                                        );
+
+                                    }
+
+                                );
+
+                            }
+
+                        }
+
+                    );
+
                     req.session.flash = {
 
                         type: "success",
 
-                        message: "Review submitted successfully."
+                        message: "Thank you! Your review has been submitted."
 
                     };
 
@@ -195,16 +250,8 @@ exports.createReview = (req, res) => {
 };
 
 // ======================================
-// Lease Reviews
-// ======================================
 
-exports.getLeaseReviews = (
-
-    leaseId,
-
-    callback
-
-) => {
+exports.getLeaseReviews = (leaseId, callback) => {
 
     Review.getLeaseReviews(
 
@@ -229,20 +276,12 @@ exports.getLeaseReviews = (
 };
 
 // ======================================
-// User Rating
-// ======================================
 
-exports.getUserRating = (
-
-    userId,
-
-    callback
-
-) => {
+exports.getOwnerRating = (ownerId, callback) => {
 
     Review.getAverageRating(
 
-        userId,
+        ownerId,
 
         (err, rating) => {
 
@@ -260,17 +299,7 @@ exports.getUserRating = (
 
             }
 
-            callback(
-
-                rating || {
-
-                    average: 0,
-
-                    total: 0
-
-                }
-
-            );
+            callback(rating);
 
         }
 

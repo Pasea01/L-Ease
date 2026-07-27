@@ -1,7 +1,14 @@
 <script>
 
 const userBtn = document.getElementById("userMenuBtn");
-const dropdown = document.getElementById("dropdownMenu");
+const userDropdown = document.getElementById("dropdownMenu");
+
+const notificationBtn = document.getElementById("notificationBtn");
+const notificationDropdown = document.getElementById("notificationDropdown");
+
+// ================================
+// User Menu
+// ================================
 
 if (userBtn) {
 
@@ -9,16 +16,58 @@ if (userBtn) {
 
         e.stopPropagation();
 
-        dropdown.classList.toggle("show");
+        if (notificationDropdown) {
 
-    });
+            notificationDropdown.classList.remove("show");
 
-    document.addEventListener("click", function () {
+        }
 
-        dropdown.classList.remove("show");
+        userDropdown.classList.toggle("show");
 
     });
 
 }
+
+// ================================
+// Notification Menu
+// ================================
+
+if (notificationBtn) {
+
+    notificationBtn.addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+        if (userDropdown) {
+
+            userDropdown.classList.remove("show");
+
+        }
+
+        notificationDropdown.classList.toggle("show");
+
+    });
+
+}
+
+// ================================
+// Close Menus
+// ================================
+
+document.addEventListener("click", function () {
+
+    if (userDropdown) {
+
+        userDropdown.classList.remove("show");
+
+    }
+
+    if (notificationDropdown) {
+
+        notificationDropdown.classList.remove("show");
+
+    }
+
+});
 
 </script>

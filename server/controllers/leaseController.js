@@ -1,6 +1,7 @@
 const Lease = require("../models/Lease");
 const Message = require("../models/Message");
 const Listing = require("../models/Listing");
+const Notification = require("../models/Notification");
 
 exports.showLeaseForm = (req, res) => {
 
@@ -46,6 +47,8 @@ exports.showLeaseForm = (req, res) => {
 
 };
 
+// =====================================================
+
 exports.createLease = (req, res) => {
 
     const {
@@ -65,7 +68,6 @@ exports.createLease = (req, res) => {
 
         }
 
-        // Prevent owners from leasing their own listings
         if (listing.owner_id === req.session.user.id) {
 
             req.session.flash = {
@@ -106,38 +108,69 @@ exports.createLease = (req, res) => {
 
             }
 
-            res.send("🎉 Lease request submitted successfully!");
+            Notification.create({
+
+                user_id: listing.owner_id,
+
+                title: "New Lease Request",
+
+                message: `${req.session.user.full_name} requested to lease "${listing.title}".`,
+
+                link: "/leases/owner"
+
+            }, () => {
+
+                req.session.flash = {
+
+                    type: "success",
+
+                    message: "Lease request submitted successfully."
+
+                };
+
+                res.redirect("/listings");
+
+            });
 
         });
 
     });
 
 };
+
+// =====================================================
 
 exports.showOwnerRequests = (req, res) => {
 
-    const ownerId = req.session.user.id;
+    Lease.getOwnerRequests(
 
-    Lease.getOwnerRequests(ownerId, (err, requests) => {
+        req.session.user.id,
 
-        if (err) {
+        (err, requests) => {
 
-            console.error(err);
+            if (err) {
 
-            return res.send("Failed to load requests.");
+                console.error(err);
+
+                return res.send("Failed to load requests.");
+
+            }
+
+            res.render("owner-requests", {
+
+                user: req.session.user,
+
+                requests
+
+            });
 
         }
 
-        res.render("owner-requests", {
-
-            user: req.session.user,
-            requests
-
-        });
-
-    });
+    );
 
 };
+
+// =====================================================
 
 exports.showMyRequests = (req, res) => {
 
@@ -155,8 +188,6 @@ exports.showMyRequests = (req, res) => {
 
             }
 
-            console.log(requests);
-
             res.render("tenant-requests", {
 
                 user: req.session.user,
@@ -171,39 +202,73 @@ exports.showMyRequests = (req, res) => {
 
 };
 
+// =====================================================
+
 exports.approveLease = (req, res) => {
 
     const leaseId = req.params.id;
+
     const ownerId = req.session.user.id;
 
     Lease.approve(leaseId, ownerId, (err) => {
 
         if (err) {
+
             console.error(err);
+
             return res.send("Failed to approve lease.");
+
         }
 
         Lease.getById(leaseId, (err, lease) => {
 
             if (err || !lease) {
+
                 console.error(err);
+
                 return res.redirect("/leases/owner");
+
             }
 
             Message.send({
 
                 sender_id: ownerId,
+
                 receiver_id: lease.tenant_id,
+
                 asset_id: lease.asset_id,
+
                 message: "Your lease request has been approved. You can now chat with the owner."
 
-            }, (err) => {
+            }, () => {
 
-                if (err) {
-                    console.error(err);
-                }
+                Listing.getListingById(lease.asset_id, (err, listing) => {
 
-                res.redirect("/leases/owner");
+                    Notification.create({
+
+                        user_id: lease.tenant_id,
+
+                        title: "Lease Approved",
+
+                        message: `Your request for "${listing.title}" has been approved.`,
+
+                        link: "/messages"
+
+                    }, () => {
+
+                        req.session.flash = {
+
+                            type: "success",
+
+                            message: "Lease approved."
+
+                        };
+
+                        res.redirect("/leases/owner");
+
+                    });
+
+                });
 
             });
 
@@ -213,36 +278,80 @@ exports.approveLease = (req, res) => {
 
 };
 
+// =====================================================
+
 exports.rejectLease = (req, res) => {
 
+    const leaseId = req.params.id;
+
     Lease.reject(
-        req.params.id,
+
+        leaseId,
+
         req.session.user.id,
+
         (err) => {
 
             if (err) {
 
                 console.error(err);
+
                 return res.send("Failed to reject lease.");
 
             }
 
-            res.redirect("/leases/owner");
+            Lease.getById(leaseId, (err, lease) => {
+
+                if (lease) {
+
+                    Listing.getListingById(lease.asset_id, (err, listing) => {
+
+                        Notification.create({
+
+                            user_id: lease.tenant_id,
+
+                            title: "Lease Request Declined",
+
+                            message: `Your request for "${listing.title}" was declined.`,
+
+                            link: "/leases/my-requests"
+
+                        }, () => {
+
+                            res.redirect("/leases/owner");
+
+                        });
+
+                    });
+
+                }
+                else {
+
+                    res.redirect("/leases/owner");
+
+                }
+
+            });
 
         }
+
     );
 
 };
 
-exports.completeLease = (req,res)=>{
+// =====================================================
+
+exports.completeLease = (req, res) => {
+
+    const leaseId = req.params.id;
 
     Lease.completeLease(
 
-        req.params.id,
+        leaseId,
 
-        (err)=>{
+        (err) => {
 
-            if(err){
+            if (err) {
 
                 console.error(err);
 
@@ -250,15 +359,46 @@ exports.completeLease = (req,res)=>{
 
             }
 
-            req.session.flash={
+            Lease.getById(leaseId, (err, lease) => {
 
-                type:"success",
+                if (lease) {
 
-                message:"Lease marked as completed."
+                    Listing.getListingById(lease.asset_id, (err, listing) => {
 
-            };
+                        Notification.create({
 
-            res.redirect("/leases/owner");
+                            user_id: lease.tenant_id,
+
+                            title: "Lease Completed",
+
+                            message: `Your lease for "${listing.title}" has been completed. Please leave a review.`,
+
+                            link: `/reviews/new/${lease.id}`
+
+                        }, () => {
+
+                            req.session.flash = {
+
+                                type: "success",
+
+                                message: "Lease marked as completed."
+
+                            };
+
+                            res.redirect("/leases/owner");
+
+                        });
+
+                    });
+
+                }
+                else {
+
+                    res.redirect("/leases/owner");
+
+                }
+
+            });
 
         }
 

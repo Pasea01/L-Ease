@@ -148,6 +148,36 @@
 
                                 <p>👤 <%= listing.full_name %></p>
 
+                                <div class="listing-rating">
+
+                                    <% if (listing.review_count > 0) { %>
+
+                                        <span class="rating-star">⭐</span>
+
+                                        <span class="rating-score">
+
+                                            <%= listing.average_rating %>
+
+                                        </span>
+
+                                        <span class="rating-count">
+
+                                            (<%= listing.review_count %>)
+
+                                        </span>
+
+                                    <% } else { %>
+
+                                        <span class="rating-none">
+
+                                            New Listing
+
+                                        </span>
+
+                                    <% } %>
+
+                                </div>
+
                                 <div class="listing-price">
 
                                     KES <%= Number(listing.price_per_day).toLocaleString() %>
@@ -173,43 +203,361 @@
 
         <section class="how-it-works">
 
-            <h2>How L-Ease Works</h2>
+            <div class="section-heading">
+
+
+                <h2>How L-Ease Works</h2>
+
+                <p>
+
+                    Leasing assets has never been easier. Follow these simple steps.
+
+                </p>
+
+            </div>
 
             <div class="steps">
 
-                <div class="step">
+                <div class="step-card">
 
-                    <span>1</span>
+                    <div class="step-number">
 
-                    <h3>List an Asset</h3>
+                        1
 
-                    <p>Create a listing in minutes.</p>
+                    </div>
+
+                    <div class="step-icon">
+
+                        📦
+
+                    </div>
+
+                    <h3>List Your Asset</h3>
+
+                    <p>
+
+                        Create a listing, upload photos, set your rental price and
+                        availability in just a few minutes.
+
+                    </p>
 
                 </div>
 
-                <div class="step">
+                <div class="step-arrow">
 
-                    <span>2</span>
+                    →
+
+                </div>
+
+                <div class="step-card">
+
+                    <div class="step-number">
+
+                        2
+
+                    </div>
+
+                    <div class="step-icon">
+
+                        📩
+
+                    </div>
 
                     <h3>Receive Requests</h3>
 
-                    <p>Interested users contact you directly.</p>
+                    <p>
+
+                        Interested renters send lease requests and communicate with you
+                        through our secure messaging system.
+
+                    </p>
 
                 </div>
 
-                <div class="step">
+                <div class="step-arrow">
 
-                    <span>3</span>
+                    →
+
+                </div>
+
+                <div class="step-card">
+
+                    <div class="step-number">
+
+                        3
+
+                    </div>
+
+                    <div class="step-icon">
+
+                        💰
+
+                    </div>
 
                     <h3>Earn Money</h3>
 
-                    <p>Lease your assets securely.</p>
+                    <p>
+
+                        Approve requests, complete leases and build your reputation
+                        through verified reviews.
+
+                    </p>
 
                 </div>
 
             </div>
 
         </section>
+
+        <!-- WHY CHOOSE US -->
+
+            <section class="why-us">
+
+                <div class="section-heading">
+
+                    <span>Why us?</span>
+
+                    <p>
+
+                        Built to make leasing assets safer, easier and more reliable.
+
+                    </p>
+
+                </div>
+
+                <div class="why-grid">
+
+                    <div class="why-card">
+
+                        <div class="why-icon">
+
+                            🔒
+
+                        </div>
+
+                        <h3>Secure Leasing</h3>
+
+                        <p>
+
+                            Lease confidently through verified accounts, secure messaging
+                            and transparent agreements.
+
+                        </p>
+
+                    </div>
+
+                    <div class="why-card">
+
+                        <div class="why-icon">
+
+                            💬
+
+                        </div>
+
+                        <h3>Direct Communication</h3>
+
+                        <p>
+
+                            Chat directly with owners or renters before making leasing
+                            decisions.
+
+                        </p>
+
+                    </div>
+
+                    <div class="why-card">
+
+                        <div class="why-icon">
+
+                            ⭐
+
+                        </div>
+
+                        <h3>Trusted Reviews</h3>
+
+                        <p>
+
+                            Build your reputation through genuine ratings from completed
+                            leases.
+
+                        </p>
+
+                    </div>
+
+                    <div class="why-card">
+
+                        <div class="why-icon">
+
+                            📅
+
+                        </div>
+
+                        <h3>Flexible Rentals</h3>
+
+                        <p>
+
+                            Lease almost any asset for the duration that works for both
+                            parties.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- TESTIMONIALS -->
+
+                <section class="testimonials">
+
+                    <div class="section-heading">
+
+                        <span>Community</span>
+
+                        <p>
+
+                            Real experiences shared by members of the L-Ease community.
+
+                        </p>
+
+                    </div>
+
+                    <% if(reviews.length === 0){ %>
+
+                        <div class="empty-state">
+
+                            <h3>
+
+                                No reviews yet
+
+                            </h3>
+
+                            <p>
+
+                                Complete your first lease to become one of our first reviewers.
+
+                            </p>
+
+                        </div>
+
+                    <% } else { %>
+
+                        <div class="testimonial-grid">
+
+                            <% reviews.forEach(review=>{ %>
+
+                                <div class="testimonial-card">
+
+                                    <div class="testimonial-stars">
+
+                                        <% for(let i=1;i<=5;i++){ %>
+
+                                            <% if(i<=review.rating){ %>
+
+                                                ⭐
+
+                                            <% }else{ %>
+
+                                                ☆
+
+                                            <% } %>
+
+                                        <% } %>
+
+                                    </div>
+
+                                    <p>
+
+                                        "<%= review.comment %>"
+
+                                    </p>
+
+                                    <div class="testimonial-user">
+
+                                        <div class="testimonial-avatar">
+
+                                            <%= review.full_name.charAt(0).toUpperCase() %>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+
+                                                <%= review.full_name %>
+
+                                            </strong>
+
+                                            <small>
+
+                                                Verified L-Ease Member
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            <% }) %>
+
+                        </div>
+
+                    <% } %>
+
+                </section>
+
+                <!-- CALL TO ACTION -->
+
+                    <section class="homepage-cta">
+
+                        <div class="cta-content">
+
+                            <h2>
+
+                                Ready to Start Leasing?
+
+                            </h2>
+
+                            <p>
+
+                                Join thousands of owners and renters using L-Ease to lease assets
+                                safely and conveniently.
+
+                            </p>
+
+                            <div class="cta-buttons">
+
+                                <a href="/listings" class="primary-btn">
+
+                                    Browse Assets
+
+                                </a>
+
+                                <% if(user){ %>
+
+                                    <a href="/listings/new" class="secondary-btn">
+
+                                        List an Asset
+
+                                    </a>
+
+                                <% } else { %>
+
+                                    <a href="/register" class="secondary-btn">
+
+                                        Join Today
+
+                                    </a>
+
+                                <% } %>
+
+                            </div>
+
+                        </div>
+
+                    </section>
 
     </main>
 

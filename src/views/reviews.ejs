@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="profile-page">
+
+    <div class="profile-layout">
+
+        <!-- Sidebar -->
+
+        <aside class="profile-sidebar">
+
+            <h1>Profile</h1>
+
+            <nav class="profile-menu">
+
+                <a href="/profile">
+
+                    👤 About Me
+
+                </a>
+
+                <a href="/profile/reviews" class="active">
+
+                    ⭐ Reviews
+
+                </a>
+
+                <a href="/dashboard">
+
+                    📊 Dashboard
+
+                </a>
+
+                <a href="/listings/my-listings">
+
+                    📦 My Listings
+
+                </a>
+
+                <a href="/leases/owner">
+
+                    📋 Lease Requests
+
+                </a>
+
+                <a href="/inbox">
+
+                    💬 Messages
+
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <!-- Main -->
+
+        <section class="profile-content">
+
+            <div class="profile-header">
+
+                <h1>
+
+                    Reviews
+
+                </h1>
+
+                <a href="/profile" class="secondary-btn">
+
+                    ← Back to Profile
+
+                </a>
+
+            </div>
+
+            <!-- Rating Summary -->
+
+            <div class="profile-card">
+
+                <div class="profile-avatar">
+
+                    ⭐
+
+                </div>
+
+                <h2>
+
+                    <%= rating.average || "0.0" %>
+
+                </h2>
+
+                <p class="profile-role">
+
+                    Overall Rating
+
+                </p>
+
+                <div class="profile-rating">
+
+                    <% const stars = Math.round(rating.average || 0); %>
+
+                    <div class="rating-stars">
+
+                        <% for(let i=1;i<=5;i++){ %>
+
+                            <% if(i<=stars){ %>
+
+                                ⭐
+
+                            <% }else{ %>
+
+                                ☆
+
+                            <% } %>
+
+                        <% } %>
+
+                    </div>
+
+                    <div class="rating-info">
+
+                        <strong>
+
+                            <%= rating.total %>
+
+                        </strong>
+
+                        <span>
+
+                            Review<%= rating.total===1 ? "" : "s" %>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Reviews -->
+
+            <div class="profile-section">
+
+                <h2>
+
+                    All Reviews
+
+                </h2>
+
+                <% if(reviews.length===0){ %>
+
+                    <div class="empty-state">
+
+                        <h3>
+
+                            No Reviews Yet
+
+                        </h3>
+
+                        <p>
+
+                            Complete leases successfully to receive reviews from other members.
+
+                        </p>
+
+                    </div>
+
+                <% }else{ %>
+
+                    <div class="review-list">
+
+                        <% reviews.forEach(review=>{ %>
+
+                            <div class="review-card">
+
+                                <div class="review-header">
+
+                                    <div class="review-user">
+
+                                        <div class="review-avatar">
+
+                                            <%= review.full_name.charAt(0).toUpperCase() %>
+
+                                        </div>
+
+                                        <div>
+
+                                            <strong>
+
+                                                <%= review.full_name %>
+
+                                            </strong>
+
+                                            <small>
+
+                                                <%= new Date(review.created_at).toLocaleDateString() %>
+
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                    <div class="review-stars">
+
+                                        <% for(let i=1;i<=5;i++){ %>
+
+                                            <% if(i<=review.rating){ %>
+
+                                                ⭐
+
+                                            <% }else{ %>
+
+                                                ☆
+
+                                            <% } %>
+
+                                        <% } %>
+
+                                    </div>
+
+                                </div>
+
+                                <p class="review-comment">
+
+                                    <%= review.comment %>
+
+                                </p>
+
+                            </div>
+
+                        <% }) %>
+
+                    </div>
+
+                <% } %>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+
+</html>

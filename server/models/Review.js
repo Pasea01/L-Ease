@@ -205,3 +205,39 @@ exports.getAverageRating = (
     );
 
 };
+
+// ======================================
+// Homepage Reviews
+// ======================================
+
+exports.getHomepageReviews = (callback) => {
+
+    const sql = `
+
+        SELECT
+
+            reviews.*,
+
+            users.full_name
+
+        FROM reviews
+
+        JOIN users
+
+            ON reviews.reviewer_id = users.id
+
+        ORDER BY reviews.created_at DESC
+
+        LIMIT 3
+
+    `;
+
+    db.all(
+
+        sql,
+
+        callback
+
+    );
+
+};

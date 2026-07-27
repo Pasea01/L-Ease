@@ -21,5 +21,10 @@ router.post(
     authMiddleware,
     userController.updateProfile
 );
+router.get(
+    "/profile/reviews",
+    authMiddleware,
+    userController.showReviews
+);
 
 module.exports = router;

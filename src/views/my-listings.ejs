@@ -131,9 +131,71 @@
 
                         <span class="host-price">
 
-                            KES <%= listing.price_per_day %>/day
+                            KES <%= Number(listing.price_per_day).toLocaleString() %>/day
 
                         </span>
+
+                    </div>
+
+                    <div class="listing-rating">
+
+                        <% if (listing.review_count > 0) { %>
+
+                            <span class="rating-star">⭐</span>
+
+                            <span class="rating-score">
+
+                                <%= listing.average_rating %>
+
+                            </span>
+
+                            <span class="rating-count">
+
+                                (<%= listing.review_count %> Reviews)
+
+                            </span>
+
+                        <% } else { %>
+
+                            <span class="rating-none">
+
+                                No reviews yet
+
+                            </span>
+
+                        <% } %>
+
+                    </div>
+
+                    <div class="host-metrics">
+
+                        <div class="metric">
+
+                            📑
+
+                            <strong>
+
+                                <%= listing.pending_requests %>
+
+                            </strong>
+
+                            Pending
+
+                        </div>
+
+                        <div class="metric">
+
+                            ✔
+
+                            <strong>
+
+                                <%= listing.completed_leases %>
+
+                            </strong>
+
+                            Completed
+
+                        </div>
 
                     </div>
 
@@ -152,8 +214,8 @@
                     <p class="host-description">
 
                         <%= listing.description.length > 80
-                        ? listing.description.substring(0,80) + "..."
-                        : listing.description %>
+                            ? listing.description.substring(0,80) + "..."
+                            : listing.description %>
 
                     </p>
 
