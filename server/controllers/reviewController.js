@@ -57,7 +57,7 @@ exports.showReviewForm = (req, res) => {
 
             }
 
-            res.render("reviews", {
+            res.render("review-form", {
 
                 user: req.session.user,
 

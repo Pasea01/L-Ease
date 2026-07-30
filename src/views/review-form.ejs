@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include("partials/head") %>
+
+<body>
+
+<%- include("partials/navbar") %>
+
+<main class="profile-page">
+
+    <div class="profile-layout">
+
+        <!-- Sidebar -->
+
+        <aside class="profile-sidebar">
+
+            <h1>Leave Review</h1>
+
+            <nav class="profile-menu">
+
+                <a href="/dashboard">
+
+                    📊 Dashboard
+
+                </a>
+
+                <a href="/leases/owner">
+
+                    📋 Lease Requests
+
+                </a>
+
+                <a href="/profile">
+
+                    👤 Profile
+
+                </a>
+
+            </nav>
+
+        </aside>
+
+        <!-- Main -->
+
+        <section class="profile-content">
+
+            <div class="profile-header">
+
+                <h1>
+
+                    Share your experience
+
+                </h1>
+
+                <a href="/dashboard" class="secondary-btn">
+
+                    ← Cancel
+
+                </a>
+
+            </div>
+
+            <div class="profile-card">
+
+                <h2>
+
+                    <%= listing.title %>
+
+                </h2>
+
+                <p>
+
+                    Owner:
+
+                    <strong>
+
+                        <%= reviewee.full_name %>
+
+                    </strong>
+
+                </p>
+
+            </div>
+
+            <form action="/reviews/create" method="POST" class="profile-section">
+
+                <input
+                    type="hidden"
+                    name="lease_id"
+                    value="<%= lease.id %>"
+                >
+
+                <input
+                    type="hidden"
+                    name="reviewee_id"
+                    value="<%= reviewee.id %>"
+                >
+
+                <div class="form-group">
+
+                    <label>
+
+                        How would you rate your experience with <%= reviewee.full_name %>?
+
+                    </label>
+
+                    <div class="rating-widget">
+
+                        <span class="star" data-value="1">&#9733;</span>
+                        <span class="star" data-value="2">&#9733;</span>
+                        <span class="star" data-value="3">&#9733;</span>
+                        <span class="star" data-value="4">&#9733;</span>
+                        <span class="star" data-value="5">&#9733;</span>
+
+                    </div>
+
+                    <p id="rating-text">
+
+                        
+
+                    </p>
+
+                    <input
+
+                        type="hidden"
+
+                        name="rating"
+
+                        id="rating"
+
+                        required
+
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>
+
+                        Review
+
+                    </label>
+
+                    <textarea
+
+                        name="review"
+
+                        rows="6"
+
+                        placeholder="Share your experience with this owner..."
+
+                        required
+
+                    ></textarea>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+
+                    Submit Review
+
+                </button>
+
+            </form>
+
+        </section>
+
+    </div>
+
+</main>
+
+<script>
+
+const stars = document.querySelectorAll(".star");
+
+const ratingInput = document.getElementById("rating");
+
+const ratingText = document.getElementById("rating-text");
+
+let selected = 0;
+
+const labels = {
+
+    1:"Poor",
+
+    2:"Fair",
+
+    3:"Good",
+
+    4:"Very Good",
+
+    5:"Excellent"
+
+};
+
+function paintStars(value){
+
+    stars.forEach(star=>{
+
+        star.classList.toggle(
+
+            "active",
+
+            star.dataset.value<=value
+
+        );
+
+    });
+
+}
+
+stars.forEach(star=>{
+
+    star.addEventListener("mouseover",()=>{
+
+        paintStars(star.dataset.value);
+
+    });
+
+    star.addEventListener("mouseout",()=>{
+
+        paintStars(selected);
+
+    });
+
+    star.addEventListener("click",()=>{
+
+        selected = star.dataset.value;
+
+        ratingInput.value = selected;
+
+        ratingText.innerHTML =
+
+            "<strong>"+labels[selected]+"</strong>";
+
+        paintStars(selected);
+
+    });
+
+});
+
+</script>
+
+<%- include("partials/footer") %>
+
+<%- include("partials/scripts") %>
+
+</body>
+
+</html>

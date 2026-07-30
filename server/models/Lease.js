@@ -178,7 +178,7 @@ class Lease {
 
             const sql = `
                 UPDATE leases
-                SET completed = 1
+                SET status = 'completed'
                 WHERE id = ?
             `;
 

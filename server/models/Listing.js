@@ -205,8 +205,7 @@ class Listing {
 
                     DISTINCT CASE
 
-                        WHEN leases.completed = 1
-
+                        WHEN leases.status = 'completed'
                         THEN leases.id
 
                     END
