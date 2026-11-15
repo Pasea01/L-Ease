@@ -20,6 +20,9 @@ require("./database/initDatabase");
 
 const getCategoryImage = require("./helpers/categoryImage");
 
+const getProfileImage = require("./helpers/profileImage");
+const getListingImage = require("./helpers/listingImage");
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -74,6 +77,10 @@ app.use((req, res, next) => {
     res.locals.flash = req.session.flash || null;
 
     res.locals.getCategoryImage = getCategoryImage;
+
+    res.locals.getProfileImage = getProfileImage;
+
+    res.locals.getListingImage = getListingImage;
 
     delete req.session.flash;
 

@@ -15,18 +15,30 @@
 
         <aside class="dashboard-sidebar">
 
+            
             <div class="sidebar-profile">
-
                 <div class="sidebar-avatar">
+                    <% const profileImage = getProfileImage(user.profile_image); %>
 
-                    <%= user.full_name.charAt(0).toUpperCase() %>
+                    <% if (profileImage) { %>
+                        <img
+                            src="<%= profileImage %>"
+                            alt="<%= user.full_name %>"
+                            class="sidebar-avatar-image"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        >
+                    <% } %>
 
+                    <span
+                        class="sidebar-avatar-initial"
+                        style="<%= profileImage ? 'display:none;' : 'display:flex;' %>"
+                    >
+                        <%= user.full_name ? user.full_name.charAt(0).toUpperCase() : '?' %>
+                    </span>
                 </div>
 
                 <h3><%= user.full_name %></h3>
-
                 <p>Member</p>
-
             </div>
 
             <nav class="dashboard-menu">

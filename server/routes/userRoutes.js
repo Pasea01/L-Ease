@@ -3,6 +3,7 @@ const router = express.Router();
 
 const authMiddleware = require("../middleware/authMiddleware");
 const userController = require("../controllers/userController");
+const upload = require("../middleware/uploadMiddleware");
 
 router.get(
     "/profile",
@@ -19,8 +20,10 @@ router.get(
 router.post(
     "/profile/edit",
     authMiddleware,
+    upload.single("profile_image"),
     userController.updateProfile
 );
+
 router.get(
     "/profile/reviews",
     authMiddleware,

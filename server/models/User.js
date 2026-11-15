@@ -304,25 +304,50 @@ class User {
 
     static updateProfile(userId, user, callback) {
 
-        const sql = `
-            UPDATE users
-            SET
-                full_name = ?,
-                email = ?,
-                phone = ?
-            WHERE id = ?
-        `;
+        let sql;
+        let params;
 
-        db.run(
-            sql,
-            [
+        if (user.profile_image) {
+
+            sql = `
+                UPDATE users
+                SET
+                    full_name = ?,
+                    email = ?,
+                    phone = ?,
+                    profile_image = ?
+                WHERE id = ?
+            `;
+
+            params = [
+                user.full_name,
+                user.email,
+                user.phone,
+                user.profile_image,
+                userId
+            ];
+
+        } else {
+
+            sql = `
+                UPDATE users
+                SET
+                    full_name = ?,
+                    email = ?,
+                    phone = ?
+                WHERE id = ?
+            `;
+
+            params = [
                 user.full_name,
                 user.email,
                 user.phone,
                 userId
-            ],
-            callback
-        );
+            ];
+
+        }
+
+        db.run(sql, params, callback);
 
     }
 

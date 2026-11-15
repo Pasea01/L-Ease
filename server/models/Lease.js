@@ -149,7 +149,7 @@ class Lease {
             SELECT *
             FROM leases
             WHERE asset_id = ?
-            AND status = 'approved'
+            AND status IN ('approved', 'completed')
             AND (
                 (owner_id = ? AND tenant_id = ?)
                 OR
@@ -170,7 +170,6 @@ class Lease {
         );
 
     }
-
     // =====================================
         // Complete Lease
         // =====================================

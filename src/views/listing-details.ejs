@@ -15,23 +15,13 @@
 
         <section class="details-main">
 
-            <% if (listing.image_url) { %>
-
+            
                 <img
-                    src="/uploads/<%= listing.image_url %>"
+                    src="<%= getListingImage(listing) %>"
                     class="details-image"
                     alt="<%= listing.title %>"
+                    onerror="this.onerror=null; this.src='<%= getCategoryImage(listing.category) %>';"
                 >
-
-            <% } else { %>
-
-                <img
-                    src="<%= getCategoryImage(listing.category) %>"
-                    class="details-image"
-                    alt="<%= listing.category %>"
-                >
-
-            <% } %>
 
             <div class="details-card">
 
@@ -129,7 +119,10 @@
 
                                 <div class="review-avatar">
 
-                                    <%= review.full_name.charAt(0).toUpperCase() %>
+                                    <img
+                                        src="<%= getProfileImage(review) %>"
+                                        alt="<%= review.full_name %>"
+                                    >
 
                                 </div>
 

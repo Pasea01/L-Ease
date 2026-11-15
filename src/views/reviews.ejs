@@ -185,7 +185,10 @@
 
                                         <div class="review-avatar">
 
-                                            <%= review.full_name.charAt(0).toUpperCase() %>
+                                            <img
+                                                src="<%= getProfileImage(review) %>"
+                                                alt="<%= review.full_name %>"
+                                            >
 
                                         </div>
 

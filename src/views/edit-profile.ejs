@@ -28,6 +28,7 @@
     <form
         action="/profile/edit"
         method="POST"
+        enctype="multipart/form-data"
         class="listing-form"
     >
 
@@ -90,17 +91,49 @@
 
                 <div class="form-card profile-summary">
 
-                    <div class="profile-avatar-large">
+                     <input
+                        type="file"
+                        id="profile_image"
+                        name="profile_image"
+                        accept="image/*"
+                        hidden
+                    >
 
-                        <%= user.full_name.charAt(0).toUpperCase() %>
+                    <label
+                        for="profile_image"
+                        class="profile-avatar-upload"
+                    >
 
-                    </div>
+                        <% if (user.profile_image && user.profile_image !== "default.png") { %>
+
+                            <img
+                                src="<%= getProfileImage(user.profile_image) %>"
+                                class="profile-avatar-large"
+                                id="profilePreview"
+                            >
+
+                        <% } else { %>
+
+                            <div
+                                class="profile-avatar-large avatar-placeholder"
+                                id="profilePreviewLetter"
+                            >
+                                <%= user.full_name.charAt(0).toUpperCase() %>
+                            </div>
+
+                        <% } %>
+
+                        <span class="avatar-edit-btn">
+                            <i class="fa-solid fa-camera"></i>
+                        </span>
+
+                    </label>
 
                     <h2><%= user.full_name %></h2>
 
-                    <p>
+                    <p class="profile-role">
 
-                        <%= user.role %>
+                        <%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %>
 
                     </p>
 
@@ -135,6 +168,28 @@
     </form>
 
 </main>
+
+        <script>
+            const input = document.getElementById("profile_image");
+
+            input.addEventListener("change", function () {
+
+                const file = this.files[0];
+
+                if (!file) return;
+
+                const preview = document.querySelector(".profile-avatar-large");
+
+                const img = document.createElement("img");
+
+                img.src = URL.createObjectURL(file);
+                img.className = "profile-avatar-large";
+                img.id = "profilePreview";
+
+                preview.replaceWith(img);
+
+            });
+            </script>
 
 <%- include("partials/footer") %>
 

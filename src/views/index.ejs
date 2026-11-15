@@ -16,7 +16,7 @@
 
             <div class="hero-content">
 
-                <h1>Lease Anything, Anytime.</h1>
+                <h1>Rent Anything, Anytime.</h1>
 
                 <p>
                     Find trusted rentals for property, vehicles,
@@ -124,21 +124,13 @@
 
                         <a href="/listings/<%= listing.id %>" class="listing-card">
 
-                            <% if(listing.image_url){ %>
-
-                                <img
-                                    src="/uploads/<%= listing.image_url %>"
-                                    class="listing-image"
-                                >
-
-                            <% } else { %>
-
-                                <img
-                                    src="<%= getCategoryImage(listing.category) %>"
-                                    class="listing-image"
-                                >
-
-                            <% } %>
+                            
+                            <img
+                                src="<%= getListingImage(listing) %>"
+                                alt="<%= listing.title %>"
+                                class="host-image"
+                                onerror="this.onerror=null; this.src='<%= getCategoryImage(listing.category) %>';"
+                            >
 
                             <div class="listing-content">
 
@@ -339,7 +331,7 @@
 
                         <p>
 
-                            Lease confidently through verified accounts, secure messaging
+                            rent confidently through verified accounts, secure messaging
                             and transparent agreements.
 
                         </p>
@@ -396,7 +388,7 @@
 
                         <p>
 
-                            Lease almost any asset for the duration that works for both
+                            rent almost any asset for the duration that works for both
                             parties.
 
                         </p>
@@ -474,9 +466,12 @@
 
                                     <div class="testimonial-user">
 
-                                        <div class="testimonial-avatar">
+                                        <div class="review-avatar">
 
-                                            <%= review.full_name.charAt(0).toUpperCase() %>
+                                            <img
+                                                src="<%= getProfileImage(review) %>"
+                                                alt="<%= review.full_name %>"
+                                            >
 
                                         </div>
 

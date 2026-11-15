@@ -63,4 +63,10 @@ router.get(
 
 );
 
+router.get("/about", (req, res) => {
+    res.render("about", {
+        user: req.session.user || null
+    });
+});
+
 module.exports = router;

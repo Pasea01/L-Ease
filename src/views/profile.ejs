@@ -65,7 +65,22 @@
 
                 <div class="profile-avatar">
 
-                    <%= user.full_name.charAt(0).toUpperCase() %>
+                    <% if(user.profile_image && user.profile_image !== "default.png"){ %>
+
+                        <img
+                            src="/uploads/profiles/<%= user.profile_image %>"
+                            alt="<%= user.full_name %>"
+                        >
+
+                    <% } else { %>
+
+                        <span>
+
+                            <%= user.full_name.charAt(0).toUpperCase() %>
+
+                        </span>
+
+                    <% } %>
 
                 </div>
 
@@ -307,7 +322,10 @@
 
                                         <div class="review-avatar">
 
-                                            <%= review.full_name.charAt(0).toUpperCase() %>
+                                            <img
+                                                src="<%= getProfileImage(review) %>"
+                                                alt="<%= review.full_name %>"
+                                            >
 
                                         </div>
 

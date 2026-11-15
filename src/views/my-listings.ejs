@@ -61,23 +61,13 @@
 
                 <a href="/listings/<%= listing.id %>">
 
-                    <% if(listing.image_url){ %>
-
+                    
                     <img
-                        src="/uploads/<%= listing.image_url %>"
+                        src="<%= getListingImage(listing) %>"
                         alt="<%= listing.title %>"
                         class="host-image"
+                        onerror="this.onerror=null; this.src='<%= getCategoryImage(listing.category) %>';"
                     >
-
-                    <% } else { %>
-
-                    <img
-                        src="<%= getCategoryImage(listing.category) %>"
-                        alt="<%= listing.category %>"
-                        class="host-image"
-                    >
-
-                    <% } %>
 
                 </a>
 

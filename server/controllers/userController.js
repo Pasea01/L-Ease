@@ -158,7 +158,11 @@ exports.updateProfile = (req, res) => {
 
         full_name: req.body.full_name,
         email: req.body.email,
-        phone: req.body.phone
+        phone: req.body.phone,
+
+        profile_image: req.file
+            ? req.file.filename
+            : null
 
     };
 
@@ -198,6 +202,12 @@ exports.updateProfile = (req, res) => {
 
             req.session.user.full_name = user.full_name;
             req.session.user.email = user.email;
+
+                if (user.profile_image) {
+
+                    req.session.user.profile_image = user.profile_image;
+
+                }
 
             req.session.flash = {
 
