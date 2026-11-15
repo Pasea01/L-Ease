@@ -124,8 +124,14 @@ app.use("/", userRoutes);
 // Start Server
 // --------------------------
 
-app.listen(PORT, () => {
+if (require.main === module) {
 
-    console.log(`🚀 L-Ease running on http://localhost:${PORT}`);
+    app.listen(PORT, () => {
 
-});
+        console.log(`🚀 L-Ease running on http://localhost:${PORT}`);
+
+    });
+
+}
+
+module.exports = app;

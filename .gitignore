@@ -1,3 +1,11 @@
 node_modules/
 .env
 .vscode/
+
+# Uploaded user-generated media
+src/uploads/*
+!src/uploads/profiles/
+!src/uploads/listings/
+src/uploads/profiles/*
+!src/uploads/profiles/default.png
+src/uploads/listings/*
