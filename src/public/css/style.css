@@ -22,6 +22,24 @@ body{
 
     line-height:1.6;
 
+    transition:
+        background-color .35s ease,
+        color .35s ease,
+        border-color .35s ease,
+        box-shadow .35s ease;
+
+}
+
+*{
+
+    transition:
+        background-color .35s ease,
+        color .35s ease,
+        border-color .35s ease,
+        box-shadow .35s ease,
+        fill .35s ease,
+        stroke .35s ease;
+
 }
 
 /* ==========================================
@@ -71,7 +89,7 @@ img{
 
 section{
 
-    padding:80px 8%;
+    padding:0;
 
 }
 
@@ -87,7 +105,7 @@ section{
 
     width:min(var(--container),95%);
 
-    margin:50px auto;
+    margin:var(--page-space-top) auto var(--page-space-bottom);
 
 }
 
@@ -103,7 +121,7 @@ section{
 
     flex-wrap:wrap;
 
-    margin-bottom:40px;
+    margin-bottom:24px;
 
 }
 
@@ -137,7 +155,7 @@ section{
 
     border-radius:var(--radius);
 
-    padding:30px;
+    padding:var(--panel-padding);
 
     box-shadow:var(--shadow);
 
@@ -151,7 +169,7 @@ section{
 
     box-shadow:var(--shadow);
 
-    padding:30px;
+    padding:var(--panel-padding);
 
     text-align:center;
 
@@ -267,13 +285,22 @@ textarea{
 
     transition:var(--transition);
 
-    background:white;
+    background:var(--input-bg);
+
+    color:var(--input-text);
 
 }
 
 textarea{
 
     resize:vertical;
+
+}
+
+input::placeholder,
+textarea::placeholder{
+
+    color:var(--text-muted);
 
 }
 
@@ -311,42 +338,127 @@ label{
 
     margin:20px auto;
 
-    padding:15px 20px;
+    padding:16px 20px;
 
-    border-radius:var(--radius);
+    border-radius:16px;
 
-    font-weight:600;
+    font-weight:700;
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    border:1px solid transparent;
+
+    box-shadow:0 10px 28px rgba(15,23,42,.12);
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+body.dark-theme{
+
+    background:var(--background);
+    color:var(--text);
+
+}
+
+.flash::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0 auto 0 0;
+
+    width:6px;
+
+    background:currentColor;
+
+    opacity:.7;
 
 }
 
 .flash-success{
 
-    background:#dcfce7;
+    background:rgba(22,163,74,.12);
 
     color:#166534;
+
+    border-color:rgba(34,197,94,.25);
 
 }
 
 .flash-error{
 
-    background:#fee2e2;
+    background:rgba(220,38,38,.1);
 
     color:#991b1b;
+
+    border-color:rgba(239,68,68,.25);
 
 }
 
 .flash-info{
 
-    background:#dbeafe;
+    background:rgba(37,99,235,.1);
 
     color:#1d4ed8;
+
+    border-color:rgba(59,130,246,.25);
+
+}
+
+body.dark-theme .flash{
+
+    box-shadow:0 12px 26px rgba(2,6,23,.42);
+
+}
+
+body.dark-theme .flash-success{
+
+    background:rgba(34,197,94,.14);
+
+    color:#bbf7d0;
+
+    border-color:rgba(74,222,128,.25);
+
+}
+
+body.dark-theme .flash-error{
+
+    background:rgba(239,68,68,.16);
+
+    color:#fecaca;
+
+    border-color:rgba(248,113,113,.25);
+
+}
+
+body.dark-theme .flash-info{
+
+    background:rgba(96,165,250,.14);
+
+    color:#dbeafe;
+
+    border-color:rgba(147,197,253,.25);
 
 }
 
 /* Dark Mode Toggle Button */
+.navbar-right {
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
 .theme-toggle {
     background: transparent;
-    border: 0.0px solid #ddd;
+    border: 1px solid var(--border);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -355,10 +467,801 @@ label{
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    margin-left: 8px;
+    transition: all 0.35s ease;
 }
 
 .theme-toggle:hover {
-    background: #f0f0f0;
+    background: var(--surface-alt);
     transform: scale(1.05);
+}
+
+body.dark-theme .theme-toggle{
+    background: rgba(148,163,184,.08);
+    border-color: var(--border);
+    color: var(--text);
+}
+
+body.dark-theme .theme-toggle:hover{
+    background: rgba(122,162,255,.12);
+}
+
+body.dark-theme .navbar,
+body.dark-theme .dropdown-menu,
+body.dark-theme .notification-dropdown,
+body.dark-theme .search-form,
+body.dark-theme .card,
+body.dark-theme .activity-card,
+body.dark-theme .stat-card,
+body.dark-theme .listing-card,
+body.dark-theme .request-card,
+body.dark-theme .message-card,
+body.dark-theme .profile-card,
+body.dark-theme .review-card,
+body.dark-theme .panel,
+body.dark-theme .empty-state,
+body.dark-theme .table-wrapper,
+body.dark-theme .notification-item,
+body.dark-theme .filter-box,
+body.dark-theme .conversation-box,
+body.dark-theme .auth-card,
+body.dark-theme .profile-box,
+body.dark-theme .dashboard-card,
+body.dark-theme .content-card,
+body.dark-theme .listing-form,
+body.dark-theme .section-card,
+body.dark-theme .lease-card{
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    border-color:var(--border);
+
+}
+
+body.dark-theme .nav-links a,
+body.dark-theme .dropdown-menu a,
+body.dark-theme .notification-item,
+body.dark-theme .notification-empty,
+body.dark-theme .request-item,
+body.dark-theme .message-content,
+body.dark-theme .review-item,
+body.dark-theme .meta-label,
+body.dark-theme .details-label,
+body.dark-theme .listing-info,
+body.dark-theme .stat-card h3,
+body.dark-theme .dashboard-header h1,
+body.dark-theme .page-title,
+body.dark-theme .section-title,
+body.dark-theme .content-title,
+body.dark-theme .auth-header h1,
+body.dark-theme .form-title,
+body.dark-theme .listing-title,
+body.dark-theme .profile-name{
+
+    color:var(--text);
+
+}
+
+body.dark-theme .dropdown-header small,
+body.dark-theme .notification-item small,
+body.dark-theme .request-meta,
+body.dark-theme .meta-value,
+body.dark-theme .list-item small,
+body.dark-theme .muted,
+body.dark-theme p,
+body.dark-theme .text-muted,
+body.dark-theme .listing-meta,
+body.dark-theme .card-subtitle,
+body.dark-theme .empty-description,
+body.dark-theme .auth-subtitle,
+body.dark-theme .description,
+body.dark-theme .detail-meta,
+body.dark-theme .secondary-text{
+
+    color:var(--text-light);
+
+}
+
+body.dark-theme .dropdown-menu a:hover,
+body.dark-theme .notification-item:hover,
+body.dark-theme .request-item:hover,
+body.dark-theme .nav-links a:hover{
+
+    background:var(--surface-alt);
+
+}
+
+body.dark-theme .avatar,
+body.dark-theme .notification-btn,
+body.dark-theme .user-btn,
+body.dark-theme .guest-actions,
+body.dark-theme .filter-box,
+body.dark-theme .listing-image,
+body.dark-theme .empty-state,
+body.dark-theme .detail-header,
+body.dark-theme .message-box,
+body.dark-theme .conversation-header{
+
+    background:var(--surface-alt);
+
+}
+
+body.dark-theme .auth-alert{
+
+    box-shadow:0 8px 22px rgba(2,6,23,.28);
+
+}
+
+body.dark-theme .auth-alert.success{
+
+    background:rgba(34,197,94,.12);
+
+    color:#bbf7d0;
+
+    border-color:rgba(74,222,128,.28);
+
+}
+
+body.dark-theme .auth-alert.error{
+
+    background:rgba(239,68,68,.12);
+
+    color:#fecaca;
+
+    border-color:rgba(248,113,113,.28);
+
+}
+
+body.dark-theme .hero-search,
+body.dark-theme .hero-search input,
+body.dark-theme .hero-search select,
+body.dark-theme .hero-search button,
+body.dark-theme .category-sidebar,
+body.dark-theme .category-sidebar a,
+body.dark-theme .listing-card,
+body.dark-theme .listing-card:hover,
+body.dark-theme .listing-content p,
+body.dark-theme .listing-price span,
+body.dark-theme .filters-card,
+body.dark-theme .empty-state,
+body.dark-theme .details-card,
+body.dark-theme .booking-card,
+body.dark-theme .review-card,
+body.dark-theme .dashboard-sidebar,
+body.dark-theme .dashboard-stat,
+body.dark-theme .dashboard-card,
+body.dark-theme .profile-sidebar,
+body.dark-theme .profile-card,
+body.dark-theme .profile-section,
+body.dark-theme .activity-box,
+body.dark-theme .empty-state-card,
+body.dark-theme .host-card,
+body.dark-theme .menu-dropdown,
+body.dark-theme .menu-dropdown a,
+body.dark-theme .form-card,
+body.dark-theme .upload-box,
+body.dark-theme .request-card,
+body.dark-theme .request-details div,
+body.dark-theme .request-message,
+body.dark-theme .inbox-wrapper,
+body.dark-theme .inbox-sidebar,
+body.dark-theme .conversation-item,
+body.dark-theme .chat-wrapper,
+body.dark-theme .chat-sidebar,
+body.dark-theme .chat-header,
+body.dark-theme .chat-messages,
+body.dark-theme .chat-compose,
+body.dark-theme .auth-card,
+body.dark-theme .auth-form .form-group input,
+body.dark-theme .auth-alert,
+body.dark-theme .review-page .review-card,
+body.dark-theme .lease-sidebar .form-card,
+body.dark-theme .lease-sidebar .booking-card,
+body.dark-theme .marketplace-layout .filters-card,
+body.dark-theme .dashboard-layout .dashboard-main .dashboard-card,
+body.dark-theme .dashboard-layout .dashboard-sidebar {
+
+    background:var(--surface);
+    color:var(--text);
+    border-color:var(--border);
+    box-shadow:var(--shadow);
+
+}
+
+body.dark-theme .hero h1,
+body.dark-theme .hero p,
+body.dark-theme .section-header h2,
+body.dark-theme .page-header h1,
+body.dark-theme .page-header p,
+body.dark-theme .details-card h1,
+body.dark-theme .asset-location,
+body.dark-theme .booking-card h2,
+body.dark-theme .booking-card p,
+body.dark-theme .owner-card p,
+body.dark-theme .review-summary h2,
+body.dark-theme .review-comment,
+body.dark-theme .profile-role,
+body.dark-theme .sidebar-profile p,
+body.dark-theme .dashboard-menu a,
+body.dark-theme .profile-menu a,
+body.dark-theme .profile-item,
+body.dark-theme .activity-box p,
+body.dark-theme .host-location,
+body.dark-theme .host-description,
+body.dark-theme .create-header p,
+body.dark-theme .form-group label,
+body.dark-theme .upload-content p,
+body.dark-theme .lease-info p,
+body.dark-theme .request-top p,
+body.dark-theme .request-message p,
+body.dark-theme .conversation-preview,
+body.dark-theme .chat-user-card p,
+body.dark-theme .chat-header small,
+body.dark-theme .chat-empty p,
+body.dark-theme .auth-header p,
+body.dark-theme .auth-footer p,
+body.dark-theme .form-group input::placeholder,
+body.dark-theme .hero-search input::placeholder,
+body.dark-theme .hero-search select,
+body.dark-theme .hero-search input,
+body.dark-theme .form-group textarea::placeholder,
+body.dark-theme .empty-state-card p,
+body.dark-theme .empty-state p,
+body.dark-theme .dashboard-card p,
+body.dark-theme .profile-page .profile-role,
+body.dark-theme .profile-page p,
+body.dark-theme .marketplace-page .page-header p,
+body.dark-theme .my-listings-page .page-header p,
+body.dark-theme .details-page .asset-location,
+body.dark-theme .details-page .owner-card p,
+body.dark-theme .request-card p,
+body.dark-theme .conversation-item .conversation-preview,
+body.dark-theme .conversation-top small,
+body.dark-theme .message-row.received .message-bubble p,
+body.dark-theme .message-row.received .message-time,
+body.dark-theme .chat-empty p,
+body.dark-theme .auth-form .form-group label,
+body.dark-theme .auth-form .form-group input,
+body.dark-theme .auth-card p,
+body.dark-theme .auth-card label,
+body.dark-theme .marketplace-page .results-header span,
+body.dark-theme .empty-state-card h2,
+body.dark-theme .empty-state-card p,
+body.dark-theme .host-content p,
+body.dark-theme .profile-summary p,
+body.dark-theme .profile-summary h2,
+body.dark-theme .avatar-help,
+body.dark-theme .placeholder-content p,
+body.dark-theme .conversation-item h3,
+body.dark-theme .conversation-item small,
+body.dark-theme .conversation-top h3,
+body.dark-theme .conversation-asset,
+body.dark-theme .chat-user-card h3,
+body.dark-theme .chat-header h2,
+body.dark-theme .booking-card span,
+body.dark-theme .booking-card .booking-footnote,
+body.dark-theme .asset-meta small,
+body.dark-theme .review-summary span,
+body.dark-theme .request-details span,
+body.dark-theme .status-badge,
+body.dark-theme .conversation-list .empty-sidebar,
+body.dark-theme .profile-summary .profile-role {
+
+    color:var(--text-light);
+
+}
+
+body.dark-theme .hero-search input,
+body.dark-theme .hero-search select,
+body.dark-theme .form-group input,
+body.dark-theme .form-group textarea,
+body.dark-theme .form-group select,
+body.dark-theme .conversation-search,
+body.dark-theme .chat-compose textarea,
+body.dark-theme .auth-form .form-group input,
+body.dark-theme .auth-card input,
+body.dark-theme .profile-item input,
+body.dark-theme .request-message,
+body.dark-theme .request-details div,
+body.dark-theme .menu-dropdown,
+body.dark-theme .menu-dropdown a,
+body.dark-theme .conversation-item,
+body.dark-theme .host-card,
+body.dark-theme .empty-state,
+body.dark-theme .filters-card,
+body.dark-theme .dashboard-stat,
+body.dark-theme .dashboard-sidebar,
+body.dark-theme .profile-section,
+body.dark-theme .profile-card,
+body.dark-theme .listing-card,
+body.dark-theme .category-sidebar,
+body.dark-theme .review-card,
+body.dark-theme .details-card,
+body.dark-theme .booking-card,
+body.dark-theme .chat-messages,
+body.dark-theme .chat-header,
+body.dark-theme .chat-compose,
+body.dark-theme .auth-alert {
+
+    border-color:var(--border);
+
+}
+
+body.dark-theme .hero-search button,
+body.dark-theme .primary-btn,
+body.dark-theme .approve-btn,
+body.dark-theme .publish-btn,
+body.dark-theme .send-btn,
+body.dark-theme .auth-btn {
+
+    box-shadow:0 12px 24px rgba(74,110,255,.2);
+
+}
+
+body.dark-theme .category-sidebar a:hover,
+body.dark-theme .dashboard-menu a:hover,
+body.dark-theme .profile-menu a:hover,
+body.dark-theme .conversation-item:hover,
+body.dark-theme .menu-dropdown a:hover,
+body.dark-theme .auth-footer a:hover,
+body.dark-theme .profile-card:hover,
+body.dark-theme .dashboard-stat:hover,
+body.dark-theme .request-card:hover,
+body.dark-theme .host-card:hover,
+body.dark-theme .listing-card:hover {
+
+    background:var(--surface-alt);
+
+}
+
+body.dark-theme .section-header h2,
+body.dark-theme .page-header h1,
+body.dark-theme .details-card h1,
+body.dark-theme .owner-card h3,
+body.dark-theme .dashboard-header h1,
+body.dark-theme .profile-sidebar h1,
+body.dark-theme .profile-card h2,
+body.dark-theme .profile-section h2,
+body.dark-theme .host-title-row h3,
+body.dark-theme .listing-content h3,
+body.dark-theme .review-summary h2,
+body.dark-theme .conversation-top h3,
+body.dark-theme .placeholder-content h2,
+body.dark-theme .chat-empty h3,
+body.dark-theme .auth-header h1,
+body.dark-theme .form-card h2,
+body.dark-theme .profile-summary h2,
+body.dark-theme .request-top h2,
+body.dark-theme .host-card h3,
+body.dark-theme .dashboard-card h3,
+body.dark-theme .dashboard-card h2,
+body.dark-theme .dashboard-stat strong,
+body.dark-theme .dashboard-stat .stat-value,
+body.dark-theme .conversation-asset,
+body.dark-theme .booking-card h2,
+body.dark-theme .details-card .asset-category,
+body.dark-theme .host-category {
+
+    color:var(--text);
+
+}
+
+body.dark-theme .listing-price,
+body.dark-theme .request-top h2,
+body.dark-theme .host-price,
+body.dark-theme .dashboard-stat span,
+body.dark-theme .activity-box h1,
+body.dark-theme .asset-meta strong,
+body.dark-theme .booking-card h2,
+body.dark-theme .price-summary strong,
+body.dark-theme .review-stars,
+body.dark-theme .review-card .review-top strong,
+body.dark-theme .chat-user-card h3,
+body.dark-theme .auth-footer a,
+body.dark-theme .category-sidebar a,
+body.dark-theme .section-header a,
+body.dark-theme .listing-content h3,
+body.dark-theme .dashboard-menu a.active,
+body.dark-theme .profile-menu a.active {
+
+    color:var(--primary);
+
+}
+
+body.dark-theme .status-pending{
+
+    background:rgba(245,158,11,.14);
+    color:#fcd34d;
+
+}
+
+body.dark-theme .status-approved{
+
+    background:rgba(34,197,94,.14);
+    color:#bbf7d0;
+
+}
+
+body.dark-theme .status-active,
+body.dark-theme .status-completed{
+
+    background:rgba(59,130,246,.16);
+    color:#bfdbfe;
+
+}
+
+body.dark-theme .status-rejected{
+
+    background:rgba(239,68,68,.14);
+    color:#fecaca;
+
+}
+
+body.dark-theme .hero-search,
+body.dark-theme .category-sidebar,
+body.dark-theme .listing-card,
+body.dark-theme .empty-state,
+body.dark-theme .details-card,
+body.dark-theme .booking-card,
+body.dark-theme .review-card,
+body.dark-theme .dashboard-sidebar,
+body.dark-theme .dashboard-stat,
+body.dark-theme .dashboard-card,
+body.dark-theme .profile-sidebar,
+body.dark-theme .profile-card,
+body.dark-theme .profile-section,
+body.dark-theme .empty-state-card,
+body.dark-theme .host-card,
+body.dark-theme .request-card,
+body.dark-theme .inbox-wrapper,
+body.dark-theme .chat-wrapper,
+body.dark-theme .auth-card,
+body.dark-theme .form-card,
+body.dark-theme .filters-card,
+body.dark-theme .conversation-item,
+body.dark-theme .chat-header,
+body.dark-theme .chat-compose,
+body.dark-theme .chat-sidebar,
+body.dark-theme .inbox-sidebar {
+
+    transition:background-color .35s ease,color .35s ease,border-color .35s ease,box-shadow .35s ease;
+
+}
+
+body.dark-theme .host-category,
+body.dark-theme .details-page .details-card .asset-category{
+    background:var(--surface-alt);
+    color:var(--primary);
+}
+
+body.dark-theme .host-metrics{
+    color:var(--text-light);
+}
+
+body.dark-theme .host-metrics .metric strong{
+    color:var(--text);
+}
+
+body.dark-theme .card-menu summary{
+    background:var(--surface-alt);
+    border:1px solid var(--border);
+    color:var(--text);
+    box-shadow:var(--shadow-sm);
+}
+
+body.dark-theme .card-menu summary:hover{
+    background:var(--surface);
+}
+
+body.dark-theme .details-page .booking-card hr,
+body.dark-theme .details-page .booking-footnote{
+    border-color:var(--border);
+}
+
+body.dark-theme .lease-page .lease-price{
+    color:var(--primary);
+}
+
+body.dark-theme .lease-page .price-summary span{
+    color:var(--text-light);
+}
+
+body.dark-theme .details-page .review-summary{
+    background:var(--surface-alt);
+    border:1px solid var(--border);
+}
+
+body.dark-theme .details-page .review-summary h2{
+    color:var(--text);
+}
+
+body.dark-theme .details-page .review-summary span{
+    color:var(--text-light);
+}
+
+body.dark-theme .marketplace-page .filter-group label{
+    color:var(--text-light);
+}
+
+/* Shared page and panel spacing */
+.marketplace-page,
+.details-page,
+.dashboard-page,
+.profile-page,
+.my-listings-page,
+.create-listing-page,
+.lease-page,
+.lease-owner-page,
+.inbox-page,
+.chat-page,
+.review-page{
+    margin-top:var(--page-space-top);
+    margin-bottom:var(--page-space-bottom);
+}
+
+.page-header,
+.create-header{
+    margin-bottom:24px;
+}
+
+.dashboard-layout,
+.profile-layout,
+.details-grid{
+    gap:24px;
+}
+
+.dashboard-main,
+.profile-content{
+    gap:24px;
+}
+
+.inbox-page{
+    padding-left:24px;
+    padding-right:24px;
+}
+
+.auth-wrapper{
+    padding:36px 20px;
+}
+
+.card,
+.activity-card,
+.stat-card,
+.dashboard-sidebar,
+.dashboard-stat,
+.dashboard-card,
+.profile-sidebar,
+.profile-card,
+.profile-section,
+.form-card,
+.details-card,
+.booking-card,
+.request-card,
+.filters-card,
+.auth-card,
+.review-page .review-card,
+.error-page-content,
+.about-feature-card,
+.step-card,
+.why-card,
+.testimonial-card,
+.activity-box{
+    padding:var(--panel-padding);
+}
+
+.host-content{
+    padding:20px;
+}
+
+.empty-state-card{
+    padding:48px 24px;
+}
+
+.market-home,
+.how-it-works,
+.why-us,
+.testimonials,
+.homepage-cta{
+    margin-top:var(--section-space);
+    margin-bottom:var(--section-space);
+}
+
+.cta-content{
+    padding:32px 24px;
+}
+
+.cta-buttons{
+    margin-top:24px;
+}
+
+.section-heading{
+    margin-bottom:40px;
+}
+
+.about-hero{
+    padding:64px 24px;
+}
+
+.about-section,
+.about-features,
+.about-how,
+.about-cta{
+    padding:var(--section-space) 24px;
+}
+
+/* Compact square cards for featured and available assets */
+.listing-card{
+    box-sizing:border-box;
+    display:flex;
+    flex-direction:column;
+    width:100%;
+    max-width:320px;
+    aspect-ratio:1;
+    margin:0 auto;
+    overflow:hidden;
+    border:1px solid var(--border);
+    border-radius:20px;
+    background:var(--surface);
+    color:var(--text);
+    box-shadow:var(--shadow-sm);
+    text-decoration:none;
+    transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease;
+}
+
+.listing-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--primary);
+    box-shadow:var(--shadow);
+}
+
+.listing-card:focus-visible{
+    outline:3px solid var(--primary);
+    outline-offset:3px;
+}
+
+.listing-card > img{
+    display:block;
+    flex:0 0 42%;
+    width:100%;
+    height:auto;
+    min-height:0;
+    object-fit:cover;
+}
+
+.listing-content{
+    display:flex;
+    flex:1;
+    flex-direction:column;
+    min-height:0;
+    padding:12px 14px;
+    overflow:hidden;
+}
+
+.listing-content h3{
+    display:-webkit-box;
+    margin:0 0 6px;
+    overflow:hidden;
+    color:var(--text);
+    font-size:16px;
+    line-height:1.25;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+}
+
+.listing-meta{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    min-width:0;
+    margin:1px 0 5px;
+}
+
+.listing-meta-item{
+    display:inline-flex;
+    flex:0 1 auto;
+    align-items:center;
+    gap:5px;
+    max-width:100%;
+    min-width:0;
+    padding:4px 8px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:var(--surface-alt);
+    color:var(--text-light);
+    font-size:11px;
+    font-weight:500;
+    line-height:1.2;
+}
+
+.listing-meta-icon{
+    display:inline-flex;
+    flex:0 0 auto;
+    align-items:center;
+}
+
+.listing-meta-value{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.listing-content .listing-rating{
+    min-height:16px;
+    margin:3px 0 5px;
+    font-size:12px;
+}
+
+.listing-rating .rating-score{
+    color:var(--text);
+}
+
+.listing-rating .rating-count{
+    color:var(--text-muted);
+}
+
+.listing-rating .rating-none{
+    display:inline-flex;
+    align-items:center;
+    padding:3px 8px;
+    border-radius:999px;
+    background:var(--surface-alt);
+    color:var(--text-light);
+    font-size:11px;
+    font-style:normal;
+    font-weight:600;
+}
+
+.listing-content .listing-price{
+    margin:auto 0 0;
+    overflow:hidden;
+    color:var(--primary);
+    font-size:17px;
+    line-height:1.25;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.listing-content .listing-price span{
+    color:var(--text-muted);
+    font-size:12px;
+}
+
+body.dark-theme .inbox-placeholder,
+body.dark-theme .chat-messages{
+    background:var(--surface-alt);
+    color:var(--text);
+}
+
+body.dark-theme .placeholder-content h2,
+body.dark-theme .chat-empty h3{
+    color:var(--text);
+}
+
+body.dark-theme .placeholder-content p,
+body.dark-theme .empty-sidebar{
+    color:var(--text-light);
+}
+
+body.dark-theme .inbox-sidebar-header,
+body.dark-theme .inbox-sidebar,
+body.dark-theme .chat-sidebar-header{
+    border-color:var(--border);
+}
+
+body.dark-theme .message-row.received .message-bubble{
+    background:var(--surface);
+    color:var(--text);
+    border-color:var(--border);
+}
+
+body.dark-theme .message-row.received .message-bubble p{
+    color:var(--text);
+}
+
+body.dark-theme .message-row.received .message-time{
+    color:var(--text-muted);
 }

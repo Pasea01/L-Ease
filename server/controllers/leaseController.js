@@ -3,22 +3,29 @@ const Message = require("../models/Message");
 const Listing = require("../models/Listing");
 const Notification = require("../models/Notification");
 
-exports.showLeaseForm = (req, res) => {
+const flashLeaseWarning = (req, res, message) => {
+    req.session.flash = {
+        type: "error",
+        message
+    };
+    return res.redirect("/leases/owner");
+};
+
+exports.showLeaseForm = (req, res, next) => {
 
     const assetId = req.params.assetId;
 
     Listing.getListingById(assetId, (err, listing) => {
 
         if (err) {
-
-            console.error(err);
-            return res.send("Failed to load listing.");
+            return next(err);
 
         }
 
         if (!listing) {
-
-            return res.send("Listing not found.");
+            const error = new Error("Listing not found.");
+            error.status = 404;
+            return next(error);
 
         }
 
@@ -49,7 +56,7 @@ exports.showLeaseForm = (req, res) => {
 
 // =====================================================
 
-exports.createLease = (req, res) => {
+exports.createLease = (req, res, next) => {
 
     const {
 
@@ -60,11 +67,45 @@ exports.createLease = (req, res) => {
 
     } = req.body;
 
-    Listing.getListingById(asset_id, (err, listing) => {
+    const assetId = Number(asset_id);
+    const validDate = (value) => {
+        if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+            return false;
+        }
 
-        if (err || !listing) {
+        const parsed = new Date(`${value}T00:00:00Z`);
+        return !Number.isNaN(parsed.getTime())
+            && parsed.toISOString().slice(0, 10) === value;
+    };
+    const trimmedMessage = typeof message === "string" ? message.trim() : "";
+    const today = new Date().toISOString().slice(0, 10);
 
-            return res.send("Listing not found.");
+    if (
+        !Number.isSafeInteger(assetId)
+        || assetId < 1
+        || !validDate(start_date)
+        || !validDate(end_date)
+        || start_date < today
+        || end_date < start_date
+        || trimmedMessage.length > 1000
+    ) {
+        req.session.flash = {
+            type: "error",
+            message: "Please enter valid lease dates and a message under 1,000 characters."
+        };
+        return res.redirect("/listings");
+    }
+
+    Listing.getListingById(assetId, (err, listing) => {
+
+        if (err) {
+            return next(err);
+        }
+
+        if (!listing) {
+            const error = new Error("Listing not found.");
+            error.status = 404;
+            return next(error);
 
         }
 
@@ -84,7 +125,7 @@ exports.createLease = (req, res) => {
 
         const lease = {
 
-            asset_id,
+            asset_id: assetId,
 
             owner_id: listing.owner_id,
 
@@ -94,17 +135,14 @@ exports.createLease = (req, res) => {
 
             end_date,
 
-            message
+            message: trimmedMessage
 
         };
 
         Lease.create(lease, (err) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to create lease request.");
+                return next(err);
 
             }
 
@@ -118,7 +156,15 @@ exports.createLease = (req, res) => {
 
                 link: "/leases/owner"
 
-            }, () => {
+            }, (err) => {
+                if (err) {
+                    console.error(err);
+                    req.session.flash = {
+                        type: "error",
+                        message: "Your lease request was submitted, but the owner could not be notified."
+                    };
+                    return res.redirect("/listings");
+                }
 
                 req.session.flash = {
 
@@ -140,7 +186,7 @@ exports.createLease = (req, res) => {
 
 // =====================================================
 
-exports.showOwnerRequests = (req, res) => {
+exports.showOwnerRequests = (req, res, next) => {
 
     Lease.getOwnerRequests(
 
@@ -149,10 +195,7 @@ exports.showOwnerRequests = (req, res) => {
         (err, requests) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to load requests.");
+                return next(err);
 
             }
 
@@ -172,7 +215,7 @@ exports.showOwnerRequests = (req, res) => {
 
 // =====================================================
 
-exports.showMyRequests = (req, res) => {
+exports.showMyRequests = (req, res, next) => {
 
     Lease.getTenantRequests(
 
@@ -181,10 +224,7 @@ exports.showMyRequests = (req, res) => {
         (err, requests) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to load requests.");
+                return next(err);
 
             }
 
@@ -204,28 +244,37 @@ exports.showMyRequests = (req, res) => {
 
 // =====================================================
 
-exports.approveLease = (req, res) => {
+exports.approveLease = (req, res, next) => {
 
     const leaseId = req.params.id;
 
     const ownerId = req.session.user.id;
 
-    Lease.approve(leaseId, ownerId, (err) => {
+    Lease.approve(leaseId, ownerId, (err, changes) => {
 
         if (err) {
+            return next(err);
 
-            console.error(err);
+        }
 
-            return res.send("Failed to approve lease.");
-
+        if (!changes) {
+            return flashLeaseWarning(
+                req,
+                res,
+                "This request is no longer pending or conflicts with another approved lease."
+            );
         }
 
         Lease.getById(leaseId, (err, lease) => {
 
             if (err || !lease) {
-
-                console.error(err);
-
+                if (err) {
+                    console.error(err);
+                }
+                req.session.flash = {
+                    type: "error",
+                    message: "The lease was approved, but related details could not be loaded."
+                };
                 return res.redirect("/leases/owner");
 
             }
@@ -240,9 +289,27 @@ exports.approveLease = (req, res) => {
 
                 message: "Your lease request has been approved. You can now chat with the owner."
 
-            }, () => {
+            }, (err) => {
+                if (err) {
+                    console.error(err);
+                    return flashLeaseWarning(
+                        req,
+                        res,
+                        "The lease was approved, but the tenant could not be notified."
+                    );
+                }
 
                 Listing.getListingById(lease.asset_id, (err, listing) => {
+                    if (err || !listing) {
+                        if (err) {
+                            console.error(err);
+                        }
+                        return flashLeaseWarning(
+                            req,
+                            res,
+                            "The lease was approved, but the tenant could not be notified."
+                        );
+                    }
 
                     Notification.create({
 
@@ -254,7 +321,15 @@ exports.approveLease = (req, res) => {
 
                         link: "/messages"
 
-                    }, () => {
+                    }, (err) => {
+                        if (err) {
+                            console.error(err);
+                            return flashLeaseWarning(
+                                req,
+                                res,
+                                "The lease was approved, but the tenant could not be notified."
+                            );
+                        }
 
                         req.session.flash = {
 
@@ -280,7 +355,7 @@ exports.approveLease = (req, res) => {
 
 // =====================================================
 
-exports.rejectLease = (req, res) => {
+exports.rejectLease = (req, res, next) => {
 
     const leaseId = req.params.id;
 
@@ -290,21 +365,44 @@ exports.rejectLease = (req, res) => {
 
         req.session.user.id,
 
-        (err) => {
+        (err, changes) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to reject lease.");
+                return next(err);
 
             }
 
+            if (!changes) {
+                return flashLeaseWarning(
+                    req,
+                    res,
+                    "This request is no longer pending or could not be found."
+                );
+            }
+
             Lease.getById(leaseId, (err, lease) => {
+                if (err) {
+                    console.error(err);
+                    return flashLeaseWarning(
+                        req,
+                        res,
+                        "The request was declined, but the tenant could not be notified."
+                    );
+                }
 
                 if (lease) {
 
                     Listing.getListingById(lease.asset_id, (err, listing) => {
+                        if (err || !listing) {
+                            if (err) {
+                                console.error(err);
+                            }
+                            return flashLeaseWarning(
+                                req,
+                                res,
+                                "The request was declined, but the tenant could not be notified."
+                            );
+                        }
 
                         Notification.create({
 
@@ -316,8 +414,20 @@ exports.rejectLease = (req, res) => {
 
                             link: "/leases/my-requests"
 
-                        }, () => {
+                        }, (err) => {
+                            if (err) {
+                                console.error(err);
+                                return flashLeaseWarning(
+                                    req,
+                                    res,
+                                    "The request was declined, but the tenant could not be notified."
+                                );
+                            }
 
+                            req.session.flash = {
+                                type: "success",
+                                message: "Lease request declined."
+                            };
                             res.redirect("/leases/owner");
 
                         });
@@ -341,29 +451,53 @@ exports.rejectLease = (req, res) => {
 
 // =====================================================
 
-exports.completeLease = (req, res) => {
+exports.completeLease = (req, res, next) => {
 
     const leaseId = req.params.id;
 
     Lease.completeLease(
 
         leaseId,
+        req.session.user.id,
 
-        (err) => {
+        (err, changes) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to complete lease.");
+                return next(err);
 
             }
 
+            if (!changes) {
+                return flashLeaseWarning(
+                    req,
+                    res,
+                    "This lease is no longer approved or could not be found."
+                );
+            }
+
             Lease.getById(leaseId, (err, lease) => {
+                if (err) {
+                    console.error(err);
+                    return flashLeaseWarning(
+                        req,
+                        res,
+                        "The lease was completed, but the tenant could not be notified."
+                    );
+                }
 
                 if (lease) {
 
                     Listing.getListingById(lease.asset_id, (err, listing) => {
+                        if (err || !listing) {
+                            if (err) {
+                                console.error(err);
+                            }
+                            return flashLeaseWarning(
+                                req,
+                                res,
+                                "The lease was completed, but the tenant could not be notified."
+                            );
+                        }
 
                         Notification.create({
 
@@ -375,7 +509,15 @@ exports.completeLease = (req, res) => {
 
                             link: `/reviews/new/${lease.id}`
 
-                        }, () => {
+                        }, (err) => {
+                            if (err) {
+                                console.error(err);
+                                return flashLeaseWarning(
+                                    req,
+                                    res,
+                                    "The lease was completed, but the tenant could not be notified."
+                                );
+                            }
 
                             req.session.flash = {
 

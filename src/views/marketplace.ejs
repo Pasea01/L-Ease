@@ -128,9 +128,16 @@
 
                                     <h3><%= listing.title %></h3>
 
-                                    <p>📍 <%= listing.location %></p>
-
-                                    <p>👤 <%= listing.full_name %></p>
+                                    <div class="listing-meta">
+                                        <span class="listing-meta-item">
+                                            <span class="listing-meta-icon" aria-hidden="true">📍</span>
+                                            <span class="listing-meta-value"><%= listing.location %></span>
+                                        </span>
+                                        <span class="listing-meta-item">
+                                            <span class="listing-meta-icon" aria-hidden="true">👤</span>
+                                            <span class="listing-meta-value"><%= listing.full_name %></span>
+                                        </span>
+                                    </div>
 
                                     <div class="listing-rating">
 

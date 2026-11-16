@@ -1,6 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const imageUpload = require("../helpers/imageUpload");
 
 const storage = multer.diskStorage({
 
@@ -45,23 +46,10 @@ const storage = multer.diskStorage({
 
 });
 
-const fileFilter = (req, file, cb) => {
-
-    if (file.mimetype.startsWith("image/")) {
-
-        cb(null, true);
-
-    } else {
-
-        cb(new Error("Only image files are allowed."));
-
-    }
-
-};
-
 module.exports = multer({
 
     storage,
-    fileFilter
+    fileFilter: imageUpload.fileFilter,
+    limits: imageUpload.limits
 
 });

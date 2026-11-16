@@ -46,7 +46,13 @@ class Lease {
                 assets.title,
                 assets.category,
                 assets.image_url,
-                users.full_name AS tenant_name
+                users.full_name AS tenant_name,
+                EXISTS (
+                    SELECT 1
+                    FROM reviews
+                    WHERE reviews.lease_id = leases.id
+                    AND reviews.reviewer_id = leases.owner_id
+                ) AS has_reviewed
             FROM leases
 
             JOIN assets
@@ -75,7 +81,13 @@ class Lease {
                 assets.title,
                 assets.category,
                 assets.image_url,
-                users.full_name AS owner_name
+                users.full_name AS owner_name,
+                EXISTS (
+                    SELECT 1
+                    FROM reviews
+                    WHERE reviews.lease_id = leases.id
+                    AND reviews.reviewer_id = leases.tenant_id
+                ) AS has_reviewed
             FROM leases
 
             JOIN assets
@@ -100,12 +112,26 @@ class Lease {
 
         const sql = `
             UPDATE leases
-            SET status = 'approved'
+            SET
+                status = 'approved',
+                updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
             AND owner_id = ?
+            AND status = 'pending'
+            AND NOT EXISTS (
+                SELECT 1
+                FROM leases existing
+                WHERE existing.asset_id = leases.asset_id
+                AND existing.id != leases.id
+                AND existing.status IN ('approved', 'active')
+                AND existing.start_date <= leases.end_date
+                AND existing.end_date >= leases.start_date
+            )
         `;
 
-        db.run(sql, [id, ownerId], callback);
+        db.run(sql, [id, ownerId], function (err) {
+            callback(err, this.changes);
+        });
 
     }
 
@@ -116,12 +142,17 @@ class Lease {
 
         const sql = `
             UPDATE leases
-            SET status = 'cancelled'
+            SET
+                status = 'cancelled',
+                updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
             AND owner_id = ?
+            AND status = 'pending'
         `;
 
-        db.run(sql, [id, ownerId], callback);
+        db.run(sql, [id, ownerId], function (err) {
+            callback(err, this.changes);
+        });
 
     }
 
@@ -146,14 +177,24 @@ class Lease {
     static canAccessConversation(userId, otherUserId, assetId, callback) {
 
         const sql = `
-            SELECT *
+            SELECT
+                leases.*,
+                assets.title AS listing_title,
+                owner.full_name AS owner_name,
+                tenant.full_name AS tenant_name
             FROM leases
-            WHERE asset_id = ?
-            AND status IN ('approved', 'completed')
+            JOIN assets
+                ON assets.id = leases.asset_id
+            JOIN users owner
+                ON owner.id = leases.owner_id
+            JOIN users tenant
+                ON tenant.id = leases.tenant_id
+            WHERE leases.asset_id = ?
+            AND leases.status IN ('approved', 'active', 'completed')
             AND (
-                (owner_id = ? AND tenant_id = ?)
+                (leases.owner_id = ? AND leases.tenant_id = ?)
                 OR
-                (owner_id = ? AND tenant_id = ?)
+                (leases.owner_id = ? AND leases.tenant_id = ?)
             )
         `;
 
@@ -171,19 +212,26 @@ class Lease {
 
     }
     // =====================================
-        // Complete Lease
-        // =====================================
-        static completeLease(leaseId, callback) {
+    // Complete Lease
+    // =====================================
+    static completeLease(leaseId, ownerId, callback) {
 
-            const sql = `
-                UPDATE leases
-                SET status = 'completed'
-                WHERE id = ?
-            `;
+        const sql = `
+            UPDATE leases
+            SET
+                status = 'completed',
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+            AND owner_id = ?
+            AND status IN ('approved', 'active')
+            AND end_date <= date('now')
+        `;
 
-            db.run(sql, [leaseId], callback);
+        db.run(sql, [leaseId, ownerId], function (err) {
+            callback(err, this.changes);
+        });
 
-        }
+    }
 
 }
 

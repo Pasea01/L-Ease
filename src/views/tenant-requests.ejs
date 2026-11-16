@@ -62,22 +62,11 @@
 
                 <div class="request-image">
 
-                    <% if(request.image_url){ %>
-
                     <img
-                        src="/uploads/<%= request.image_url %>"
+                        src="<%= getListingImage(request) %>"
                         alt="<%= request.title %>"
-                        onerror="this.onerror=null;this.src='/images/categories/<%= (request.category || 'other').toLowerCase() %>.png';"
+                        onerror="this.onerror=null; this.src='<%= getCategoryImage(request.category) %>';"
                     >
-
-                    <% } else { %>
-
-                    <img
-                        src="/images/categories/<%= (request.category || 'other').toLowerCase() %>.png"
-                        alt="<%= request.category %>"
-                    >
-
-                    <% } %>
 
                 </div>
 
@@ -97,10 +86,8 @@
 
                         </div>
 
-                        <span class="status-badge status-<%= request.status %>">
-
-                            <%= request.status %>
-
+                        <span class="status-badge status-<%= request.status === 'cancelled' ? 'rejected' : request.status %>">
+                            <%= request.status === "cancelled" ? "Rejected" : request.status %>
                         </span>
 
                     </div>
@@ -127,18 +114,20 @@
 
                     <div class="request-actions">
 
-                        <% if(request.completed){ %>
+                        <% if(request.status === "completed"){ %>
 
-                            <a
-                                href="/reviews/new/<%= request.id %>"
-                                class="primary-btn"
-                            >
+                            <% if(!request.has_reviewed){ %>
+                                <a
+                                    href="/reviews/new/<%= request.id %>"
+                                    class="primary-btn"
+                                >
+                                    ⭐ Leave Review
+                                </a>
+                            <% } else { %>
+                                <span class="success-badge">✔ Review Submitted</span>
+                            <% } %>
 
-                                ⭐ Leave Review
-
-                            </a>
-
-                        <% } else if(request.status === "approved"){ %>
+                        <% } else if(request.status === "approved" || request.status === "active"){ %>
 
                             <a
                                 href="/messages/<%= request.asset_id %>/<%= request.owner_id %>"
@@ -153,6 +142,7 @@
 
                             <button
                                 class="secondary-btn"
+                                type="button"
                                 disabled
                             >
 
@@ -164,38 +154,13 @@
 
                             <button
                                 class="danger-btn"
+                                type="button"
                                 disabled
                             >
 
                                 Rejected
 
                             </button>
-
-                        <% } %>
-
-                        <% if(request.status==="pending"){ %>
-
-                        <button
-                            class="secondary-btn"
-                            disabled
-                        >
-
-                            Awaiting Approval
-
-                        </button>
-
-                        <% } %>
-
-                        <% if(request.status==="rejected"){ %>
-
-                        <button
-                            class="reject-btn"
-                            disabled
-                        >
-
-                            Request Rejected
-
-                        </button>
 
                         <% } %>
 

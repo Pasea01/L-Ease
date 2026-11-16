@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 const authMiddleware = require("../middleware/authMiddleware");
-
 const homeController = require("../controllers/homeController");
+const authController = require("../controllers/authController");
 
 // =====================================
 // Home
@@ -11,25 +11,8 @@ const homeController = require("../controllers/homeController");
 
 router.get("/", homeController.showHome);
 
-// =====================================
-// Login
-// =====================================
-
-router.get("/login", (req, res) => {
-
-    res.render("login");
-
-});
-
-// =====================================
-// Register
-// =====================================
-
-router.get("/register", (req, res) => {
-
-    res.render("register");
-
-});
+router.get("/login", authController.showLogin);
+router.get("/register", authController.showRegister);
 
 // =====================================
 // Dashboard
@@ -64,7 +47,7 @@ router.get(
 );
 
 router.get("/about", (req, res) => {
-    res.render("about", {
+    res.render("About", {
         user: req.session.user || null
     });
 });

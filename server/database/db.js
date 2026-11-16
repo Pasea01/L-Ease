@@ -3,7 +3,7 @@ const path = require("path");
 
 // Create/Open database
 const db = new sqlite3.Database(
-    path.join(__dirname, "lease.db"),
+    process.env.DATABASE_PATH || path.join(__dirname, "lease.db"),
     (err) => {
 
         if (err) {

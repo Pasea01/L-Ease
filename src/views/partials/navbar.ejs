@@ -10,14 +10,66 @@
 
     <div class="navbar-left">
 
-        <a href="/" class="logo">
-
-            <img
-                src="/images/logo.png"
-                alt="L-Ease"
+        <a href="/" class="logo" aria-label="L-Ease home">
+            <svg
                 class="logo-image"
+                viewBox="0 0 909 391"
+                role="img"
+                aria-labelledby="logo-title"
             >
-
+                <title id="logo-title">L-Ease — Lease. Easy. Smart.</title>
+                <defs>
+                    <linearGradient id="logo-blue" x1="20" y1="30" x2="340" y2="360" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="var(--primary)" />
+                        <stop offset="1" stop-color="var(--primary-dark)" />
+                    </linearGradient>
+                </defs>
+                <path
+                    d="M312 220V118Q312 107 301 101L178 37Q165 30 152 37L35 102Q22 109 22 123V254Q22 268 35 276L153 345Q166 353 179 346L248 306"
+                    fill="none"
+                    stroke="url(#logo-blue)"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="27"
+                />
+                <circle
+                    cx="291"
+                    cy="285"
+                    r="33"
+                    fill="none"
+                    stroke="url(#logo-blue)"
+                    stroke-width="24"
+                />
+                <path
+                    d="M139 127V252Q139 270 157 270H211Q229 270 229 254Q229 238 212 238H172V127Q172 111 155 111Q139 111 139 127Z"
+                    fill="url(#logo-blue)"
+                />
+                <path
+                    d="M237 338L253 329L260 341L244 350Z"
+                    fill="url(#logo-blue)"
+                    stroke="url(#logo-blue)"
+                    stroke-linejoin="round"
+                    stroke-width="5"
+                />
+                <text
+                    x="384"
+                    y="221"
+                    fill="var(--text)"
+                    font-family="Arial, Helvetica, sans-serif"
+                    font-size="165"
+                    font-weight="700"
+                    letter-spacing="-6"
+                >L-Ease</text>
+                <text
+                    x="386"
+                    y="301"
+                    fill="var(--text)"
+                    font-family="Arial, Helvetica, sans-serif"
+                    font-size="49"
+                    font-weight="400"
+                    letter-spacing="0.5"
+                >Lease. Easy. Smart.</text>
+            </svg>
         </a>
 
     </div>
@@ -268,11 +320,11 @@
 
                     <hr>
 
-                    <a href="/auth/logout">
-
-                        🚪 Logout
-
-                    </a>
+                    <form action="/auth/logout" method="POST">
+                        <button type="submit" class="dropdown-menu-action">
+                            🚪 Logout
+                        </button>
+                    </form>
 
                 </div>
 

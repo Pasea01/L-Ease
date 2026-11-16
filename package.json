@@ -11,7 +11,7 @@
   "scripts": {
     "start": "node server/app.js",
     "dev": "nodemon server/app.js",
-    "test": "node -e \"const app = require('./server/app.js'); console.log('App loaded successfully'); process.exit(0);\""
+    "test": "node test/leaseModel.test.js && node test/routesSmoke.test.js && node -e \"require('./server/app.js'); console.log('App loaded successfully'); process.exit(0);\""
   },
   "keywords": [
     "marketplace",

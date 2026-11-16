@@ -36,7 +36,9 @@ exports.create = (review, callback) => {
 
         ],
 
-        callback
+        function (err) {
+            callback(err, this.changes);
+        }
 
     );
 

@@ -1,0 +1,27 @@
+<%- include("partials/head", { title: "Something went wrong | L-Ease" }) %>
+<%- include("partials/navbar") %>
+
+<main class="container error-page">
+    <div class="card error-page-content">
+        <h1>
+            <%= status === 404
+                ? "Page not found"
+                : status === 403
+                    ? "Access restricted"
+                    : status >= 500
+                        ? "Something went wrong"
+                        : "Request could not be completed" %>
+        </h1>
+        <p>
+            <%= status === 404
+                ? "The page or item you're looking for could not be found."
+                : status >= 500
+                    ? "A technical problem occurred while processing your request. Please try again."
+                    : "Please review the message above or return to the home page." %>
+        </p>
+        <a href="/" class="primary-btn">Return to home</a>
+    </div>
+</main>
+
+<%- include("partials/footer") %>
+<%- include("partials/scripts") %>

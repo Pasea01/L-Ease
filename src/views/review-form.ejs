@@ -71,7 +71,7 @@
 
                 <p>
 
-                    Owner:
+                    Lease partner:
 
                     <strong>
 
@@ -89,12 +89,6 @@
                     type="hidden"
                     name="lease_id"
                     value="<%= lease.id %>"
-                >
-
-                <input
-                    type="hidden"
-                    name="reviewee_id"
-                    value="<%= reviewee.id %>"
                 >
 
                 <div class="form-group">
@@ -144,13 +138,10 @@
                     </label>
 
                     <textarea
-
                         name="review"
-
                         rows="6"
-
-                        placeholder="Share your experience with this owner..."
-
+                        maxlength="1000"
+                        placeholder="Share your experience with this person..."
                         required
 
                     ></textarea>

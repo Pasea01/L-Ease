@@ -50,11 +50,9 @@
 
 .logo-image{
 
-    width:160px;
-
-    height:auto;
-
     display:block;
+    width:160px;
+    height:auto;
 
 }
 
@@ -316,10 +314,32 @@
 
 }
 
+.dropdown-menu .dropdown-menu-action{
+
+    display:block;
+    width:100%;
+    padding:15px 20px;
+    border:0;
+    background:transparent;
+    color:inherit;
+    font:inherit;
+    text-align:left;
+    cursor:pointer;
+    transition:.2s;
+
+}
+
 .dropdown-menu a:hover{
 
     background:#f4f7fb;
 
+    color:#2563eb;
+
+}
+
+.dropdown-menu .dropdown-menu-action:hover{
+
+    background:#f4f7fb;
     color:#2563eb;
 
 }

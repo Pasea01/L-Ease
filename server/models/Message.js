@@ -85,6 +85,21 @@ class Message {
     );
     }
 
+    static markConversationRead(userId, otherUserId, assetId, callback) {
+
+        const sql = `
+            UPDATE messages
+            SET is_read = 1
+            WHERE receiver_id = ?
+            AND sender_id = ?
+            AND asset_id = ?
+            AND is_read = 0
+        `;
+
+        db.run(sql, [userId, otherUserId, assetId], callback);
+
+    }
+
     // Get conversation
 static getConversation(userId, otherUserId, assetId, callback) {
 

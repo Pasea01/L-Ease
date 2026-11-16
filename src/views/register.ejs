@@ -37,12 +37,16 @@
 
             <div class="form-group">
 
-                <label>Full Name</label>
+                <label for="register-name">Full Name</label>
 
                 <input
                     type="text"
                     name="full_name"
+                    id="register-name"
                     placeholder="John Doe"
+                    minlength="2"
+                    maxlength="80"
+                    autocomplete="name"
                     required
                 >
 
@@ -50,12 +54,15 @@
 
             <div class="form-group">
 
-                <label>Email Address</label>
+                <label for="register-email">Email Address</label>
 
                 <input
                     type="email"
                     name="email"
+                    id="register-email"
                     placeholder="john@example.com"
+                    maxlength="254"
+                    autocomplete="email"
                     required
                 >
 
@@ -63,12 +70,16 @@
 
             <div class="form-group">
 
-                <label>Phone Number</label>
+                <label for="register-phone">Phone Number</label>
 
                 <input
                     type="tel"
                     name="phone"
+                    id="register-phone"
                     placeholder="+254 7XX XXX XXX"
+                    minlength="7"
+                    maxlength="20"
+                    autocomplete="tel"
                     required
                 >
 
@@ -76,12 +87,16 @@
 
             <div class="form-group">
 
-                <label>Password</label>
+                <label for="register-password">Password</label>
 
                 <input
                     type="password"
                     name="password"
+                    id="register-password"
                     placeholder="Create a password"
+                    minlength="8"
+                    maxlength="72"
+                    autocomplete="new-password"
                     required
                 >
 

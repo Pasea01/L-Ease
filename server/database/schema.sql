@@ -164,6 +164,9 @@ CREATE TABLE IF NOT EXISTS reviews (
 
 );
 
+CREATE UNIQUE INDEX IF NOT EXISTS reviews_one_per_reviewer_per_lease
+    ON reviews (lease_id, reviewer_id);
+
 -- =====================================================
 -- MESSAGES
 -- =====================================================

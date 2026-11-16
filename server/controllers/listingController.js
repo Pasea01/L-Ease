@@ -1,18 +1,63 @@
 const Listing = require("../models/Listing");
 
+const listingCategories = new Set([
+    "Property",
+    "Vehicle",
+    "Electronics",
+    "Furniture",
+    "Tools",
+    "Equipment",
+    "Livestock",
+    "Other"
+]);
+
+const getValidatedListing = (body) => {
+    const title = typeof body.title === "string" ? body.title.trim() : "";
+    const description = typeof body.description === "string"
+        ? body.description.trim()
+        : "";
+    const category = typeof body.category === "string" ? body.category : "";
+    const location = typeof body.location === "string"
+        ? body.location.trim()
+        : "";
+    const rawPrice = typeof body.price_per_day === "string"
+        ? body.price_per_day.trim()
+        : "";
+    const price = Number(rawPrice);
+
+    if (
+        title.length < 3
+        || title.length > 100
+        || description.length > 2000
+        || !listingCategories.has(category)
+        || !rawPrice
+        || !Number.isFinite(price)
+        || price <= 0
+        || location.length < 2
+        || location.length > 100
+    ) {
+        return null;
+    }
+
+    return {
+        title,
+        description,
+        category,
+        price_per_day: price,
+        location
+    };
+};
+
 // =====================================
 // Get all listings (API)
 // =====================================
 
-exports.getListingsAPI = (req, res) => {
+exports.getListingsAPI = (req, res, next) => {
 
     Listing.getAllListings((err, listings) => {
 
         if (err) {
-
-            return res.status(500).json({
-                error: "Database error"
-            });
+            return next(err);
 
         }
 
@@ -26,7 +71,7 @@ exports.getListingsAPI = (req, res) => {
 // Marketplace Page
 // =====================================
 
-exports.showMarketplace = (req, res) => {
+exports.showMarketplace = (req, res, next) => {
 
     const search = req.query.search || "";
     const category = req.query.category || "";
@@ -51,10 +96,7 @@ exports.showMarketplace = (req, res) => {
         (err, listings) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Error loading marketplace.");
+                return next(err);
 
             }
 
@@ -81,7 +123,7 @@ exports.showMarketplace = (req, res) => {
 // User Listings
 // =====================================
 
-exports.showMyListings = (req, res) => {
+exports.showMyListings = (req, res, next) => {
 
     Listing.getUserListings(
 
@@ -90,10 +132,7 @@ exports.showMyListings = (req, res) => {
         (err, listings) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to load listings.");
+                return next(err);
 
             }
 
@@ -114,16 +153,22 @@ exports.showMyListings = (req, res) => {
 // Create Listing
 // =====================================
 
-exports.createListing = (req, res) => {
+exports.createListing = (req, res, next) => {
+
+    const validatedListing = getValidatedListing(req.body);
+
+    if (!validatedListing) {
+        req.session.flash = {
+            type: "error",
+            message: "Check the listing details: title, category, price and location are required, and descriptions must be under 2,000 characters."
+        };
+        return res.redirect("/listings/new");
+    }
 
     const listing = {
 
         owner_id: req.session.user.id,
-        title: req.body.title,
-        description: req.body.description,
-        category: req.body.category,
-        price_per_day: req.body.price_per_day,
-        location: req.body.location,
+        ...validatedListing,
         image_url: req.file ? req.file.filename : null
 
     };
@@ -135,10 +180,7 @@ exports.createListing = (req, res) => {
         (err) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to create listing.");
+                return next(err);
 
             }
 
@@ -154,7 +196,7 @@ exports.createListing = (req, res) => {
 // Delete Listing
 // =====================================
 
-exports.deleteListing = (req, res) => {
+exports.deleteListing = (req, res, next) => {
 
     Listing.deleteListing(
 
@@ -165,10 +207,7 @@ exports.deleteListing = (req, res) => {
         (err) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to delete listing.");
+                return next(err);
 
             }
 
@@ -184,7 +223,7 @@ exports.deleteListing = (req, res) => {
 // Edit Listing Page
 // =====================================
 
-exports.showEditListing = (req, res) => {
+exports.showEditListing = (req, res, next) => {
 
     Listing.getById(
 
@@ -194,11 +233,14 @@ exports.showEditListing = (req, res) => {
 
         (err, listing) => {
 
-            if (err || !listing) {
+            if (err) {
+                return next(err);
+            }
 
-                console.error(err);
-
-                return res.send("Listing not found.");
+            if (!listing) {
+                const error = new Error("Listing not found.");
+                error.status = 404;
+                return next(error);
 
             }
 
@@ -219,11 +261,20 @@ exports.showEditListing = (req, res) => {
 // Update Listing
 // =====================================
 
-exports.updateListing = (req, res) => {
+exports.updateListing = (req, res, next) => {
 
     const listingId = req.params.id;
 
     const ownerId = req.session.user.id;
+    const validatedListing = getValidatedListing(req.body);
+
+    if (!validatedListing) {
+        req.session.flash = {
+            type: "error",
+            message: "Check the listing details: title, category, price and location are required, and descriptions must be under 2,000 characters."
+        };
+        return res.redirect(`/listings/edit/${encodeURIComponent(listingId)}`);
+    }
 
     Listing.getById(
 
@@ -233,21 +284,20 @@ exports.updateListing = (req, res) => {
 
         (err, existingListing) => {
 
-            if (err || !existingListing) {
+            if (err) {
+                return next(err);
+            }
 
-                console.error(err);
-
-                return res.send("Listing not found.");
+            if (!existingListing) {
+                const error = new Error("Listing not found.");
+                error.status = 404;
+                return next(error);
 
             }
 
             const listing = {
 
-                title: req.body.title,
-                description: req.body.description,
-                category: req.body.category,
-                price_per_day: req.body.price_per_day,
-                location: req.body.location,
+                ...validatedListing,
 
                 image_url: req.file
                     ? req.file.filename
@@ -266,10 +316,7 @@ exports.updateListing = (req, res) => {
                 (err) => {
 
                     if (err) {
-
-                        console.error(err);
-
-                        return res.send("Failed to update listing.");
+                        return next(err);
 
                     }
 
@@ -289,7 +336,7 @@ exports.updateListing = (req, res) => {
 // Listing Details
 // =====================================
 
-exports.showListing = (req, res) => {
+exports.showListing = (req, res, next) => {
 
     const listingId = req.params.id;
 
@@ -299,11 +346,14 @@ exports.showListing = (req, res) => {
 
         (err, listing) => {
 
-            if (err || !listing) {
+            if (err) {
+                return next(err);
+            }
 
-                console.error(err);
-
-                return res.send("Listing not found.");
+            if (!listing) {
+                const error = new Error("Listing not found.");
+                error.status = 404;
+                return next(error);
 
             }
 
@@ -314,15 +364,7 @@ exports.showListing = (req, res) => {
                 (err, rating) => {
 
                     if (err) {
-
-                        console.error(err);
-
-                        rating = {
-
-                            average: 0,
-                            total: 0
-
-                        };
+                        return next(err);
 
                     }
 
@@ -333,10 +375,7 @@ exports.showListing = (req, res) => {
                         (err, reviews) => {
 
                             if (err) {
-
-                                console.error(err);
-
-                                reviews = [];
+                                return next(err);
 
                             }
 

@@ -2,6 +2,23 @@
    HOME PAGE
 ===================================================== */
 
+.error-page{
+    min-height:45vh;
+    display:grid;
+    place-items:center;
+    padding:48px 0;
+}
+
+.error-page-content{
+    width:min(620px,100%);
+    padding:40px;
+    text-align:center;
+}
+
+.error-page-content p{
+    margin:16px 0 24px;
+}
+
 .hero{
     width:100%;
     padding:50px 0 30px;
@@ -248,7 +265,7 @@
 
     display:grid;
 
-    grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
 
     gap:20px;
 
@@ -299,16 +316,6 @@
     margin-bottom:8px;
 
     line-height:1.3;
-
-}
-
-.listing-content p{
-
-    font-size:14px;
-
-    color:#667085;
-
-    margin-bottom:8px;
 
 }
 
@@ -405,8 +412,8 @@
 .marketplace-layout{
 
     display:grid;
-    grid-template-columns:300px 1fr;
-    gap:30px;
+    grid-template-columns:minmax(0,1fr);
+    gap:28px;
 
 }
 
@@ -414,36 +421,105 @@
 
     background:#fff;
     border-radius:18px;
-    padding:28px;
+    padding:22px 24px;
     box-shadow:0 10px 30px rgba(0,0,0,.05);
-    height:max-content;
+    min-width:0;
 
 }
 
 .filters-card h3{
 
-    margin-bottom:25px;
+    margin-bottom:14px;
+
+}
+
+.filters-card form{
+
+    display:grid;
+    grid-template-columns:
+        minmax(170px,1.5fr)
+        minmax(140px,1fr)
+        minmax(140px,1fr)
+        minmax(110px,.7fr)
+        minmax(110px,.7fr)
+        minmax(140px,1fr)
+        auto;
+    align-items:end;
+    gap:12px;
 
 }
 
 .filter-group{
 
-    margin-bottom:10px;
+    margin-bottom:0;
+    min-width:0;
 
 }
 
 .filter-group label{
 
     display:block;
-    margin-bottom:8px;
+    margin-bottom:6px;
     font-weight:400;
     color:#374151;
 
 }
 
+.filters-card .filter-group input,
+.filters-card .filter-group select{
+
+    width:100%;
+    min-width:0;
+
+}
+
+.filters-card form > button{
+
+    min-height:46px;
+    white-space:nowrap;
+
+}
+
 .marketplace-results{
 
-    width:70%;
+    width:100%;
+
+}
+
+.marketplace-page .listing-grid{
+
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+    gap:24px;
+
+}
+
+@media(max-width:1100px){
+
+    .filters-card form{
+        grid-template-columns:repeat(4,minmax(0,1fr));
+    }
+
+    .filters-card form > .filter-group:first-child{
+        grid-column:span 2;
+    }
+
+}
+
+@media(max-width:640px){
+
+    .filters-card{
+        padding:18px;
+    }
+
+    .filters-card form{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+    }
+
+    .filters-card form > .filter-group:first-child,
+    .filters-card form > button{
+        grid-column:1 / -1;
+    }
 
 }
 
@@ -1358,7 +1434,35 @@ grid-template-columns:1fr;
 
 }
 
+.menu-dropdown form{
+
+    margin:0;
+
+}
+
+.menu-dropdown .menu-dropdown-action{
+
+    display:block;
+    width:100%;
+    padding:14px 18px;
+    border:0;
+    background:transparent;
+    color:inherit;
+    font:inherit;
+    font-size:14px;
+    text-align:left;
+    cursor:pointer;
+    transition:.2s;
+
+}
+
 .menu-dropdown a:hover{
+
+    background:#f4f6f9;
+
+}
+
+.menu-dropdown .menu-dropdown-action:hover{
 
     background:#f4f6f9;
 
@@ -1696,10 +1800,63 @@ grid-template-columns:1fr;
     width:100%;
     height:240px;
     object-fit:cover;
+    display:block;
+}
 
+.listing-image-editor{
+    position:relative;
+    display:block;
+    overflow:hidden;
+    border:1px solid var(--border);
     border-radius:16px;
+    background:var(--surface-alt);
+    cursor:pointer;
+}
 
-    margin-bottom:20px;
+.listing-image-editor .current-image{
+    margin:0;
+    transition:transform .25s ease;
+}
+
+.listing-image-editor:hover .current-image{
+    transform:scale(1.02);
+}
+
+.listing-image-change{
+    position:absolute;
+    inset:auto 0 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:24px 16px 14px;
+    background:linear-gradient(transparent,rgba(15,23,42,.78));
+    color:#fff;
+    font-weight:600;
+}
+
+.listing-image-editor input[type="file"]{
+    position:absolute;
+    width:1px;
+    height:1px;
+    padding:0;
+    margin:-1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+    white-space:nowrap;
+    border:0;
+}
+
+.listing-image-editor:focus-within{
+    outline:3px solid var(--primary);
+    outline-offset:3px;
+}
+
+.listing-image-help{
+    margin:12px 0 0;
+    color:var(--text-light);
+    font-size:13px;
+    line-height:1.5;
 
 }
 
@@ -2047,6 +2204,14 @@ height:280px;
 
     background:#DCFCE7;
     color:#166534;
+
+}
+
+.status-active,
+.status-completed{
+
+    background:#DBEAFE;
+    color:#1E40AF;
 
 }
 
@@ -3070,6 +3235,12 @@ padding:15px 22px;
 
 }
 
+body.dark-theme.auth-page{
+
+    background:var(--background);
+
+}
+
 .auth-wrapper{
 
     min-height:calc(100vh - 160px);
@@ -3249,33 +3420,45 @@ padding:15px 22px;
 
 .auth-alert{
 
-    padding:14px 16px;
+    padding:14px 18px;
 
-    border-radius:12px;
+    border-radius:14px;
 
     margin-bottom:25px;
 
     font-size:14px;
 
+    font-weight:600;
+
+    border:1px solid transparent;
+
+    box-shadow:0 10px 22px rgba(15,23,42,.08);
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
 }
 
 .auth-alert.success{
 
-    background:#ecfdf5;
+    background:rgba(22,163,74,.08);
 
-    color:#047857;
+    color:#166534;
 
-    border:1px solid #a7f3d0;
+    border-color:rgba(34,197,94,.22);
 
 }
 
 .auth-alert.error{
 
-    background:#fef2f2;
+    background:rgba(220,38,38,.08);
 
-    color:#b91c1c;
+    color:#991b1b;
 
-    border:1px solid #fecaca;
+    border-color:rgba(239,68,68,.2);
 
 }
 
@@ -4734,6 +4917,7 @@ HOW IT WORKS
     line-height:1.6;
 
 }
+
 .step-arrow{
 
     font-size:28px;
@@ -5345,4 +5529,96 @@ HOME CTA
     .about-steps {
         grid-template-columns: 1fr;
     }
+}
+
+/* Marketing pages: consistent dark surfaces and readable copy */
+body.dark-theme .about-page {
+    color: var(--text);
+}
+
+body.dark-theme .section-heading h2,
+body.dark-theme .section-heading p,
+body.dark-theme .step-card,
+body.dark-theme .step-card h3,
+body.dark-theme .step-card p,
+body.dark-theme .why-card,
+body.dark-theme .why-card h3,
+body.dark-theme .why-card p,
+body.dark-theme .testimonial-card,
+body.dark-theme .testimonial-card p,
+body.dark-theme .testimonial-user small,
+body.dark-theme .testimonials .empty-state h3,
+body.dark-theme .about-page h1,
+body.dark-theme .about-page h2,
+body.dark-theme .about-page h3,
+body.dark-theme .about-page p,
+body.dark-theme .about-step {
+    color: var(--text);
+}
+
+body.dark-theme .section-heading span,
+body.dark-theme .step-arrow,
+body.dark-theme .about-label,
+body.dark-theme .about-step > span {
+    color: var(--primary);
+}
+
+body.dark-theme .step-card,
+body.dark-theme .why-card,
+body.dark-theme .testimonial-card,
+body.dark-theme .empty-state,
+body.dark-theme .about-feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+}
+
+body.dark-theme .about-step {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+}
+
+body.dark-theme .about-hero,
+body.dark-theme .about-cta {
+    background: var(--surface);
+    border-block: 1px solid var(--border);
+}
+
+body.dark-theme .about-features {
+    background: var(--surface-alt);
+}
+
+body.dark-theme .step-card .step-number {
+    background: var(--primary);
+    color: #fff;
+}
+
+body.dark-theme .why-icon,
+body.dark-theme .testimonial-avatar,
+body.dark-theme .about-feature-icon {
+    background: var(--surface-alt);
+}
+
+body.dark-theme .testimonial-avatar,
+body.dark-theme .about-feature-icon {
+    color: var(--primary);
+}
+
+body.dark-theme .about-button {
+    background: var(--primary);
+    color: #fff;
+}
+
+body.dark-theme .about-button:hover {
+    background: var(--primary-dark);
+}
+
+body.dark-theme .cta-buttons .primary-btn {
+    background: var(--surface-alt);
+    color: var(--text);
+}
+
+body.dark-theme .cta-buttons .primary-btn:hover {
+    background: var(--surface);
 }

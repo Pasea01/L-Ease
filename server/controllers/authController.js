@@ -7,24 +7,47 @@ exports.showRegister = (req, res) => {
 
 };
 
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
 
     try {
 
-        const {
+        const full_name = typeof req.body.full_name === "string"
+            ? req.body.full_name.trim()
+            : "";
+        const email = typeof req.body.email === "string"
+            ? req.body.email.trim().toLowerCase()
+            : "";
+        const phone = typeof req.body.phone === "string"
+            ? req.body.phone.trim()
+            : "";
+        const password = typeof req.body.password === "string"
+            ? req.body.password
+            : "";
 
-            full_name,
-            email,
-            phone,
-            password
-
-        } = req.body;
+        if (
+            full_name.length < 2
+            || full_name.length > 80
+            || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+            || email.length > 254
+            || phone.length < 7
+            || phone.length > 20
+            || password.length < 8
+            || Buffer.byteLength(password, "utf8") > 72
+        ) {
+            req.session.flash = {
+                type: "error",
+                message: "Enter a valid name, email and phone number, and use a password of at least 8 characters."
+            };
+            return res.redirect("/register");
+        }
 
         const existingUser = await new Promise((resolve, reject) => {
 
             User.findByEmail(email, (err, user) => {
 
-                if (err) reject(err);
+                if (err) {
+                    return reject(err);
+                }
 
                 resolve(user);
 
@@ -34,7 +57,11 @@ exports.register = async (req, res) => {
 
         if (existingUser) {
 
-            return res.send("Email already exists.");
+            req.session.flash = {
+                type: "error",
+                message: "An account with that email already exists."
+            };
+            return res.redirect("/register");
 
         }
 
@@ -54,7 +81,7 @@ exports.register = async (req, res) => {
 
             if (err) {
 
-                return res.send("Registration failed.");
+                return next(err);
 
             }
 
@@ -66,9 +93,7 @@ exports.register = async (req, res) => {
 
     catch (error) {
 
-        console.error(error);
-
-        res.send("Server error.");
+        next(error);
 
     }
 
@@ -77,53 +102,88 @@ exports.showLogin = (req, res) => {
     res.render("login");
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
 
     try {
 
-        const { email, password } = req.body;
+        const email = typeof req.body.email === "string"
+            ? req.body.email.trim().toLowerCase()
+            : "";
+        const password = typeof req.body.password === "string"
+            ? req.body.password
+            : "";
 
-        User.findByEmail(email, async (err, user) => {
+        if (!email || !password) {
+            req.session.flash = {
+                type: "error",
+                message: "Invalid email or password."
+            };
+            return res.redirect("/login");
+        }
+
+        User.findByEmail(email, (err, user) => {
 
             if (err) {
-                return res.send("Server error.");
+                return next(err);
             }
 
             if (!user) {
-                return res.send("Invalid email or password.");
+                req.session.flash = {
+                    type: "error",
+                    message: "Invalid email or password."
+                };
+                return res.redirect("/login");
             }
 
-            const match = await bcrypt.compare(password, user.password);
+            bcrypt.compare(password, user.password)
+                .then((match) => {
+                    if (!match) {
+                        req.session.flash = {
+                            type: "error",
+                            message: "Invalid email or password."
+                        };
+                        return res.redirect("/login");
+                    }
 
-            if (!match) {
-                return res.send("Invalid email or password.");
-            }
+                    req.session.regenerate((sessionError) => {
+                        if (sessionError) {
+                            return next(sessionError);
+                        }
 
-            req.session.user = {
-                id: user.id,
-                full_name: user.full_name,
-                email: user.email,
-                profile_image: user.profile_image,
-                role: user.role
-            };
+                        req.session.user = {
+                            id: user.id,
+                            full_name: user.full_name,
+                            email: user.email,
+                            profile_image: user.profile_image,
+                            role: user.role
+                        };
 
-            res.redirect("/dashboard");
+                        req.session.save((saveError) => {
+                            if (saveError) {
+                                return next(saveError);
+                            }
+                            res.redirect("/dashboard");
+                        });
+                    });
+                })
+                .catch(next);
 
         });
 
     } catch (error) {
 
-        console.error(error);
-
-        res.send("Server error.");
+        next(error);
 
     }
 
 };
 
-exports.logout = (req, res) => {
+exports.logout = (req, res, next) => {
 
-    req.session.destroy(() => {
+    req.session.destroy((err) => {
+        if (err) {
+            return next(err);
+        }
 
         res.redirect("/");
 

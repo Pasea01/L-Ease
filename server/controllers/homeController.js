@@ -6,25 +6,19 @@ const Review = require("../models/Review");
 // Home
 // =====================================
 
-exports.showHome = (req, res) => {
+exports.showHome = (req, res, next) => {
 
     Listing.getAllListings((err, listings) => {
 
         if (err) {
-
-            console.error(err);
-
-            listings = [];
+            return next(err);
 
         }
 
         Review.getHomepageReviews((err, reviews) => {
 
             if (err) {
-
-                console.error(err);
-
-                reviews = [];
+                return next(err);
 
             }
 
@@ -48,37 +42,28 @@ exports.showHome = (req, res) => {
 // Dashboard
 // =====================================
 
-exports.showDashboard = (req, res) => {
+exports.showDashboard = (req, res, next) => {
 
     const userId = req.session.user.id;
 
     User.getDashboardStats(userId, (err, stats) => {
 
         if (err) {
-
-            console.error(err);
-
-            return res.send("Failed to load dashboard.");
+            return next(err);
 
         }
 
         User.getRecentActivity(userId, (err, activities) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to load dashboard.");
+                return next(err);
 
             }
 
             Review.getAverageRating(userId, (err, rating) => {
 
                 if (err) {
-
-                    console.error(err);
-
-                    return res.send("Failed to load dashboard.");
+                    return next(err);
 
                 }
 

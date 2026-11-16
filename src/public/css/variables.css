@@ -22,6 +22,7 @@
 
     --background:#f8fafc;
     --surface:#ffffff;
+    --surface-alt:#f3f4f6;
 
     /* Text */
 
@@ -32,6 +33,11 @@
     /* Borders */
 
     --border:#e5e7eb;
+
+    /* Inputs */
+
+    --input-bg:#ffffff;
+    --input-text:#1f2937;
 
     /* Radius */
 
@@ -57,5 +63,55 @@
     /* Layout */
 
     --container:1200px;
+    --page-space-top:24px;
+    --page-space-bottom:40px;
+    --section-space:48px;
+    --panel-padding:24px;
+
+}
+
+body.dark-theme{
+
+    --primary:#7aa2ff;
+    --primary-dark:#5f8ef7;
+
+    --secondary:#9aa7b8;
+    --secondary-dark:#bec8d4;
+
+    --background:#121a2a;
+    --surface:#1a2232;
+    --surface-alt:#202b3d;
+
+    --text:#edf3ff;
+    --text-light:#dfe9fb;
+    --text-muted:#aab9cf;
+
+    --border:#2d3a4f;
+
+    --input-bg:#121d2d;
+    --input-text:#edf3ff;
+
+    --shadow:
+        0 14px 32px rgba(3,7,18,.52);
+
+    --shadow-sm:
+        0 3px 10px rgba(15,23,42,.22);
+
+    --shadow-lg:
+        0 18px 42px rgba(7,12,24,.46);
+
+    background:var(--background);
+    color:var(--text);
+
+}
+
+@media(max-width:640px){
+
+    :root{
+        --page-space-top:16px;
+        --page-space-bottom:32px;
+        --section-space:36px;
+        --panel-padding:18px;
+    }
 
 }

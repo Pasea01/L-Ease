@@ -35,9 +35,10 @@ The project is in active development but already includes the core marketplace f
 - User registration with full name, email, phone, password
 - Password hashing with bcrypt
 - Login and logout
-- Session-based authentication
+- Session-based authentication with session ID renewal at login
 - User profile management
 - Profile image upload and display
+- Server-side validation for registration and profile updates
 
 ### Marketplace and asset listings
 - Create new listings
@@ -47,30 +48,44 @@ The project is in active development but already includes the core marketplace f
 - Sort by newest, oldest, lowest price, or highest price
 - View listing details
 - Edit listing details and image
+- Preview a replacement image immediately while editing a listing
 - Delete listing
 - My listings page for the logged-in user
+- Server-side listing validation and owner-only listing management
 
 ### Lease request workflow
 - Users can request to lease a listing they do not own
 - Owners see incoming lease requests
 - Owners can approve or reject lease requests
 - Tenant sees their own requests
-- Completed leases can be marked as completed
-- Access to conversations is restricted to approved/completed lease participants only
+- Lease dates are validated, and approvals are limited to pending requests
+- Approval prevents overlapping approved or active leases for the same asset
+- Only the asset owner can approve, reject, or complete a lease
+- A lease can only be marked completed after its end date
+- Conversations are restricted to participants in an eligible lease for the asset
 
 ### Messaging system
 - Inbox page for all conversations
 - Conversation pages between two users for a specific asset
 - Message sending and retrieval
 - Automatic notifications when a new message arrives
-- Access protection for lease-based conversations
+- Access checks before opening a conversation or sending a message
+- Message length limits and read-state updates
+- Light and dark theme styling for the inbox and conversation views
 
 ### Reviews and ratings
-- One review per lease per reviewer
+- Reviews are limited to participants in a completed lease
+- One review per lease per reviewer, enforced by a SQLite unique index
 - Users can submit a rating from 1 to 5 stars with optional comments
 - Reviews appear on listing detail pages and user profiles
 - Average rating stats are computed for users and listings
 - Homepage displays recent reviews
+
+### Interface and feedback
+- Responsive server-rendered pages built with EJS
+- Light and dark themes, with the selected theme saved in the browser and system preference used by default
+- Consistent page spacing, updated marketplace filters/cards, and an inline listing-image editor
+- Flash feedback for user-facing technical errors and a rendered error page for failed requests
 
 ### Notifications
 - New lease request notifications
@@ -105,7 +120,11 @@ The project is in active development but already includes the core marketplace f
 ```text
 L-Ease/
 ├── README.md
+├── .gitignore
+├── .env.example
+├── RELEASE_NOTES.md
 ├── package.json
+├── package-lock.json
 ├── server/
 │   ├── app.js
 │   ├── config/
@@ -128,10 +147,12 @@ L-Ease/
 │   │   └── seedDatabase.js
 │   ├── helpers/
 │   │   ├── categoryImage.js
+│   │   ├── imageUpload.js
 │   │   ├── listingImage.js
 │   │   └── profileImage.js
 │   ├── middleware/
 │   │   ├── authMiddleware.js
+│   │   ├── errorHandler.js
 │   │   ├── notificationMiddleware.js
 │   │   └── uploadMiddleware.js
 │   ├── models/
@@ -150,9 +171,6 @@ L-Ease/
 │   │   ├── pageRoutes.js
 │   │   ├── reviewRoutes.js
 │   │   └── userRoutes.js
-│   └── uploads/
-│       ├── profiles/
-│       └── listings/
 ├── src/
 │   ├── public/
 │   │   ├── css/
@@ -160,13 +178,14 @@ L-Ease/
 │   │   └── js/
 │   ├── uploads/
 │   │   ├── profiles/
-│   │   └── listings/
+│   │   └── (listing image files)
 │   └── views/
 │       ├── About.ejs
 │       ├── conversation.ejs
 │       ├── dashboard.ejs
 │       ├── edit-listing.ejs
 │       ├── edit-profile.ejs
+│       ├── error.ejs
 │       ├── inbox.ejs
 │       ├── index.ejs
 │       ├── lease-request.ejs
@@ -186,6 +205,9 @@ L-Ease/
 │           ├── head.ejs
 │           ├── navbar.ejs
 │           ├── scripts.ejs
+├── test/
+│   ├── leaseModel.test.js
+│   └── routesSmoke.test.js
 └── node_modules/
 ```
 
@@ -283,10 +305,10 @@ Stores user notifications:
 
 ### Listing routes
 - GET /listings — marketplace view
-- GET /listings/api — JSON API for listings
+- GET /api/listings and GET /listings/api — JSON API for listings
 - GET /listings/my-listings — current user’s listings
 - POST /listings/create — create new listing
-- GET /listings/delete/:id — delete listing
+- POST /listings/delete/:id — delete listing
 - GET /listings/edit/:id — edit listing page
 - POST /listings/edit/:id — update listing
 - GET /listings/:id — listing details page
@@ -295,7 +317,7 @@ Stores user notifications:
 - POST /auth/register — register account
 - GET /auth/login — login page
 - POST /auth/login — authenticate user
-- GET /auth/logout — logout
+- POST /auth/logout — logout
 
 ### Lease routes
 - GET /leases/request/:assetId — request lease form
@@ -352,12 +374,15 @@ npm install
 
 ### 2. Create environment variables
 
-The app loads environment variables from a `.env` file. Create a `.env` file in the project root with at least:
+Copy `.env.example` to `.env` in the project root and set a unique session secret:
 
 ```env
 PORT=3000
-SESSION_SECRET=your_secure_session_secret
+SESSION_SECRET=replace-with-a-long-random-secret
 ```
+
+Generate a secret with `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`.
+`SESSION_SECRET` is required when `NODE_ENV=production`.
 
 ### 3. Start the app
 
@@ -385,35 +410,58 @@ http://localhost:3000
 
 - Access to protected pages is enforced by the auth middleware.
 - Users cannot lease their own listing.
-- Message access is limited to users involved in an approved or completed lease for that asset.
-- Reviews can only be submitted once per lease and per reviewer.
-- Profile images and listing images are stored in upload folders and served from the public upload directories.
+- Lease requests require valid dates; approval is limited to pending requests and prevents overlaps with approved or active leases for that asset.
+- Only the owner can approve, reject, or complete a lease, and completion is unavailable until the lease end date.
+- Message access and sending are limited to participants in an eligible lease for that asset.
+- Reviews require a completed lease, are limited to its participants, and can be submitted only once per reviewer per lease.
+- Image uploads require matching JPG/JPEG, PNG, or WebP extensions and MIME types, and are limited to 5 MB.
+- Logout and listing deletion use POST requests rather than state-changing GET requests.
+- The database schema is initialized before the application starts accepting requests.
 
 ## Security and Data Handling
 
 - Passwords are hashed before being saved.
-- Sessions are tracked server-side with Express Session.
+- Sessions use HTTP-only, SameSite=Lax cookies; secure cookies and a configured `SESSION_SECRET` are required in production.
+- The default Express in-memory session store is intended for development only. Configure a persistent store before production or multi-instance deployment.
 - Database operations are performed with SQLite using the project’s database wrapper.
 - Access checks are enforced in both the middleware and controller logic before sensitive actions are allowed.
+- User-facing errors are rendered as HTML or returned as JSON for API requests; unexpected server errors are logged.
 
 ## Data and Upload Locations
 
 ### SQLite database
-The project creates and uses a SQLite database at:
+The app creates the SQLite database at startup. By default, it uses:
 
 ```text
 server/database/lease.db
 ```
 
-The database is initialized by [server/database/initDatabase.js](server/database/initDatabase.js), which loads the schema and seed data.
+The database schema and indexes are initialized by [server/database/initDatabase.js](server/database/initDatabase.js) before the server begins listening. Set `DATABASE_PATH` to use another database file. The seed SQL is not run automatically. New local SQLite database files and their journal/WAL sidecars are ignored by Git. The default `lease.db` is already tracked in this repository; ignore rules do not stop Git from tracking an existing file.
 
 ### Image uploads
 Uploaded images are stored in:
 
 - `src/uploads/profiles/`
-- `src/uploads/listings/`
+- `src/uploads/` for listing images
 
 They are served via the app from `/uploads`.
+Uploaded user images are ignored by Git; the default profile image is retained.
+
+## Tests
+
+Run the configured tests with:
+
+```bash
+npm test
+```
+
+The test command runs:
+
+- Lease transition, owner authorization, overlap, conversation-access, and duplicate-review regression checks.
+- Public route smoke checks for the home, about, login, registration, marketplace, and listings API routes, plus the 404 page.
+- An application-load check.
+
+The database tests use in-memory SQLite and do not modify the project database.
 
 ## Notes on Current State
 
@@ -428,7 +476,7 @@ The application already includes a substantial portion of the marketplace lifecy
 - reviews
 - dashboard/profile features
 
-The project still has room for enhancements such as stronger validation, payment flow, more advanced moderation, role-based admin tooling, and more polished UX improvements.
+The current MVP does not include payment processing, email verification or password recovery, admin moderation workflows, or a persistent production session store. Add these before relying on the app for production transactions or multi-instance deployment.
 
 ## Author
 

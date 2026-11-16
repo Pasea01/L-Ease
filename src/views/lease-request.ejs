@@ -46,9 +46,10 @@
                 <% if(listing.image_url){ %>
 
                     <img
-                        src="/uploads/listings/<%= listing.image_url %>"
+                        src="<%= getListingImage(listing) %>"
                         class="lease-image"
                         alt="<%= listing.title %>"
+                        onerror="this.onerror=null; this.src='<%= getCategoryImage(listing.category) %>';"
                     >
 
                 <% } else { %>
@@ -98,6 +99,7 @@
                     <input
                         type="date"
                         name="start_date"
+                        min="<%= new Date().toISOString().slice(0, 10) %>"
                         required
                     >
 
@@ -110,6 +112,8 @@
                     <input
                         type="date"
                         name="end_date"
+                        min="<%= new Date().toISOString().slice(0, 10) %>"
+                        id="lease-end-date"
                         required
                     >
 
@@ -122,6 +126,7 @@
                     <textarea
                         name="message"
                         rows="6"
+                        maxlength="1000"
                         placeholder="Introduce yourself or explain your intended use..."
                     ></textarea>
 
@@ -177,6 +182,18 @@
 <%- include("partials/footer") %>
 
 <%- include("partials/scripts") %>
+
+<script>
+    const leaseStartDate = document.querySelector('[name="start_date"]');
+    const leaseEndDate = document.getElementById("lease-end-date");
+
+    leaseStartDate.addEventListener("change", () => {
+        leaseEndDate.min = leaseStartDate.value || leaseEndDate.min;
+        if (leaseEndDate.value && leaseEndDate.value < leaseEndDate.min) {
+            leaseEndDate.value = leaseEndDate.min;
+        }
+    });
+</script>
 
 </body>
 

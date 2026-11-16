@@ -5,6 +5,65 @@ const userDropdown = document.getElementById("dropdownMenu");
 
 const notificationBtn = document.getElementById("notificationBtn");
 const notificationDropdown = document.getElementById("notificationDropdown");
+const themeToggle = document.getElementById("themeToggle");
+
+const applyTheme = (theme) => {
+
+    const isDark = theme === "dark";
+
+    document.body.classList.toggle("dark-theme", isDark);
+
+    document.documentElement.style.colorScheme = isDark ? "dark" : "light";
+
+    if (themeToggle) {
+
+        themeToggle.textContent = isDark ? "☀️" : "🌙";
+        themeToggle.setAttribute(
+            "aria-label",
+            isDark ? "Switch to light mode" : "Switch to dark mode"
+        );
+        themeToggle.setAttribute(
+            "title",
+            isDark ? "Switch to light mode" : "Switch to dark mode"
+        );
+
+    }
+
+    localStorage.setItem("l-ease-theme", theme);
+
+};
+
+const getPreferredTheme = () => {
+
+    const savedTheme = localStorage.getItem("l-ease-theme");
+
+    if (savedTheme === "light" || savedTheme === "dark") {
+
+        return savedTheme;
+
+    }
+
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+
+};
+
+applyTheme(getPreferredTheme());
+
+if (themeToggle) {
+
+    themeToggle.addEventListener("click", () => {
+
+        const nextTheme = document.body.classList.contains("dark-theme")
+            ? "light"
+            : "dark";
+
+        applyTheme(nextTheme);
+
+    });
+
+}
 
 // ================================
 // User Menu

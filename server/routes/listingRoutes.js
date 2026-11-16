@@ -29,7 +29,7 @@ router.post(
     listingController.createListing
 );
 // Delete listing
-router.get(
+router.post(
     "/delete/:id",
     authMiddleware,
     listingController.deleteListing

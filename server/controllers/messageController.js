@@ -7,7 +7,7 @@ const Notification = require("../models/Notification");
 // Inbox
 // =====================================================
 
-exports.showInbox = (req, res) => {
+exports.showInbox = (req, res, next) => {
 
     Message.getInbox(
 
@@ -16,10 +16,7 @@ exports.showInbox = (req, res) => {
         (err, conversations) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to load inbox.");
+                return next(err);
 
             }
 
@@ -41,7 +38,7 @@ exports.showInbox = (req, res) => {
 // Conversation
 // =====================================================
 
-exports.showConversation = (req, res) => {
+exports.showConversation = (req, res, next) => {
 
     const userId = req.session.user.id;
 
@@ -60,79 +57,50 @@ exports.showConversation = (req, res) => {
         (err, lease) => {
 
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to verify access.");
+                return next(err);
 
             }
 
             if (!lease) {
-
-                return res.status(403).send("Access denied.");
+                const error = new Error("Access denied.");
+                error.status = 403;
+                return next(error);
 
             }
 
-            Message.getConversation(
-
+            Message.markConversationRead(
                 userId,
-
                 otherUserId,
-
                 assetId,
-
-                (err, messages) => {
-
+                (err) => {
                     if (err) {
-
-                        console.error(err);
-
-                        return res.send("Failed to load conversation.");
-
+                        return next(err);
                     }
 
-                    const otherUserName =
-
-                        messages.length > 0
-
-                            ? messages.find(
-
-                                  m => m.sender_id !== userId
-
-                              )?.full_name ||
-
-                              messages[0].full_name
-
-                            : "User";
-
-                    const listingTitle =
-
-                        messages.length > 0
-
-                            ? messages[0].title ||
-
-                              "Conversation"
-
-                            : "Conversation";
-
-                    res.render("conversation", {
-
-                        user: req.session.user,
-
-                        messages,
-
-                        assetId,
-
+                    Message.getConversation(
+                        userId,
                         otherUserId,
+                        assetId,
+                        (err, messages) => {
+                            if (err) {
+                                return next(err);
+                            }
 
-                        otherUserName,
+                            const otherUserName = userId === lease.owner_id
+                                ? lease.tenant_name
+                                : lease.owner_name;
 
-                        listingTitle
-
-                    });
-
+                            res.render("conversation", {
+                                user: req.session.user,
+                                messages,
+                                assetId,
+                                otherUserId,
+                                otherUserName,
+                                listingTitle: lease.listing_title
+                            });
+                        }
+                    );
                 }
-
             );
 
         }
@@ -145,53 +113,60 @@ exports.showConversation = (req, res) => {
 // Send Message
 // =====================================================
 
-exports.sendMessage = (req, res) => {
+exports.sendMessage = (req, res, next) => {
 
     const sender_id = req.session.user.id;
 
-    const {
+    const receiverId = Number(req.body.receiver_id);
+    const assetId = Number(req.body.asset_id);
+    const message = typeof req.body.message === "string"
+        ? req.body.message.trim()
+        : "";
+    const validConversation = Number.isSafeInteger(receiverId)
+        && receiverId > 0
+        && receiverId !== sender_id
+        && Number.isSafeInteger(assetId)
+        && assetId > 0;
+    const redirectUrl = validConversation
+        ? `/messages/${assetId}/${receiverId}`
+        : "/messages";
 
-        receiver_id,
-
-        asset_id,
-
-        message
-
-    } = req.body;
-
-    if (!message.trim()) {
-
-        return res.redirect(
-
-            `/messages/${asset_id}/${receiver_id}`
-
-        );
-
+    if (!validConversation || !message || message.length > 2000) {
+        req.session.flash = {
+            type: "error",
+            message: "Please enter a message of 1-2,000 characters in a valid conversation."
+        };
+        return res.redirect(redirectUrl);
     }
 
-    Message.send(
-
-        {
-
-            sender_id,
-
-            receiver_id,
-
-            asset_id,
-
-            message
-
-        },
-
-        (err) => {
-
+    Lease.canAccessConversation(
+        sender_id,
+        receiverId,
+        assetId,
+        (err, lease) => {
             if (err) {
-
-                console.error(err);
-
-                return res.send("Failed to send message.");
-
+                return next(err);
             }
+
+            if (!lease) {
+                const error = new Error("Access denied.");
+                error.status = 403;
+                return next(error);
+            }
+
+            Message.send(
+                {
+                    sender_id,
+                    receiver_id: receiverId,
+                    asset_id: assetId,
+                    message
+                },
+                (err) => {
+
+                    if (err) {
+                        return next(err);
+
+                    }
 
             // ---------------------------------------
             // Create notification for receiver
@@ -199,17 +174,21 @@ exports.sendMessage = (req, res) => {
 
             Listing.getListingById(
 
-                asset_id,
+                assetId,
 
                 (err, listing) => {
 
                     if (err || !listing) {
+                        if (err) {
+                            console.error(err);
+                        }
 
-                        return res.redirect(
+                        req.session.flash = {
+                            type: "error",
+                            message: "Your message was sent, but we couldn't notify the recipient."
+                        };
 
-                            `/messages/${asset_id}/${receiver_id}`
-
-                        );
+                        return res.redirect(redirectUrl);
 
                     }
 
@@ -217,23 +196,26 @@ exports.sendMessage = (req, res) => {
 
                         {
 
-                            user_id: receiver_id,
+                            user_id: receiverId,
 
                             title: "New Message",
 
                             message: `${req.session.user.full_name} sent you a message about "${listing.title}".`,
 
-                            link: `/messages/${asset_id}/${sender_id}`
+                            link: `/messages/${assetId}/${sender_id}`
 
                         },
 
-                        () => {
+                        (err) => {
+                            if (err) {
+                                console.error(err);
+                                req.session.flash = {
+                                    type: "error",
+                                    message: "Your message was sent, but we couldn't notify the recipient."
+                                };
+                            }
 
-                            res.redirect(
-
-                                `/messages/${asset_id}/${receiver_id}`
-
-                            );
+                            res.redirect(redirectUrl);
 
                         }
 
@@ -243,8 +225,9 @@ exports.sendMessage = (req, res) => {
 
             );
 
+                }
+            );
         }
-
     );
 
 };

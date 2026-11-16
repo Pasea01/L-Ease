@@ -48,6 +48,8 @@
                             type="text"
                             name="title"
                             value="<%= listing.title %>"
+                            minlength="3"
+                            maxlength="100"
                             required
                         >
 
@@ -76,6 +78,8 @@
 
                                 <option value="Equipment" <%= listing.category==="Equipment"?"selected":"" %>>Equipment</option>
 
+                                <option value="Livestock" <%= listing.category==="Livestock"?"selected":"" %>>Livestock</option>
+
                                 <option value="Other" <%= listing.category==="Other"?"selected":"" %>>Other</option>
 
                             </select>
@@ -90,6 +94,8 @@
                                 type="number"
                                 name="price_per_day"
                                 value="<%= listing.price_per_day %>"
+                                min="0.01"
+                                step="0.01"
                                 required
                             >
 
@@ -105,6 +111,8 @@
                             type="text"
                             name="location"
                             value="<%= listing.location %>"
+                            minlength="2"
+                            maxlength="100"
                             required
                         >
 
@@ -117,6 +125,7 @@
                         <textarea
                             name="description"
                             rows="8"
+                            maxlength="2000"
                             required
                         ><%= listing.description %></textarea>
 
@@ -132,49 +141,52 @@
 
                 <div class="form-card">
 
-                    <h2>Current Image</h2>
+                    <h2>Listing Image</h2>
 
-                    <% if (listing.image_url) { %>
+                    <label class="listing-image-editor">
 
-                        <img
-                            src="/uploads/listings/<%= listing.image_url %>"
-                            class="current-image"
-                            alt="<%= listing.title %>"
-                        >
+                        <% if (listing.image_url) { %>
 
-                    <% } else { %>
+                            <img
+                                src="<%= getListingImage(listing) %>"
+                                class="current-image"
+                                id="listing-image-preview"
+                                alt="<%= listing.title %>"
+                                onerror="this.onerror=null; this.src='<%= getCategoryImage(listing.category) %>';"
+                            >
 
-                        <img
-                            src="<%= getCategoryImage(listing.category) %>"
-                            class="current-image"
-                            alt="<%= listing.category %>"
-                        >
+                        <% } else { %>
 
-                    <% } %>
+                            <img
+                                src="<%= getCategoryImage(listing.category) %>"
+                                class="current-image"
+                                id="listing-image-preview"
+                                alt="<%= listing.category %>"
+                            >
 
-                    <label class="upload-box">
+                        <% } %>
 
                         <input
                             type="file"
                             name="image"
-                            accept="image/*"
+                            id="listing-image-input"
+                            aria-label="Change listing image"
+                            accept="image/jpeg,image/png,image/webp"
                         >
 
-                        <div class="upload-content">
+                        <span class="listing-image-change">
 
-                            <span>📷</span>
+                            <span aria-hidden="true">📷</span>
 
-                            <h3>Replace Image</h3>
+                            <span>Change image</span>
 
-                            <p>
-
-                                Leave empty to keep the current image.
-
-                            </p>
-
-                        </div>
+                        </span>
 
                     </label>
+
+                    <p class="listing-image-help" id="listing-image-status" aria-live="polite">
+                        Select an image to preview it. JPG, PNG or WebP, up to 5 MB.
+                    </p>
 
                 </div>
 
@@ -202,6 +214,29 @@
 <%- include("partials/footer") %>
 
 <%- include("partials/scripts") %>
+
+<script>
+const listingImageInput = document.getElementById("listing-image-input");
+const listingImagePreview = document.getElementById("listing-image-preview");
+const listingImageStatus = document.getElementById("listing-image-status");
+let listingImagePreviewUrl;
+
+listingImageInput?.addEventListener("change", () => {
+    const file = listingImageInput.files?.[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (listingImagePreviewUrl) {
+        URL.revokeObjectURL(listingImagePreviewUrl);
+    }
+
+    listingImagePreviewUrl = URL.createObjectURL(file);
+    listingImagePreview.src = listingImagePreviewUrl;
+    listingImageStatus.textContent = `Selected: ${file.name}`;
+});
+</script>
 
 </body>
 </html>

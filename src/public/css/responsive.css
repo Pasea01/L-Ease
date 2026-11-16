@@ -76,6 +76,18 @@
 
 @media (max-width:768px){
 
+    .hero-search{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .market-home{
+
+        grid-template-columns:1fr;
+
+    }
+
     .navbar{
 
         flex-direction:column;
@@ -196,9 +208,9 @@
 
     }
 
-    .logo{
+    .logo-image{
 
-        font-size:22px;
+        width:140px;
 
     }
 

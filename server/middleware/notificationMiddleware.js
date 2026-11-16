@@ -19,10 +19,7 @@ module.exports = (req, res, next) => {
         (err, notifications) => {
 
             if (err) {
-
-                console.error(err);
-
-                return next();
+                return next(err);
 
             }
 
@@ -33,10 +30,7 @@ module.exports = (req, res, next) => {
                 (err, unread) => {
 
                     if (err) {
-
-                        console.error(err);
-
-                        return next();
+                        return next(err);
 
                     }
 

@@ -22,9 +22,4 @@ router.get(
     messageController.showConversation
 );
 
-router.post(
-    "/send",
-    authMiddleware,
-    messageController.sendMessage
-);
 module.exports = router;

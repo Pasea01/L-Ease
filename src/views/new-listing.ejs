@@ -47,6 +47,8 @@
                         <input
                             type="text"
                             name="title"
+                            minlength="3"
+                            maxlength="100"
                             placeholder="e.g. Toyota Prado TX"
                             required
                         >
@@ -72,6 +74,7 @@
                                 <option>Furniture</option>
                                 <option>Tools</option>
                                 <option>Equipment</option>
+                                <option>Livestock</option>
                                 <option>Other</option>
 
                             </select>
@@ -85,6 +88,8 @@
                             <input
                                 type="number"
                                 name="price_per_day"
+                                min="0.01"
+                                step="0.01"
                                 placeholder="2500"
                                 required
                             >
@@ -100,6 +105,8 @@
                         <input
                             type="text"
                             name="location"
+                            minlength="2"
+                            maxlength="100"
                             placeholder="Nairobi"
                             required
                         >
@@ -113,6 +120,7 @@
                         <textarea
                             name="description"
                             rows="8"
+                            maxlength="2000"
                             placeholder="Describe your asset..."
                         ></textarea>
 
@@ -135,7 +143,7 @@
                         <input
                             type="file"
                             name="image"
-                            accept="image/*"
+                            accept="image/jpeg,image/png,image/webp"
                         >
 
                         <div class="upload-content">
@@ -146,7 +154,7 @@
 
                             <p>
 
-                                PNG, JPG or JPEG
+                                PNG, JPG or WebP (max 5 MB)
 
                             </p>
 

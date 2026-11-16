@@ -4,7 +4,7 @@ const Notification = require("../models/Notification");
 // Open Notification
 // ======================================
 
-exports.openNotification = (req, res) => {
+exports.openNotification = (req, res, next) => {
 
     const notificationId = req.params.id;
 
@@ -16,17 +16,21 @@ exports.openNotification = (req, res) => {
 
         (err, notification) => {
 
-            if (err || !notification) {
+            if (err) {
+                return next(err);
+            }
 
-                console.error(err);
-
-                return res.redirect("/dashboard");
+            if (!notification) {
+                const error = new Error("Notification not found.");
+                error.status = 404;
+                return next(error);
 
             }
 
             if (notification.user_id !== userId) {
-
-                return res.redirect("/dashboard");
+                const error = new Error("Notification not found.");
+                error.status = 404;
+                return next(error);
 
             }
 
@@ -39,8 +43,10 @@ exports.openNotification = (req, res) => {
                 (err) => {
 
                     if (err) {
-
-                        console.error(err);
+                        req.session.flash = {
+                            type: "error",
+                            message: "We couldn't mark that notification as read."
+                        };
 
                     }
 
@@ -64,7 +70,7 @@ exports.openNotification = (req, res) => {
 // Mark All Notifications As Read
 // ======================================
 
-exports.markAllAsRead = (req, res) => {
+exports.markAllAsRead = (req, res, next) => {
 
     const userId = req.session.user.id;
 
@@ -75,18 +81,7 @@ exports.markAllAsRead = (req, res) => {
         (err) => {
 
             if (err) {
-
-                console.error(err);
-
-                req.session.flash = {
-
-                    type: "error",
-
-                    message: "Failed to mark notifications as read."
-
-                };
-
-                return res.redirect("back");
+                return next(err);
 
             }
 

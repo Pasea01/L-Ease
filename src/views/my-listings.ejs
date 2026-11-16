@@ -89,14 +89,15 @@
 
                         </a>
 
-                        <a
-                            href="/listings/delete/<%= listing.id %>"
-                            onclick="return confirm('Delete this listing?')"
+                        <form
+                            action="/listings/delete/<%= listing.id %>"
+                            method="POST"
+                            onsubmit="return confirm('Delete this listing?')"
                         >
-
-                            🗑 Delete
-
-                        </a>
+                            <button type="submit" class="menu-dropdown-action">
+                                🗑 Delete
+                            </button>
+                        </form>
 
                     </div>
 
